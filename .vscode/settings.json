@@ -6,11 +6,9 @@
     "_components": "Components",
     "_constants": "Constant",
     "_hooks": "Hook",
-    "_api": "Api",
     "_store": "Container",
     "_types": "Typescript",
     "_utils": "Utils",
-    "_lib": "lib",
     "(routes)": "Routes"
   },
   "editor.codeActionsOnSave": {
