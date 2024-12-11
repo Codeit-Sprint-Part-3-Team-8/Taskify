@@ -10,7 +10,8 @@
     "_store": "Container",
     "_types": "Typescript",
     "_utils": "Utils",
-    "(route)": "Routes"
+    "_lib": "lib",
+    "(routes)": "Routes"
   },
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": "always"
