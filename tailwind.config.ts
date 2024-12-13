@@ -3,6 +3,13 @@ import type { Config } from 'tailwindcss'
 export default {
   content: ['./app/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
+    /* 디바이스 분기점 정의 */
+    screens: {
+      mobile: '360px',
+      tablet: '744px',
+      pc: '1280px',
+    },
+
     extend: {
       /* tailwind color palette입니다.
       사용 예시: 사용해야 하는 색상 #000000이면 => black-000000
