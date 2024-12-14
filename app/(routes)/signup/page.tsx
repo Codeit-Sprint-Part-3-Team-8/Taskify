@@ -20,11 +20,11 @@ export default function SignUp() {
           <input id="nickname" type="text" required />
         </fieldset>
         <fieldset>
-          <label htmlFor="password"></label>
+          <label htmlFor="password">비밀번호</label>
           <input id="password" type="password" required />
         </fieldset>
         <fieldset>
-          <label htmlFor="repeat"></label>
+          <label htmlFor="repeat">비밀번호 확인</label>
           <input id="repeat" type="password" required />
         </fieldset>
         <fieldset>
