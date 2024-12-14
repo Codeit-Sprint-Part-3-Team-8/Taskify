@@ -1,3 +1,28 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+  /* Device Breakpoints */
+  --mobile-min: 360px;
+  --tablet-min: 744px;
+  --pc-min: 1280px;
+}
+
+/* 상위 레이어 기본 스타일 정의 */
+@layer base {
+  /* 기본 스타일 초기화 */
+  * {
+    @apply box-border p-0 m-0;
+  }
+  /* 부드러운 스크롤을 위한 속성 */
+  html {
+    @apply scroll-smooth;
+  }
+  /* 부드러운 렌더링을 위한 속성 */
+  body {
+    @apply min-h-screen bg-white text-gray-900;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+}
