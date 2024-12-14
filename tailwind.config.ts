@@ -1,6 +1,6 @@
-import type { Config } from "tailwindcss";
+/** @type {import('tailwindcss').Config} */
 
-export default {
+module.exports = {
   content: ["./app/**/*.{js,ts,jsx,tsx,mdx}"],
   theme: {
     /* 디바이스 분기점 정의 */
@@ -57,4 +57,4 @@ export default {
     },
   },
   plugins: [],
-} satisfies Config;
+};
