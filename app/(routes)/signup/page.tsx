@@ -1,4 +1,5 @@
 import Image from "next/image";
+import Link from "next/link";
 
 export default function SignUp() {
   return (
@@ -30,6 +31,10 @@ export default function SignUp() {
         </fieldset>
         <button type="submit">가입하기</button>
       </form>
+      <footer>
+        <span>이미 회원이신가요?&nbsp;</span>
+        <Link href="/login">로그인하기</Link>
+      </footer>
     </div>
   );
 }
