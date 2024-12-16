@@ -3,11 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
-
-const FIELD_STYLE = 'w-full flex flex-col gap-2';
-const FIEDL_LABEL_STYLE = 'text-black-333236 select-none';
-const FIELD_INPUT_STYLE =
-  'rounded-lg border border-gray-D9D9D9 px-4 py-3.5 placeholder:select-none placeholder:text-gray-9FA6B2';
+import InputField from './InputField';
 
 interface ValuesType {
   email: string;
@@ -51,66 +47,26 @@ export default function SignUp() {
         </span>
       </header>
       <form className="mb-6 flex flex-col gap-6">
-        <fieldset className={FIELD_STYLE}>
-          <label className={FIEDL_LABEL_STYLE} htmlFor="email">
-            이메일
-          </label>
-          <input
-            className={FIELD_INPUT_STYLE}
-            id="email"
-            name="email"
-            type="text"
-            value={values.email}
-            placeholder="이메일을 입력해주세요"
-            onChange={handleChangeValue}
-            required
-          />
-        </fieldset>
-        <fieldset className={FIELD_STYLE}>
-          <label className={FIEDL_LABEL_STYLE} htmlFor="nickname">
-            닉네임
-          </label>
-          <input
-            className={FIELD_INPUT_STYLE}
-            id="nickname"
-            name="nickname"
-            type="text"
-            value={values.nickname}
-            placeholder="닉네임을 입력해주세요"
-            onChange={handleChangeValue}
-            required
-          />
-        </fieldset>
-        <fieldset className={FIELD_STYLE}>
-          <label className={FIEDL_LABEL_STYLE} htmlFor="password">
-            비밀번호
-          </label>
-          <input
-            className={FIELD_INPUT_STYLE}
-            id="password"
-            name="password"
-            type="password"
-            value={values.password}
-            placeholder="비밀번호를 입력해주세요"
-            onChange={handleChangeValue}
-            required
-          />
-        </fieldset>
-        <fieldset className={FIELD_STYLE}>
-          <label className={FIEDL_LABEL_STYLE} htmlFor="repeat">
-            비밀번호 확인
-          </label>
-          <input
-            className={FIELD_INPUT_STYLE}
-            id="repeat"
-            name="repeat"
-            type="password"
-            value={values.repeat}
-            placeholder="비밀번호를 한 번 더 입력해주세요"
-            onChange={handleChangeValue}
-            required
-          />
-        </fieldset>
+        <InputField
+          name="email"
+          value={values.email}
+          onChange={handleChangeValue}
+        />
+        <InputField
+          name="nickname"
+          value={values.nickname}
+          onChange={handleChangeValue}
+        />
+        <InputField
+          name="password"
+          value={values.password}
+          onChange={handleChangeValue}
+        />
+        <InputField
+          name="repeat"
+          value={values.repeat}
+          onChange={handleChangeValue}
+        />
         <fieldset className="flex items-center gap-2">
           <input
             className="hidden"
@@ -135,7 +91,7 @@ export default function SignUp() {
             <div className="absolute z-10 h-full w-full rounded bg-black-171717 opacity-0 hover:opacity-20 active:opacity-40" />
           </label>
           <label
-            className={`${FIEDL_LABEL_STYLE} cursor-pointer`}
+            className="cursor-pointer select-none text-black-333236"
             htmlFor="terms-of-use"
           >
             이용약관에 동의합니다.
