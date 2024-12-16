@@ -30,10 +30,18 @@ const INPUT_FIELD_TEXT: {
 interface InputFieldProps {
   name: string;
   value: string;
+  validation: { isValid: boolean; message: string };
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
-export default function InputField({ name, value, onChange }: InputFieldProps) {
+export default function InputField({
+  name,
+  value,
+  validation,
+  onChange,
+}: InputFieldProps) {
+  const { isValid, message } = validation;
+
   return (
     <fieldset className={FIELD_STYLE}>
       <label className={FIEDL_LABEL_STYLE} htmlFor={name}>
@@ -49,6 +57,7 @@ export default function InputField({ name, value, onChange }: InputFieldProps) {
         onChange={onChange}
         required
       />
+      {!isValid && <p>{message}</p>}
     </fieldset>
   );
 }
