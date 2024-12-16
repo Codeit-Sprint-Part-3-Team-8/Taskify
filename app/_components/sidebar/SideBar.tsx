@@ -72,6 +72,10 @@ export default function Sidebar() {
         {myDashBoards.length > 0 ? (
           myDashBoards.map((dashboard) => (
             <div key={dashboard.id}>
+              <div
+                className="h-2 w-2 rounded-full"
+                style={{ backgroundColor: dashboard.color }}
+              ></div>
               {dashboard.title}
               {dashboard.createdByMe ? (
                 <Image
