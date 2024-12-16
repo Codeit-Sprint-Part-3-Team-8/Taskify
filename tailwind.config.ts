@@ -1,13 +1,13 @@
 /** @type {import('tailwindcss').Config} */
 
 module.exports = {
-  content: ["./app/**/*.{js,ts,jsx,tsx,mdx}"],
+  content: ['./app/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     /* 디바이스 분기점 정의 */
     screens: {
-      mobile: "360px",
-      tablet: "744px",
-      pc: "1280px",
+      mobile: '360px',
+      tablet: '744px',
+      pc: '1280px',
     },
 
     extend: {
@@ -18,40 +18,40 @@ module.exports = {
       */
       colors: {
         black: {
-          "000000": "#000000",
-          "171717": "#171717",
-          "333236": "#333236",
-          "4B4B4B": "#4B4B4B",
+          '000000': '#000000',
+          '171717': '#171717',
+          '333236': '#333236',
+          '4B4B4B': '#4B4B4B',
         },
         gray: {
-          "787486": "#787486",
-          "9FA6B2": "#9FA6B2",
-          D9D9D9: "#D9D9D9",
-          EEEEEE: "#EEEEEE",
-          FAFAFA: "#FAFAFA",
+          '787486': '#787486',
+          '9FA6B2': '#9FA6B2',
+          D9D9D9: '#D9D9D9',
+          EEEEEE: '#EEEEEE',
+          FAFAFA: '#FAFAFA',
         },
-        white: "#FFFFFF",
+        white: '#FFFFFF',
         violet: {
-          "5534DA": "#5534DA",
-          "8": "#F1EFFD",
+          '5534DA': '#5534DA',
+          '8': '#F1EFFD',
         },
         red: {
-          D6173A: "#D6173A",
+          D6173A: '#D6173A',
         },
         green: {
-          "7AC555": "#7AC555",
+          '7AC555': '#7AC555',
         },
         purple: {
-          "760DDE": "#760DDE",
+          '760DDE': '#760DDE',
         },
         orange: {
-          FFA500: "#FFA500",
+          FFA500: '#FFA500',
         },
         blue: {
-          "76A5EA": "#76A5EA",
+          '76A5EA': '#76A5EA',
         },
         pink: {
-          E876EA: "#E876EA",
+          E876EA: '#E876EA',
         },
       },
     },
