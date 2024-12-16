@@ -39,7 +39,6 @@ export default function Sidebar() {
       );
 
       setMyDashBoards(response.data.dashboards || []);
-      console.log(response.data);
     } catch (error) {
       console.error('내 대시보드를 불러오는데 실패했습니다.', error);
     }
