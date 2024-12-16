@@ -99,7 +99,7 @@ export default function SignUp() {
           가입하기
         </button>
       </form>
-      <footer className="select-none">
+      <footer className="select-none text-center">
         <span>이미 회원이신가요?&nbsp;</span>
         <Link className="text-violet-5534DA underline" href="/login">
           로그인하기
