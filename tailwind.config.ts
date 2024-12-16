@@ -1,6 +1,6 @@
-import type { Config } from 'tailwindcss'
+/** @type {import('tailwindcss').Config} */
 
-export default {
+module.exports = {
   content: ['./app/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     /* 디바이스 분기점 정의 */
@@ -30,9 +30,7 @@ export default {
           EEEEEE: '#EEEEEE',
           FAFAFA: '#FAFAFA',
         },
-        white: {
-          FFFFFF: '#FFFFFF',
-        },
+        white: '#FFFFFF',
         violet: {
           '5534DA': '#5534DA',
           '8': '#F1EFFD',
@@ -59,4 +57,4 @@ export default {
     },
   },
   plugins: [],
-} satisfies Config
+};

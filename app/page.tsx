@@ -1,3 +1,10 @@
+import Sidebar from './_components/sidebar/SideBar';
+
 export default function Home() {
-  return <h1>Hello Next JS!!!</h1>;
+  return (
+    <div>
+      <Sidebar />
+      <h1>Hello Next JS!!!</h1>
+    </div>
+  );
 }
