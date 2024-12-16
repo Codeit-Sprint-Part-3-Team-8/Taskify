@@ -1,11 +1,14 @@
 import Image from 'next/image';
 
-interface CheckboxProps {
+interface CheckboxFieldProps {
   isChecked: boolean;
   onChange: () => void;
 }
 
-export default function Checkbox({ isChecked, onChange }: CheckboxProps) {
+export default function CheckboxField({
+  isChecked,
+  onChange,
+}: CheckboxFieldProps) {
   return (
     <fieldset className="flex items-center gap-2">
       <input

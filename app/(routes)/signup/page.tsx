@@ -1,10 +1,10 @@
 'use client';
 
-import Image from 'next/image';
-import Link from 'next/link';
 import { useState } from 'react';
 import InputField from './InputField';
 import CheckboxField from './CheckboxField';
+import AuthHeader from './AuthHeader';
+import AuthFooter from './AuthFooter';
 
 interface ValuesType {
   email: string;
@@ -34,19 +34,7 @@ export default function SignUp() {
 
   return (
     <div className="fixed left-1/2 right-1/2 top-1/2 w-full max-w-xs -translate-x-1/2 -translate-y-1/2 tablet:max-w-lg">
-      <header className="mb-7 flex select-none flex-col items-center justify-center">
-        <Link href="/">
-          <Image
-            width={200}
-            height={280}
-            src="/images/logo-main.svg"
-            alt="Taskify"
-          />
-        </Link>
-        <span className="text-xl font-medium text-black-333236">
-          첫 방문을 확영합니다!
-        </span>
-      </header>
+      <AuthHeader />
       <form className="mb-6 flex flex-col gap-6">
         <InputField
           name="email"
@@ -77,12 +65,7 @@ export default function SignUp() {
           가입하기
         </button>
       </form>
-      <footer className="select-none">
-        <span>이미 회원이신가요?&nbsp;</span>
-        <Link className="text-violet-5534DA underline" href="/login">
-          로그인하기
-        </Link>
-      </footer>
+      <AuthFooter to="signin" />
     </div>
   );
 }
