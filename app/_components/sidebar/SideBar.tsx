@@ -71,7 +71,19 @@ export default function Sidebar() {
       <div>
         {myDashBoards.length > 0 ? (
           myDashBoards.map((dashboard) => (
-            <div key={dashboard.id}>{dashboard.title}</div>
+            <div key={dashboard.id}>
+              {dashboard.title}
+              {dashboard.createdByMe ? (
+                <Image
+                  width={17.59}
+                  height={14}
+                  src="/ic-crown.svg"
+                  alt="CrownIcon"
+                />
+              ) : (
+                <div></div>
+              )}
+            </div>
           ))
         ) : (
           <div></div>
