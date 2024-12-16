@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useState } from 'react';
 import InputField from './InputField';
+import CheckboxField from './CheckboxField';
 
 interface ValuesType {
   email: string;
@@ -67,36 +68,7 @@ export default function SignUp() {
           value={values.repeat}
           onChange={handleChangeValue}
         />
-        <fieldset className="flex items-center gap-2">
-          <input
-            className="hidden"
-            type="checkbox"
-            id="terms-of-use"
-            checked={isChecked}
-            onChange={handleChangeCheckbox}
-          />
-          <label
-            className="relative h-5 w-5 cursor-pointer select-none"
-            htmlFor="terms-of-use"
-          >
-            <Image
-              fill
-              src={
-                isChecked
-                  ? '/images/icon-checkbox-active.png'
-                  : '/images/icon-checkbox-default.png'
-              }
-              alt="이용약관"
-            />
-            <div className="absolute z-10 h-full w-full rounded bg-black-171717 opacity-0 hover:opacity-20 active:opacity-40" />
-          </label>
-          <label
-            className="cursor-pointer select-none text-black-333236"
-            htmlFor="terms-of-use"
-          >
-            이용약관에 동의합니다.
-          </label>
-        </fieldset>
+        <CheckboxField isChecked={isChecked} onChange={handleChangeCheckbox} />
         <button
           className="w-full select-none rounded-lg border bg-violet-5534DA py-3.5 text-lg font-medium text-white disabled:bg-gray-9FA6B2"
           type="submit"
