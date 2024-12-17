@@ -7,6 +7,7 @@ import AuthHeader from './AuthHeader';
 import AuthFooter from './AuthFooter';
 import { DEFAULT_VALIDATIONS, validateSchema } from './validate';
 import { ValuesType } from './signupType';
+import { createUser } from '@/api/users';
 
 const DEFAULT_VALUES: ValuesType = {
   email: '',
@@ -43,6 +44,18 @@ export default function SignUp() {
     setIsFormValid(isValid);
   }, [validations, isChecked]);
 
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    if (!isFormValid) return;
+    const body = {
+      email: values.email.trim(),
+      nickname: values.nickname.trim(),
+      password: values.password.trim(),
+    };
+    const response = await createUser(body);
+    console.log(response);
+  };
+
   useEffect(() => {
     validateForm();
   }, [validateForm]);
@@ -50,7 +63,7 @@ export default function SignUp() {
   return (
     <div className="fixed left-1/2 right-1/2 top-1/2 w-full max-w-xs -translate-x-1/2 -translate-y-1/2 tablet:max-w-lg">
       <AuthHeader />
-      <form className="mb-6 flex flex-col gap-6">
+      <form className="mb-6 flex flex-col gap-6" onSubmit={handleSubmit}>
         <InputField
           name="email"
           value={values.email}
