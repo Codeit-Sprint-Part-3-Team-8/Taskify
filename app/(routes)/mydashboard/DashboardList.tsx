@@ -4,15 +4,15 @@ import Image from 'next/image';
 
 export default function DashboardGrid() {
   return (
-    <div className="grid grid-cols-3 grid-rows-2 gap-4 p-4 py-28 pl-16 tablet:pl-40 pc:pl-[21.25rem]">
-      <div className="flex flex-col items-center justify-center rounded-lg border-2 border-gray-300 p-4 hover:cursor-pointer">
+    <div className="grid grid-cols-1 grid-rows-6 gap-4 p-4 py-28 pl-[5.5rem] tablet:grid-cols-2 tablet:grid-rows-3 tablet:pl-[12.5rem] pc:grid-cols-3 pc:grid-rows-2 pc:pl-[21.25rem]">
+      <div className="flex items-center justify-center gap-3 rounded-lg border border-gray-D9D9D9 px-14 py-4 hover:cursor-pointer">
+        <p className="text-sm text-black-333236">새로운 대시보드</p>
         <Image
-          src="/images/sidebar-plusbtn.svg"
+          src="/images/icon/ic-chip.svg"
           alt="Add Dashboard"
-          width={30}
-          height={30}
+          width={22}
+          height={22}
         />
-        <p className="mt-2 text-sm text-gray-600">새로운 대시보드 추가</p>
       </div>
     </div>
   );
