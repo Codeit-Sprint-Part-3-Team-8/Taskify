@@ -13,7 +13,7 @@ export default function AuthHeader() {
         />
       </Link>
       <span className="text-xl font-medium text-black-333236">
-        첫 방문을 확영합니다!
+        첫 방문을 환영합니다!
       </span>
     </header>
   );
