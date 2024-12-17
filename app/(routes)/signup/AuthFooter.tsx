@@ -15,7 +15,7 @@ const DESTINATION = {
 
 export default function AuthFooter({ to }: { to: 'signup' | 'signin' }) {
   return (
-    <footer className="select-none">
+    <footer className="select-none text-center">
       <span>{DESTINATION[to].description}&nbsp;</span>
       <Link
         className="text-violet-5534DA underline"
