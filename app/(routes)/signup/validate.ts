@@ -11,7 +11,9 @@ const DEFAULT_VALIDATIONS: ValidationType = {
 function validateSchema(name: string, values: ValuesType) {
   switch (name) {
     case 'email':
-      const emailSchema = new Validator(values.email).required().isEmail();
+      const emailSchema = new Validator(values.email)
+        .required('이메일을 입력해주세요')
+        .isEmail('이메일 형식이 옳지 않습니다');
       const email = {
         isValid: emailSchema.validate(),
         message: emailSchema.validate() ? '' : emailSchema.getErrors()[0],
@@ -19,8 +21,9 @@ function validateSchema(name: string, values: ValuesType) {
       return { email };
     case 'nickname':
       const nicknameSchema = new Validator(values.nickname)
-        .required()
-        .minLength(2);
+        .required('닉네임을 입력해주세요')
+        .minLength(2, '닉네임을 2자 이상 입력해주세요')
+        .maxLength(10, '이메일을 10자 이하로 입력해주세요');
       const nickname = {
         isValid: nicknameSchema.validate(),
         message: nicknameSchema.validate() ? '' : nicknameSchema.getErrors()[0],
@@ -29,8 +32,8 @@ function validateSchema(name: string, values: ValuesType) {
     case 'password':
     case 'repeat':
       const passwordSchema = new Validator(values.password)
-        .required()
-        .minLength(8);
+        .required('비밀번호를 입력해주세요')
+        .minLength(8, '비밀번호를 8자 이상 입력해주세요');
 
       const password = {
         isValid: passwordSchema.validate(),
