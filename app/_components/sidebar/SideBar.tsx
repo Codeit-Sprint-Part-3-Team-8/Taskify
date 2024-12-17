@@ -89,7 +89,7 @@ export default function Sidebar() {
                   style={{ backgroundColor: dashboard.color }}
                 />
                 <div className="hidden w-full text-gray-787486 tablet:flex tablet:gap-1 tablet:text-base pc:gap-1.5">
-                  <div className="w-full truncate">{dashboard.title}</div>
+                  <div className="w-0 flex-1 truncate">{dashboard.title}</div>
                   {dashboard.createdByMe && (
                     <Image
                       width={17.59}
