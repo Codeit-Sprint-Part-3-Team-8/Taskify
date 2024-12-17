@@ -10,6 +10,7 @@ import { ValuesType } from './signupType';
 import { createUser } from '@/api/users';
 import useAsync from '@/_hooks/useAsync';
 import Modal from './Modal';
+import { useRouter } from 'next/navigation';
 
 const DEFAULT_VALUES: ValuesType = {
   email: '',
@@ -31,8 +32,10 @@ export default function SignUp() {
     error,
     errorMessage,
   } = useAsync(createUser);
+  const router = useRouter();
 
-  const handleCloseModal = () => setShowError(false);
+  const handleClickClose = () => setShowError(false);
+  const handleClickSuccess = () => router.push('/login');
 
   const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -81,9 +84,11 @@ export default function SignUp() {
 
   return (
     <>
-      {!!userData && <Modal text="모달이라능" onClick={() => {}} />}
+      {!!userData && (
+        <Modal text="가입이 완료되었습니다!!" onClick={handleClickSuccess} />
+      )}
       {showError && (
-        <Modal text={errorMessage as string} onClick={handleCloseModal} />
+        <Modal text={errorMessage as string} onClick={handleClickClose} />
       )}
       <div className="fixed left-1/2 right-1/2 top-1/2 w-full max-w-xs -translate-x-1/2 -translate-y-1/2 tablet:max-w-lg">
         <AuthHeader />
