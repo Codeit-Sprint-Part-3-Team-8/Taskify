@@ -11,7 +11,7 @@ const BUTTON_VARIANT_STYLES = {
   white: 'bg-white text-gray-787486 border border-gray-D9D9D9',
 };
 
-const ModalButton = ({
+const Button = ({
   backgroundColor,
   children,
   customStyle,
@@ -25,4 +25,4 @@ const ModalButton = ({
   );
 };
 
-export default ModalButton;
+export default Button;
