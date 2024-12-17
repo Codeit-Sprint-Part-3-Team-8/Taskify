@@ -68,7 +68,7 @@ export default function Sidebar() {
         />
       </button>
       <div>
-        {myDashBoards.length > 0 ? (
+        {myDashBoards.length > 0 &&
           myDashBoards.map((dashboard) => (
             <div key={dashboard.id}>
               <div
@@ -76,21 +76,17 @@ export default function Sidebar() {
                 style={{ backgroundColor: dashboard.color }}
               ></div>
               {dashboard.title}
-              {dashboard.createdByMe ? (
+              {dashboard.createdByMe && (
                 <Image
                   width={17.59}
                   height={14}
                   src="/ic-crown.svg"
                   alt="CrownIcon"
                 />
-              ) : (
-                <div></div>
               )}
             </div>
-          ))
-        ) : (
-          <div></div>
-        )}
+          ))}
+        {myDashBoards.length === 0 && <div></div>}
       </div>
     </div>
   );
