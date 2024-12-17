@@ -49,7 +49,7 @@ export default function Sidebar() {
   }, []);
 
   return (
-    <div>
+    <div className="fixed left-0 top-0 z-10 flex h-full w-16 flex-col gap-3.5 border border-r-gray-D9D9D9 bg-white px-3 py-5 tablet:w-40 tablet:gap-14 pc:w-72 pc:px-2">
       <Link href={'/'}>
         <Image
           width={108.8}
@@ -58,35 +58,44 @@ export default function Sidebar() {
           alt="Taskify"
         />
       </Link>
-      <button>
-        <div>Dash Boards</div>
-        <Image
-          width={20}
-          height={20}
-          src="/sidebar-plusbtn.svg"
-          alt="Plusbtn"
-        />
-      </button>
-      <div>
-        {myDashBoards.length > 0 &&
-          myDashBoards.map((dashboard) => (
-            <div key={dashboard.id}>
+      <div className="flex h-full w-full flex-col gap-4">
+        <button className="flex w-full items-center justify-center tablet:justify-between">
+          <div className="hidden text-xs text-gray-787486 tablet:block">
+            Dash Boards
+          </div>
+          <Image
+            width={20}
+            height={20}
+            src="/sidebar-plusbtn.svg"
+            alt="Plusbtn"
+          />
+        </button>
+        <div className="flex h-full w-full flex-col gap-3.5 tablet:gap-0.5 pc:gap-2">
+          {myDashBoards.length > 0 &&
+            myDashBoards.map((dashboard) => (
               <div
-                className="h-2 w-2 rounded-full"
-                style={{ backgroundColor: dashboard.color }}
-              ></div>
-              {dashboard.title}
-              {dashboard.createdByMe && (
-                <Image
-                  width={17.59}
-                  height={14}
-                  src="/ic-crown.svg"
-                  alt="CrownIcon"
+                key={dashboard.id}
+                className="flex w-full items-center justify-center gap-4 rounded p-4 tablet:justify-start tablet:gap-2.5 tablet:px-3 tablet:py-2"
+              >
+                <span
+                  className="sh h-2 w-2 shrink-0 rounded-full"
+                  style={{ backgroundColor: dashboard.color }}
                 />
-              )}
-            </div>
-          ))}
-        {myDashBoards.length === 0 && <div></div>}
+                <div className="hidden w-full text-gray-787486 tablet:flex tablet:gap-1 tablet:text-base pc:gap-1.5">
+                  <div className="w-full truncate">{dashboard.title}</div>
+                  {dashboard.createdByMe && (
+                    <Image
+                      width={17.59}
+                      height={14}
+                      src="/ic-crown.svg"
+                      alt="CrownIcon"
+                    />
+                  )}
+                </div>
+              </div>
+            ))}
+          {myDashBoards.length === 0 && <div></div>}
+        </div>
       </div>
     </div>
   );
