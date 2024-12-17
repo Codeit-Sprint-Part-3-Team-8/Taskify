@@ -29,6 +29,7 @@ export default function SignUp() {
     excute: createUserAsync,
     loading,
     error,
+    errorMessage,
   } = useAsync(createUser);
 
   const handleCloseModal = () => setShowError(false);
@@ -82,7 +83,7 @@ export default function SignUp() {
     <>
       {!!userData && <Modal text="모달이라능" onClick={() => {}} />}
       {showError && (
-        <Modal text={error?.message as string} onClick={handleCloseModal} />
+        <Modal text={errorMessage as string} onClick={handleCloseModal} />
       )}
       <div className="fixed left-1/2 right-1/2 top-1/2 w-full max-w-xs -translate-x-1/2 -translate-y-1/2 tablet:max-w-lg">
         <AuthHeader />
