@@ -54,7 +54,7 @@ export default function Sidebar() {
         <Image
           width={108.8}
           height={33.07}
-          src="/main-logo.svg"
+          src="/images/logo/main-logo.svg"
           alt="Taskify"
         />
       </Link>
@@ -66,7 +66,7 @@ export default function Sidebar() {
           <Image
             width={20}
             height={20}
-            src="/sidebar-plusbtn.svg"
+            src="/images/sidebar-plusbtn.svg"
             alt="Plusbtn"
           />
         </button>
@@ -87,7 +87,7 @@ export default function Sidebar() {
                     <Image
                       width={17.59}
                       height={14}
-                      src="/ic-crown.svg"
+                      src="/images/icon/ic-crown.svg"
                       alt="CrownIcon"
                     />
                   )}
