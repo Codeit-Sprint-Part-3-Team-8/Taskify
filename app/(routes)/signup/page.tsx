@@ -8,6 +8,7 @@ import AuthFooter from './AuthFooter';
 import { DEFAULT_VALIDATIONS, validateSchema } from './validate';
 import { ValuesType } from './signupType';
 import { createUser } from '@/api/users';
+import useAsync from '@/_hooks/useAsync';
 
 const DEFAULT_VALUES: ValuesType = {
   email: '',
@@ -21,6 +22,7 @@ export default function SignUp() {
   const [isChecked, setIsChecked] = useState(false);
   const [validations, setValidations] = useState(DEFAULT_VALIDATIONS);
   const [isFormValid, setIsFormValid] = useState(false);
+  const { excute: createUserAsync, loading, error } = useAsync(createUser);
 
   const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -52,8 +54,7 @@ export default function SignUp() {
       nickname: values.nickname.trim(),
       password: values.password.trim(),
     };
-    const response = await createUser(body);
-    console.log(response);
+    await createUserAsync(body);
   };
 
   useEffect(() => {
@@ -63,6 +64,7 @@ export default function SignUp() {
   return (
     <div className="fixed left-1/2 right-1/2 top-1/2 w-full max-w-xs -translate-x-1/2 -translate-y-1/2 tablet:max-w-lg">
       <AuthHeader />
+      {error && <div>{error.message}</div>}
       <form className="mb-6 flex flex-col gap-6" onSubmit={handleSubmit}>
         <InputField
           name="email"
@@ -92,7 +94,7 @@ export default function SignUp() {
         <button
           className="w-full select-none rounded-lg border bg-violet-5534DA py-3.5 text-lg font-medium text-white disabled:bg-gray-9FA6B2"
           type="submit"
-          disabled={!isFormValid}
+          disabled={!isFormValid || loading}
         >
           가입하기
         </button>

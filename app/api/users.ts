@@ -7,9 +7,8 @@ interface CreateUserParams {
 }
 
 async function createUser({ email, nickname, password }: CreateUserParams) {
-  const result = await axios.post('/users', { email, nickname, password });
-  console.log(result);
-  return result.data;
+  const response = await axios.post('/users', { email, nickname, password });
+  return response.data;
 }
 
 export { createUser };
