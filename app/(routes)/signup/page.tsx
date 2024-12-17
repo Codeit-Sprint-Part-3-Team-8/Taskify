@@ -35,9 +35,13 @@ export default function SignUp() {
   const validateForm = useCallback(() => {
     const { email, nickname, password, repeat } = validations;
     const isValid =
-      email.isValid && nickname.isValid && password.isValid && repeat.isValid;
+      email.isValid &&
+      nickname.isValid &&
+      password.isValid &&
+      repeat.isValid &&
+      isChecked;
     setIsFormValid(isValid);
-  }, [validations]);
+  }, [validations, isChecked]);
 
   useEffect(() => {
     validateForm();
