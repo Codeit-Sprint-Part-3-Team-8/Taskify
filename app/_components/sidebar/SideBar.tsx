@@ -49,12 +49,19 @@ export default function Sidebar() {
   }, []);
 
   return (
-    <div className="fixed left-0 top-0 z-10 flex h-full w-16 flex-col gap-3.5 border border-r-gray-D9D9D9 bg-white px-3 py-5 tablet:w-40 tablet:gap-14 pc:w-72 pc:px-2">
-      <Link href={'/'}>
+    <div className="fixed left-0 top-0 z-10 flex h-full w-16 flex-col gap-10 border border-r-gray-D9D9D9 bg-white px-3 py-5 tablet:w-40 tablet:gap-14 pc:w-72 pc:px-2">
+      <Link className="flex justify-center tablet:justify-start" href={'/'}>
         <Image
-          width={108.8}
+          width={28.82}
           height={33.07}
-          src="/images/logo/main-logo.svg"
+          src="/images/logo/logo-image.svg"
+          alt="Taskify"
+        />
+        <Image
+          className="hidden tablet:block"
+          width={80}
+          height={22}
+          src="/images/logo/logo-text.svg"
           alt="Taskify"
         />
       </Link>
