@@ -24,7 +24,7 @@ interface DashBoardResponse {
 const ACCESSTOKEN =
   'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDk1OCwidGVhbUlkIjoiMTEtOCIsImlhdCI6MTczNDMzMTY1OSwiaXNzIjoic3AtdGFza2lmeSJ9.NUwX8wxDLIx4GWjslfJYQ-jaxA0AsSLSZXcmK9r0sog';
 
-export default function Sidebar() {
+export default function SideBar() {
   const [myDashBoards, setMyDashBoards] = useState<DashBoard[]>([]);
 
   async function getMyDashBoardList() {
