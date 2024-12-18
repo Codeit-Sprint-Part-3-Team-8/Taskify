@@ -85,7 +85,7 @@ export default function SignUp() {
   return (
     <>
       {!!userData && (
-        <Modal text="가입이 완료되었습니다!!" onClick={handleClickSuccess} />
+        <Modal text="가입이 완료되었습니다!" onClick={handleClickSuccess} />
       )}
       {showError && (
         <Modal text={errorMessage as string} onClick={handleClickClose} />
