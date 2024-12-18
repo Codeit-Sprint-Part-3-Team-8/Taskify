@@ -1,6 +1,6 @@
 import { UniqueIdentifier } from '@dnd-kit/core';
 import { ItemGroupsProps } from './Dashboard';
-import { insertAtIndex, removeAtIndex } from '@/_lib/array';
+import { insertAtIndex, removeAtIndex } from './array';
 
 type ContainerId = keyof ItemGroupsProps;
 
