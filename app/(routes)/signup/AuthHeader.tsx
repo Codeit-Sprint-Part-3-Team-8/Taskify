@@ -6,6 +6,7 @@ export default function AuthHeader() {
     <header className="mb-7 flex select-none flex-col items-center justify-center">
       <Link href="/">
         <Image
+          priority={true}
           width={200}
           height={280}
           src="/images/logo/logo-main.svg"

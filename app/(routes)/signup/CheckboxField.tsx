@@ -30,6 +30,7 @@ export default function CheckboxField({
               : '/images/icon/icon-checkbox-default.png'
           }
           alt="이용약관"
+          sizes="100%, 100%, 100%, 100%"
         />
         <div className="absolute z-10 h-full w-full rounded bg-black-171717 opacity-0 hover:opacity-20 active:opacity-40" />
       </label>
