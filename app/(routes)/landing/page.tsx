@@ -9,7 +9,7 @@ import landing5 from '@images/contents/landing5.png';
 import { montserrat } from '@/fonts';
 import Link from 'next/link';
 import Header from './Header';
-import Footer from './footer';
+import Footer from './Footer';
 import ContentBox from './ContentBox';
 
 export default function LandingPage() {
@@ -18,14 +18,8 @@ export default function LandingPage() {
       <div className="bg-black-000000 pb-24 tablet:pb-0">
         <Header />
         <div className="justify flex flex-col items-center pb-40 pt-24">
-          <div className="relative flex items-center justify-center first-letter:w-full mobile:px-11 tablet:px-24">
-            <Image
-              className=""
-              src={mainImage}
-              width={722}
-              height={422}
-              alt="메인이미지"
-            />
+          <div className="relative flex w-full items-center justify-center px-11 tablet:px-24">
+            <Image src={mainImage} width={722} height={422} alt="메인이미지" />
           </div>
           <h1 className="pb-28 pt-6 text-center text-4xl font-bold text-white tablet:pt-12 tablet:text-[3.5rem] pc:text-6xl">
             새로운 일정 관리
@@ -41,7 +35,7 @@ export default function LandingPage() {
             </button>
           </Link>
           <div className="flex w-full items-center justify-center px-4 tablet:px-10">
-            <section className="mt-44 w-full bg-black-171717 pc:h-[37rem] pc:w-[75rem]">
+            <section className="mt-44 h-full w-full bg-black-171717 pc:h-[37rem] pc:w-[75rem]">
               <div className="flex flex-col justify-between gap-56 pc:flex-row pc:gap-0">
                 <div className="pt-28 text-center tablet:pl-14 tablet:text-left">
                   <div className="pb-24 text-[1.3rem] text-gray-9FA6B2">
@@ -56,11 +50,10 @@ export default function LandingPage() {
                 <div className="flex justify-end">
                   <div className="relative h-[15rem] w-[18rem] tablet:h-[27rem] tablet:w-[32rem]">
                     <Image
-                      className="tablet: pc:pt-[5.8rem]"
+                      className="pc:pt-[10rem]"
                       src={landing1}
                       width={594}
                       height={497}
-                      objectFit="cover"
                       alt="대쉬보드이미지"
                     />
                   </div>
@@ -77,7 +70,6 @@ export default function LandingPage() {
                     src={landing2}
                     width={436}
                     height={502}
-                    objectFit="cover"
                     alt="할일카드"
                   />
                 </div>
