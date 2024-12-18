@@ -1,4 +1,4 @@
-import Sidebar from '@/_components/Sidebar/SideBar';
+import Sidebar from '@/_components/sidebar/SideBar';
 import DashboardList from './DashboardList';
 
 export default function myDashBoardPage() {
