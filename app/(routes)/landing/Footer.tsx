@@ -4,6 +4,29 @@ import IconFacebook from '@images/icon/facebook.svg';
 import IconInstagram from '@images/icon/Instagram.svg';
 import Image from 'next/image';
 
+const socialLinks = [
+  {
+    href: 'https://www.gmail.com',
+    src: IconMail,
+    alt: '메일이동하기',
+  },
+  {
+    href: 'https://www.facebook.com',
+    src: IconFacebook,
+    alt: '페이스북이동하기',
+  },
+  {
+    href: 'https://www.instagram.com',
+    src: IconInstagram,
+    alt: '인스타그램이동하기',
+  },
+];
+
+const footerLinks = [
+  { label: 'Privacy Policy', href: '/privacy-policy' },
+  { label: 'FAQ', href: '/faq' },
+];
+
 export default function Footer() {
   return (
     <footer className="flex h-24 flex-col items-center justify-between tablet:flex tablet:flex-row tablet:px-36">
@@ -11,41 +34,27 @@ export default function Footer() {
         @codeit - 2024
       </div>
       <div className="text-1 flex items-center gap-8 font-normal text-gray-9FA6B2">
-        <div>Privacy Policy</div>
-        <div>FAQ</div>
+        <ul className="flex gap-8">
+          {footerLinks.map(({ label, href }) => (
+            <li key={href}>
+              <a href={href} className="hover:text-blue-500">
+                {label}
+              </a>
+            </li>
+          ))}
+        </ul>
       </div>
       <div className="flex items-center gap-3 pt-16 tablet:pt-0">
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.gmail.com"
-        >
-          <Image src={IconMail} width={20} height={15} alt="메일이동하기" />
-        </a>
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.facebook.com"
-        >
-          <Image
-            src={IconFacebook}
-            width={20}
-            height={15}
-            alt="페이스북이동하기"
-          />
-        </a>
-        <a
-          target="_blank"
-          rel="noopener noreferrer"
-          href="https://www.instagram.com"
-        >
-          <Image
-            src={IconInstagram}
-            width={20}
-            height={15}
-            alt="인스타그램이동하기"
-          />
-        </a>
+        {socialLinks.map(({ href, src, alt }) => (
+          <a key={href} target="_blank" rel="noopener noreferrer" href={href}>
+            <Image
+              src={src}
+              width={16}
+              style={{ width: '100%', height: 'auto' }}
+              alt={alt}
+            />
+          </a>
+        ))}
       </div>
     </footer>
   );

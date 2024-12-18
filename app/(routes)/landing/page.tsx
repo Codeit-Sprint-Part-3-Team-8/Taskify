@@ -9,7 +9,7 @@ import landing5 from '@images/contents/landing5.png';
 import { montserrat } from '@/fonts';
 import Link from 'next/link';
 import Header from './Header';
-import Footer from './footer';
+import Footer from './Footer';
 import ContentBox from './ContentBox';
 
 export default function LandingPage() {
@@ -30,13 +30,13 @@ export default function LandingPage() {
           <h1 className="pb-28 pt-6 text-center text-4xl font-bold text-white tablet:pt-12 tablet:text-[3.5rem] pc:text-6xl">
             새로운 일정 관리
             <span
-              className={`${montserrat.variable} font-montserrat mt-2 block text-[2.6rem] text-violet-5534DA tablet:inline tablet:pl-7 tablet:text-[4.3rem]`}
+              className={`${montserrat.variable} mt-2 block font-montserrat text-[2.6rem] text-violet-5534DA tablet:inline tablet:pl-7 tablet:text-[4.3rem]`}
             >
               Taskify
             </span>
           </h1>
           <Link href="/login">
-            <button className="text-2lg rounded-lg bg-violet-5534DA px-[101px] py-4 font-medium text-white">
+            <button className="rounded-lg bg-violet-5534DA px-[101px] py-4 text-2lg font-medium text-white">
               로그인하기
             </button>
           </Link>
@@ -60,7 +60,6 @@ export default function LandingPage() {
                       src={landing1}
                       width={594}
                       height={497}
-                      objectFit="cover"
                       alt="대쉬보드이미지"
                     />
                   </div>
@@ -77,7 +76,6 @@ export default function LandingPage() {
                     src={landing2}
                     width={436}
                     height={502}
-                    objectFit="cover"
                     alt="할일카드"
                   />
                 </div>
