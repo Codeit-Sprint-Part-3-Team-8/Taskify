@@ -11,3 +11,4 @@ async function loginUser({ email, password }: LoginUserParams) {
 }
 
 export { loginUser };
+export type { LoginUserParams };
