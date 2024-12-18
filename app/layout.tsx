@@ -1,9 +1,9 @@
-import "@/_styles/globals.css";
+import '@/_styles/globals.css';
 
 export const metadata = {
-  title: "Taskify - 새로운 일정 관리",
+  title: 'Taskify - 새로운 일정 관리',
   description:
-    "일정 관리와 공유 기능을 제공하여 다양한 커뮤니티를 생성하고, 멤버를 초대하여 일정과 할 일 목록을 함께 관리",
+    '일정 관리와 공유 기능을 제공하여 다양한 커뮤니티를 생성하고, 멤버를 초대하여 일정과 할 일 목록을 함께 관리',
 };
 
 export default function RootLayout({
