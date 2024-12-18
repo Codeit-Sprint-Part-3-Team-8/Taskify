@@ -27,7 +27,8 @@
       "@types/*": ["./app/_types/*"],
       "@api/*": ["./app/api/*"],
       "@constants/*": ["./app/_constants/*"],
-      "@hooks/*": ["./app/_hooks/*"]
+      "@hooks/*": ["./app/_hooks/*"],
+      "@images/*": ["./public/images/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],
