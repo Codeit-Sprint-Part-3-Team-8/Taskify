@@ -1,15 +1,15 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import InputField from './InputField';
+import InputField from '../../_components/Auth/InputField';
 import CheckboxField from './CheckboxField';
-import AuthHeader from './AuthHeader';
-import AuthFooter from './AuthFooter';
+import AuthHeader from '../../_components/Auth/AuthHeader';
+import AuthFooter from '../../_components/Auth/AuthFooter';
 import { DEFAULT_VALIDATIONS, validateSchema } from './validate';
 import { ValuesType } from './signupType';
 import { createUser } from '@/api/users';
 import useAsync from '@/_hooks/useAsync';
-import Modal from './Modal';
+import Modal from '../../_components/Auth/Modal';
 import { useRouter } from 'next/navigation';
 
 const DEFAULT_VALUES: ValuesType = {
@@ -91,7 +91,7 @@ export default function SignUp() {
         <Modal text={errorMessage as string} onClick={handleClickClose} />
       )}
       <div className="fixed left-1/2 right-1/2 top-1/2 w-full max-w-xs -translate-x-1/2 -translate-y-1/2 tablet:max-w-lg">
-        <AuthHeader />
+        <AuthHeader text="첫 방문을 환영합니다!!" />
         <form className="mb-6 flex flex-col gap-6" onSubmit={handleSubmit}>
           <InputField
             name="email"
