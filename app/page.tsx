@@ -1,4 +1,5 @@
-import LandingPage from './(routes)/landing/page';
+import Image from 'next/image';
+import mainImage from '@images/contents/main.png';
 
 export default function Home() {
   return <LandingPage />;
