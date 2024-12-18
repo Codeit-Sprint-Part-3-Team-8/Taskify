@@ -8,7 +8,7 @@ export default function AuthHeader() {
         <Image
           width={200}
           height={280}
-          src="/images/logo-main.svg"
+          src="/images/logo/logo-main.svg"
           alt="Taskify"
         />
       </Link>

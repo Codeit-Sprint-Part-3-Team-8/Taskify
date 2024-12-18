@@ -26,8 +26,8 @@ export default function CheckboxField({
           fill
           src={
             isChecked
-              ? '/images/icon-checkbox-active.png'
-              : '/images/icon-checkbox-default.png'
+              ? '/images/icon/icon-checkbox-active.png'
+              : '/images/icon/icon-checkbox-default.png'
           }
           alt="이용약관"
         />
