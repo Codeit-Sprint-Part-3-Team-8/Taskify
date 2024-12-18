@@ -4,7 +4,7 @@ import AuthFooter from '@/_components/Auth/AuthFooter';
 import AuthHeader from '@/_components/Auth/AuthHeader';
 import InputField from '@/_components/Auth/InputField';
 import Validator from '@/_lib/validator';
-import { useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 
 interface ValuesType {
   email: string;
@@ -53,6 +53,7 @@ function validateSchema(name: string, values: ValuesType) {
 export default function LoginPage() {
   const [values, setValues] = useState(DEFAULT_VALUES);
   const [validations, setValidations] = useState(DEFAULT_VALIDATIONS);
+  const [isFormValid, setIsFormValid] = useState(false);
 
   const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -65,6 +66,16 @@ export default function LoginPage() {
       return next;
     });
   };
+
+  const validateForm = useCallback(() => {
+    const { email, password } = validations;
+    const isValid = email.isValid && password.isValid;
+    setIsFormValid(isValid);
+  }, [validations]);
+
+  useEffect(() => {
+    validateForm();
+  }, [validateForm]);
 
   return (
     <>
@@ -86,7 +97,7 @@ export default function LoginPage() {
           <button
             className="w-full select-none rounded-lg border bg-violet-5534DA py-3.5 text-lg font-medium text-white disabled:bg-gray-9FA6B2"
             type="submit"
-            // disabled={!isFormValid || loading}
+            disabled={!isFormValid}
           >
             로그인
           </button>
