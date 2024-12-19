@@ -1,7 +1,7 @@
 import React from 'react';
 import IconMail from '@images/icon/mail.svg';
 import IconFacebook from '@images/icon/facebook.svg';
-import IconInstagram from '@images/icon/Instagram.svg';
+import IconInstagram from '@images/icon/instagram.svg';
 import Image from 'next/image';
 
 const socialLinks = [
