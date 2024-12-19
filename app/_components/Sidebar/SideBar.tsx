@@ -21,21 +21,13 @@ interface DashBoardResponse {
   cursorId: number | null;
 }
 
-const ACCESSTOKEN =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDk1OCwidGVhbUlkIjoiMTEtOCIsImlhdCI6MTczNDMzMTY1OSwiaXNzIjoic3AtdGFza2lmeSJ9.NUwX8wxDLIx4GWjslfJYQ-jaxA0AsSLSZXcmK9r0sog';
-
 export default function SideBar() {
   const [myDashBoards, setMyDashBoards] = useState<DashBoard[]>([]);
 
   async function getMyDashBoardList() {
     try {
       const response = await instance.get<DashBoardResponse>(
-        `11-8/dashboards?navigationMethod=pagination`,
-        {
-          headers: {
-            Authorization: `Bearer ${ACCESSTOKEN}`,
-          },
-        },
+        `/dashboards?navigationMethod=pagination`,
       );
 
       setMyDashBoards(response.data.dashboards || []);
@@ -80,7 +72,8 @@ export default function SideBar() {
         <div className="flex h-full w-full flex-col gap-3.5 tablet:gap-0.5 pc:gap-2">
           {myDashBoards.length > 0 &&
             myDashBoards.map((dashboard) => (
-              <div
+              <Link
+                href={`/dashboard/${dashboard.id}`}
                 key={dashboard.id}
                 className="flex w-full items-center justify-center gap-4 rounded p-4 tablet:justify-start tablet:gap-2.5 tablet:px-3 tablet:py-2"
               >
@@ -99,7 +92,7 @@ export default function SideBar() {
                     />
                   )}
                 </div>
-              </div>
+              </Link>
             ))}
           {myDashBoards.length === 0 && <div></div>}
         </div>
