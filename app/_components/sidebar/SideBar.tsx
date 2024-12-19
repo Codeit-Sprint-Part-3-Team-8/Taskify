@@ -30,7 +30,7 @@ export default function SideBar() {
   async function getMyDashBoardList() {
     try {
       const response = await instance.get<DashBoardResponse>(
-        `11-8/dashboards?navigationMethod=pagination`,
+        `/dashboards?navigationMethod=pagination`,
         {
           headers: {
             Authorization: `Bearer ${ACCESSTOKEN}`,
