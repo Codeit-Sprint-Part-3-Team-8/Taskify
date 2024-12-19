@@ -12,14 +12,18 @@ import { createContext, useContext, useEffect } from 'react';
 
 const AuthContext = createContext<{
   user: UserType | null;
-  loading: boolean;
+  loadingLogin: boolean;
+  loadingUser: boolean;
   login: ({ email, password }: LoginUserParams) => void;
   logout: () => void;
+  loginErrorMessage: string | null;
 }>({
   user: null,
-  loading: false,
+  loadingLogin: false,
+  loadingUser: false,
   login: () => {},
   logout: () => {},
+  loginErrorMessage: null,
 });
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
@@ -34,6 +38,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     excute: loginUserAsync,
     data: loginData,
     loading: loadingLogin,
+    errorMessage: loginErrorMessage,
   } = useAsync(loginUser);
 
   async function login({ email, password }: LoginUserParams) {
@@ -51,19 +56,20 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     if (loginData) {
       localStorage.setItem(key, loginData.accessToken);
     }
-  }, [loginData, key]);
-
-  useEffect(() => {
-    getUserAsync(undefined);
-  }, [getUserAsync]);
+    if (localStorage.getItem(key)) {
+      getUserAsync(undefined);
+    }
+  }, [getUserAsync, loginData, key]);
 
   return (
     <AuthContext.Provider
       value={{
         user: userData,
-        loading: loadingUser || loadingLogin,
+        loadingUser,
+        loadingLogin,
         login,
         logout,
+        loginErrorMessage,
       }}
     >
       {children}
@@ -80,10 +86,10 @@ function useAuth(required: boolean = false) {
   }
 
   useEffect(() => {
-    if (required && !context.user && !context.loading) {
+    if (required && !context.user && !context.loadingUser) {
       router.push('/login');
     }
-  }, [required, context.user, context.loading, router]);
+  }, [required, context.user, context.loadingUser, router]);
 
   return context;
 }
