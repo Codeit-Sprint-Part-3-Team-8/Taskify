@@ -1,16 +1,16 @@
 'use client';
 
 import { useCallback, useEffect, useState } from 'react';
-import InputField from '../../_components/Auth/InputField';
 import CheckboxField from './CheckboxField';
-import AuthHeader from '../../_components/Auth/AuthHeader';
-import AuthFooter from '../../_components/Auth/AuthFooter';
 import { DEFAULT_VALIDATIONS, validateSchema } from './validate';
 import { ValuesType } from './signupType';
 import { createUser } from '@/api/users';
 import useAsync from '@/_hooks/useAsync';
-import Modal from '../../_components/Auth/Modal';
 import { useRouter } from 'next/navigation';
+import InputField from '@/_components/Auth/InputField';
+import Modal from '@/_components/Auth/Modal';
+import AuthHeader from '@/_components/Auth/AuthHeader';
+import AuthFooter from '@/_components/Auth/AuthFooter';
 
 const DEFAULT_VALUES: ValuesType = {
   email: '',
