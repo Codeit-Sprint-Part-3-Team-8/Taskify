@@ -7,7 +7,7 @@ const DESTINATION = {
     href: '/login',
   },
   signup: {
-    description: '회원이 아니신가요요?',
+    description: '회원이 아니신가요?',
     link: '회원가입하기',
     href: '/signup',
   },

@@ -26,6 +26,8 @@ export default function useAsync<T, R>(
     [asyncFunction],
   );
 
+  const clear = useCallback(() => setData(null), []);
+
   useEffect(() => {
     if (axios.isAxiosError(error)) {
       const { message } = error.response?.data as {
@@ -39,5 +41,5 @@ export default function useAsync<T, R>(
     }
   }, [error]);
 
-  return { data, excute, loading, error, errorMessage, errorStatus };
+  return { data, excute, loading, error, errorMessage, errorStatus, clear };
 }
