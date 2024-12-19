@@ -23,10 +23,15 @@ export default function MyDashboardNavBar() {
   });
 
   const dropdownRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
   const router = useRouter();
 
   const toggleDropdown = () => {
     setIsDropdownVisible((prev) => !prev);
+
+    if (buttonRef.current && isDropdownVisible) {
+      buttonRef.current.blur();
+    }
   };
 
   const handleClickOutside = (e: MouseEvent) => {
@@ -35,6 +40,9 @@ export default function MyDashboardNavBar() {
       !dropdownRef.current.contains(e.target as Node)
     ) {
       setIsDropdownVisible(false);
+      if (buttonRef.current) {
+        buttonRef.current.blur();
+      }
     }
   };
 
@@ -70,6 +78,7 @@ export default function MyDashboardNavBar() {
       </div>
       <div className="relative flex items-center" ref={dropdownRef}>
         <button
+          ref={buttonRef}
           className="flex items-center rounded-full p-1 focus:bg-gray-9FA6B2 tablet:gap-3"
           onClick={toggleDropdown}
           type="button"
@@ -85,7 +94,6 @@ export default function MyDashboardNavBar() {
             {user.nickname || '사용자'}
           </div>
         </button>
-
         {isDropdownVisible && (
           <div className="absolute right-0 top-10 z-10 mt-2 w-36 rounded-md border border-gray-D9D9D9 bg-white shadow-lg">
             <button
