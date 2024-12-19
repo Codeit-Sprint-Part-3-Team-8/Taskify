@@ -1,10 +1,7 @@
 import axios from './axios';
 
-interface getDashBoardByIdParams {
-  id: number;
-}
-
-export async function getDashBoardById({ id }: getDashBoardByIdParams) {
+export async function getDashBoardById(id: number) {
   const response = await axios.get(`/dashboard/${id}`);
+
   return response.data;
 }
