@@ -1,5 +1,3 @@
-'use client';
-
 import {
   DndContext,
   DragEndEvent,
@@ -14,7 +12,8 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import { useState } from 'react';
+import { useState, useCallback, useMemo } from 'react';
+import { throttle } from 'lodash';
 import Droppable from './Droppable';
 import { Item } from './Item';
 import moveBetweenContainers from './MoveBetweenContainers';
@@ -25,13 +24,12 @@ export interface ItemGroupsProps {
   done: string[];
 }
 
-export default function DashBoard() {
-  const [itemGroups, setItemGroups] = useState<ItemGroupsProps>({
-    todo: ['1', '2', '3'],
-    inProgress: ['4', '5', '6'],
-    done: ['7', '8', '9'],
-  });
-
+export default function DashBoard({
+  initialData,
+}: {
+  initialData: ItemGroupsProps;
+}) {
+  const [itemGroups, setItemGroups] = useState<ItemGroupsProps>(initialData);
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
 
   const sensors = useSensors(
@@ -47,42 +45,59 @@ export default function DashBoard() {
 
   const handleDragCancel = () => setActiveId(null);
 
-  const handleDragOver = ({ active, over }: DragOverEvent) => {
-    const overId = over?.id;
+  const throttledHandleDragOver = useMemo(
+    () =>
+      throttle(
+        (active: DragOverEvent['active'], over: DragOverEvent['over']) => {
+          const overId = over?.id;
 
-    if (!overId) {
-      return;
-    }
-    const activeContainer = active.data.current?.sortable.containerId;
-    const overContainer = over.data.current?.sortable.containerId || over.id;
+          if (!overId) {
+            return;
+          }
 
-    if (
-      !activeContainer ||
-      !overContainer ||
-      activeContainer === overContainer
-    ) {
-      return;
-    }
+          const activeContainer = active.data.current?.sortable.containerId;
+          const overContainer =
+            over.data.current?.sortable.containerId || over.id;
 
-    if (activeContainer !== overContainer) {
-      setItemGroups((itemGroups) => {
-        const activeIndex = active.data.current?.sortable.index;
-        const overIndex =
-          over.id in itemGroups
-            ? itemGroups[overContainer as keyof ItemGroupsProps].length + 1
-            : over.data.current?.sortable.index;
+          if (
+            !activeContainer ||
+            !overContainer ||
+            activeContainer === overContainer
+          ) {
+            return;
+          }
 
-        return moveBetweenContainers({
-          items: itemGroups,
-          activeContainer,
-          activeIndex,
-          overContainer,
-          overIndex,
-          item: active.id,
-        });
-      });
-    }
-  };
+          if (activeContainer !== overContainer) {
+            setItemGroups((itemGroups) => {
+              const activeIndex = active.data.current?.sortable.index;
+              const overIndex =
+                over.id in itemGroups
+                  ? itemGroups[overContainer as keyof ItemGroupsProps].length +
+                    1
+                  : over.data.current?.sortable.index;
+
+              return moveBetweenContainers({
+                items: itemGroups,
+                activeContainer,
+                activeIndex,
+                overContainer,
+                overIndex,
+                item: active.id,
+              });
+            });
+          }
+        },
+        100,
+      ),
+    [],
+  );
+
+  const handleDragOver = useCallback(
+    ({ active, over }: DragOverEvent) => {
+      throttledHandleDragOver(active, over);
+    },
+    [throttledHandleDragOver],
+  );
 
   const handleDragEnd = ({ active, over }: DragEndEvent) => {
     if (!over) {
