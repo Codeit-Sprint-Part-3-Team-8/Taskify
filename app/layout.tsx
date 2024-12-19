@@ -1,4 +1,5 @@
 import '@/_styles/globals.css';
+import { pretendard } from './fonts';
 
 export const metadata = {
   title: 'Taskify - 새로운 일정 관리',
@@ -19,7 +20,7 @@ export default function RootLayout({
         <title>{metadata.title}</title>
         <link rel="icon" href="/images/icon/favicon.ico" />
       </head>
-      <body>{children}</body>
+      <body className={`${pretendard.variable}`}>{children}</body>
     </html>
   );
 }
