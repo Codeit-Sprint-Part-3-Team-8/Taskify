@@ -1,3 +1,5 @@
+import LandingPage from './(routes)/landing/page';
+
 export default function Home() {
-  return <h1>Hello Next JS!!!</h1>;
+  return <LandingPage />;
 }
