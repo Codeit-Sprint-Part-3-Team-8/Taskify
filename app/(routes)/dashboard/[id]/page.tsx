@@ -4,7 +4,7 @@ import dynamic from 'next/dynamic';
 
 const DashBoard = dynamic(() => import('./Dashboard'), { ssr: false });
 
-export default function Page() {
+export default function DashBoardPage() {
   const initialData = {
     todo: ['1', '2', '3'],
     inProgress: ['4', '5', '6'],
