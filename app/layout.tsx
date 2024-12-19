@@ -17,7 +17,7 @@ export default function RootLayout({
         <meta charSet="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <title>{metadata.title}</title>
-        <link rel="icon" href="/images/favicon.ico" />
+        <link rel="icon" href="/images/icon/favicon.ico" />
       </head>
       <body>{children}</body>
     </html>
