@@ -93,6 +93,7 @@ export default function LoginPage() {
           />
           <InputField
             name="password"
+            type="password"
             value={values.password}
             validation={validations.password}
             onChange={handleChangeValue}

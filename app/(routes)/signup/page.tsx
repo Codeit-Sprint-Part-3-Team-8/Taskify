@@ -107,12 +107,14 @@ export default function SignUp() {
           />
           <InputField
             name="password"
+            type="password"
             value={values.password}
             validation={validations.password}
             onChange={handleChangeValue}
           />
           <InputField
             name="repeat"
+            type="password"
             value={values.repeat}
             validation={validations.repeat}
             onChange={handleChangeValue}

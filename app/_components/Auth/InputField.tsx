@@ -1,7 +1,5 @@
-const FIELD_STYLE = 'w-full flex flex-col gap-2';
-const FIEDL_LABEL_STYLE = 'text-black-333236 select-none';
-const FIELD_INPUT_STYLE =
-  'rounded-lg border border-gray-D9D9D9 px-4 py-3.5 placeholder:select-none placeholder:text-gray-9FA6B2';
+import Image from 'next/image';
+import { useState } from 'react';
 
 const INPUT_FIELD_TEXT: {
   [key: string]: {
@@ -29,6 +27,7 @@ const INPUT_FIELD_TEXT: {
 
 interface InputFieldProps {
   name: string;
+  type?: 'text' | 'password';
   value: string;
   validation: { isValid: boolean; message: string };
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -36,27 +35,44 @@ interface InputFieldProps {
 
 export default function InputField({
   name,
+  type = 'text',
   value,
   validation,
   onChange,
 }: InputFieldProps) {
+  const [isVisible, setIsVisible] = useState(type !== 'password');
   const { isValid, message } = validation;
 
   return (
-    <fieldset className={FIELD_STYLE}>
-      <label className={FIEDL_LABEL_STYLE} htmlFor={name}>
+    <fieldset className="relative flex w-full flex-col gap-2">
+      <label className="select-none text-black-333236" htmlFor={name}>
         {INPUT_FIELD_TEXT[name].label}
       </label>
       <input
-        className={FIELD_INPUT_STYLE}
+        className="rounded-lg border border-gray-D9D9D9 px-4 py-3.5 placeholder:select-none placeholder:text-gray-9FA6B2"
         id={name}
         name={name}
-        type="text"
+        type={isVisible ? 'text' : 'password'}
         value={value}
         placeholder={INPUT_FIELD_TEXT[name].placeholder}
         onChange={onChange}
         required
       />
+      {type === 'password' && (
+        <Image
+          className="absolute right-3 top-12"
+          width={24}
+          height={24}
+          priority={true}
+          src={
+            isVisible
+              ? '/images/icon/icon-visibility-on.svg'
+              : '/images/icon/icon-visibility-off.svg'
+          }
+          alt={type === 'password' ? '비밀번호 숨기기' : '비밀번호 표기'}
+          onClick={() => setIsVisible((prev) => !prev)}
+        />
+      )}
       {!isValid && <p>{message}</p>}
     </fieldset>
   );
