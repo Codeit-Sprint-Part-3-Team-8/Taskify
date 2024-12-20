@@ -1,4 +1,5 @@
 import '@/_styles/globals.css';
+import { pretendard } from './fonts';
 import { AuthProvider } from './context/AuthContext';
 
 export const metadata = {
@@ -21,7 +22,7 @@ export default function RootLayout({
           <title>{metadata.title}</title>
           <link rel="icon" href="/images/favicon.ico" />
         </head>
-        <body>{children}</body>
+        <body className={`${pretendard.variable}`}>{children}</body>
       </html>
     </AuthProvider>
   );
