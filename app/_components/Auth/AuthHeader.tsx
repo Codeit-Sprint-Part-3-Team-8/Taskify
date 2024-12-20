@@ -1,7 +1,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-export default function AuthHeader() {
+export default function AuthHeader({ text }: { text: string }) {
   return (
     <header className="mb-7 flex select-none flex-col items-center justify-center">
       <Link href="/">
@@ -13,9 +13,7 @@ export default function AuthHeader() {
           alt="Taskify"
         />
       </Link>
-      <span className="text-xl font-medium text-black-333236">
-        첫 방문을 환영합니다!
-      </span>
+      <span className="text-xl font-medium text-black-333236">{text}</span>
     </header>
   );
 }
