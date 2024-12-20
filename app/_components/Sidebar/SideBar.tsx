@@ -21,8 +21,6 @@ interface DashBoardResponse {
   cursorId: number | null;
 }
 
-const ACCESSTOKEN =
-  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6NDk1OCwidGVhbUlkIjoiMTEtOCIsImlhdCI6MTczNDMzMTY1OSwiaXNzIjoic3AtdGFza2lmeSJ9.NUwX8wxDLIx4GWjslfJYQ-jaxA0AsSLSZXcmK9r0sog';
 
 export default function SideBar() {
   const [myDashBoards, setMyDashBoards] = useState<DashBoard[]>([]);
@@ -30,12 +28,7 @@ export default function SideBar() {
   async function getMyDashBoardList() {
     try {
       const response = await instance.get<DashBoardResponse>(
-        `11-8/dashboards?navigationMethod=pagination`,
-        {
-          headers: {
-            Authorization: `Bearer ${ACCESSTOKEN}`,
-          },
-        },
+        `/dashboards?navigationMethod=pagination`
       );
 
       setMyDashBoards(response.data.dashboards || []);
