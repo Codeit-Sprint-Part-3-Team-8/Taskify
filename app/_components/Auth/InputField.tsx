@@ -1,5 +1,5 @@
 import Image from 'next/image';
-import { useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const INPUT_FIELD_TEXT: {
   [key: string]: {
@@ -42,6 +42,21 @@ export default function InputField({
 }: InputFieldProps) {
   const [isVisible, setIsVisible] = useState(type !== 'password');
   const { isValid, message } = validation;
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    const INVALID_STYLES = ['outline', 'outline-1', 'outline-red-D6173A'];
+    INVALID_STYLES.forEach((style) => {
+      inputRef.current?.classList.toggle(style, !isValid && !!message);
+    });
+    /**
+     * @todo focus 되었을 때 유효하지 않아고 보라색 아웃라인을 보여줄지 여부
+     */
+    inputRef.current?.classList.toggle(
+      'focus-visible:outline-violet-5534DA',
+      isValid || !message,
+    );
+  }, [isValid, message]);
 
   return (
     <fieldset className="relative flex w-full flex-col gap-2">
@@ -49,7 +64,8 @@ export default function InputField({
         {INPUT_FIELD_TEXT[name].label}
       </label>
       <input
-        className="rounded-lg border border-gray-D9D9D9 px-4 py-3.5 placeholder:select-none placeholder:text-gray-9FA6B2"
+        ref={inputRef}
+        className="rounded-lg border border-gray-D9D9D9 px-4 py-3.5 placeholder:select-none placeholder:text-gray-9FA6B2 focus-visible:outline-1 focus-visible:outline-violet-5534DA"
         id={name}
         name={name}
         type={isVisible ? 'text' : 'password'}
