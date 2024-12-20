@@ -5,6 +5,9 @@ import Image from 'next/image';
 import { getDashboard, getMember } from '@/api/navbar';
 import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
+import DropdownMenu from './Dropdown';
+import DropdownContet from './DropdownContent';
+import Profile from './Profile';
 
 interface Member {
   id: number;
@@ -77,7 +80,7 @@ export default function DashboardNavBar() {
 
   return (
     <div className="flex h-[3.75rem] w-full items-center justify-end border-b border-gray-D9D9D9 pl-[5.25rem] pr-2 tablet:h-[4.375rem] tablet:pl-[12.5rem] tablet:pr-8 pc:justify-between pc:pl-80 pc:pr-20">
-      <div className="font-pretendard hidden gap-2 text-lg font-bold text-black-333236 pc:flex pc:text-xl">
+      <div className="hidden gap-2 font-pretendard text-lg font-bold text-black-333236 pc:flex pc:text-xl">
         {dashboard?.title}
         {dashboard?.createdByMe && (
           <Image
@@ -93,7 +96,7 @@ export default function DashboardNavBar() {
         <div className="flex items-center gap-1.5 tablet:gap-3 pc:gap-4">
           <Link
             href={`/dashboard/${BOARD_ID}/edit`}
-            className="font-pretendard text-md flex items-center justify-center rounded-md border border-gray-D9D9D9 px-3 py-1.5 font-medium tablet:gap-2 tablet:rounded-lg tablet:py-2 pc:px-4 pc:py-2.5 pc:text-lg"
+            className="flex items-center justify-center rounded-md border border-gray-D9D9D9 px-3 py-1.5 font-pretendard text-md font-medium tablet:gap-2 tablet:rounded-lg tablet:py-2 pc:px-4 pc:py-2.5 pc:text-lg"
           >
             <Image
               width={20}
@@ -104,7 +107,7 @@ export default function DashboardNavBar() {
             />
             관리
           </Link>
-          <button className="font-pretendard text-md flex items-center justify-center rounded-md border border-gray-D9D9D9 px-3 py-1.5 font-medium tablet:gap-2 tablet:rounded-lg tablet:py-2 pc:px-4 pc:py-2.5 pc:text-lg">
+          <button className="flex items-center justify-center rounded-md border border-gray-D9D9D9 px-3 py-1.5 font-pretendard text-md font-medium tablet:gap-2 tablet:rounded-lg tablet:py-2 pc:px-4 pc:py-2.5 pc:text-lg">
             <Image
               width={20}
               height={20}
@@ -136,23 +139,16 @@ export default function DashboardNavBar() {
           )}
         </div>
         <div className="relative flex items-center border-l border-gray-D9D9D9 pl-4 pc:pl-9">
-          <button
-            type="button"
-            className="flex items-center rounded-full p-1 tablet:gap-1 pc:gap-3"
+          <DropdownMenu
+            trigger={
+              <Profile
+                profileImageUrl={user?.profileImageUrl}
+                nickname={user?.nickname}
+              />
+            }
           >
-            <Image
-              width={32}
-              height={32}
-              src={
-                user?.profileImageUrl || '/images/contents/default-profile.svg'
-              }
-              alt={user?.nickname || '사용자'}
-              className="rounded-full"
-            />
-            <div className="font-pretendard hidden text-lg font-medium text-black-333236 tablet:block">
-              {user?.nickname || '사용자'}
-            </div>
-          </button>
+            <DropdownContet />
+          </DropdownMenu>
         </div>
       </div>
     </div>
