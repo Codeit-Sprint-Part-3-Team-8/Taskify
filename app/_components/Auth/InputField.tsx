@@ -46,6 +46,11 @@ export default function InputField({
   const { isValid, message } = validation;
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const handleToggleType = () => {
+    setIsVisible((prev) => !prev);
+    inputRef.current?.focus();
+  };
+
   useEffect(() => {
     const INVALID_STYLES = ['outline', 'outline-1', 'outline-red-D6173A'];
     INVALID_STYLES.forEach((style) => {
@@ -89,7 +94,7 @@ export default function InputField({
               : '/images/icon/icon-visibility-off.svg'
           }
           alt={type === 'password' ? '비밀번호 숨기기' : '비밀번호 표기'}
-          onClick={() => setIsVisible((prev) => !prev)}
+          onClick={handleToggleType}
         />
       )}
       <div className="h-4 text-sm text-red-D6173A">{message}</div>
