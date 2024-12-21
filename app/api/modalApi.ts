@@ -7,7 +7,6 @@ import type {
   DashboardResponse,
   ColumnResponse,
   InvitationResponse,
-  CreateDashboardResponse,
   CreateColumnResponse,
   UpdateColumnResponse,
   CreateInvitationResponse,
@@ -26,12 +25,12 @@ export class ModalApi {
     const { title, color } = newDashboardData;
 
     try {
-      const response = await instance.post<CreateDashboardResponse>(
+      const response = await instance.post<DashboardResponse>(
         '/dashboards',
         { title, color },
         { headers: createAuthHeader() },
       );
-      return response.data.data;
+      return response.data;
     } catch (error) {
       throw handleApiError(error);
     }

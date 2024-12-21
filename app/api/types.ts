@@ -6,12 +6,12 @@ export interface ApiResponse<T> {
 
 export interface Member {
   email: string;
-  id: string;
-  username: string;
+  id: number;
+  nickname: string;
 }
 
 export interface Dashboard {
-  id: string;
+  id: number;
   title: string;
   color: string;
   createdAt: string;
@@ -19,9 +19,8 @@ export interface Dashboard {
 }
 
 export interface Column {
-  id: string;
+  id: number;
   title: string;
-  dashboardId: string;
   createdAt: string;
   updatedAt: string;
 }
@@ -33,59 +32,56 @@ export interface CreateDashboardRequest {
 
 export interface CreateColumnRequest {
   title: string;
-  dashboardId: string;
+  dashboardId: number;
 }
 
 export interface UpdateColumnRequest {
-  columnId: string;
   title: string;
+  columnId: string;
 }
 
 export interface InviteMemberRequest {
   email: string;
-  dashboardId: string;
+  dashboardId: number;
 }
 
 export interface DeleteColumnData {
-  confirmed: boolean;
+  columnId: number;
 }
 
 export interface DashboardResponse {
-  id: string;
+  id: number;
   title: string;
   color: string;
   createdAt: string;
   updatedAt: string;
   createdByMe: boolean;
-  userId: string;
+  userId: number;
 }
 
 export interface ColumnResponse {
-  id: string;
+  id: number;
   title: string;
-  dashboardId: string;
   createdAt: string;
   updatedAt: string;
 }
 
 export interface InvitationResponse {
-  id: string;
+  id: number;
   inviter: {
-    id: string;
-    email: string;
     nickname: string;
+    email: string;
+    id: number;
   };
-  teamId: string;
   dashboard: {
-    id: string;
     title: string;
+    id: number;
   };
   invitee: {
-    id: string;
-    email: string;
     nickname: string;
+    email: string;
+    id: number;
   };
-  status: 'PENDING' | 'ACCEPTED' | 'DECLINED';
   createdAt: string;
   updatedAt: string;
 }

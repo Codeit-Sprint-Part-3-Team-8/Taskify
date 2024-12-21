@@ -55,10 +55,10 @@ const CreateDashboardModal = ({ onClose }: { onClose: () => void }) => {
       });
 
       handleClosingModal();
-      router.push(`/dashboard/${response.id}`);
+      router.push(`/dashboard/${response.id.toString()}`);
     } catch (error) {
       alert('대시보드 생성에 실패했습니다.');
-      console.error(error);
+      console.error('대시보드 생성 에러:', error);
     } finally {
       setIsLoading(false);
     }
