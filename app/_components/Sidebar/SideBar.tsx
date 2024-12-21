@@ -4,6 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import instance from '@/api/axios';
 import { useEffect, useState } from 'react';
+import CreateDashboardModal from '../Modals/Dashboard/CreateDashboardModal';
 
 interface DashBoard {
   id: number;
@@ -23,6 +24,7 @@ interface DashBoardResponse {
 
 export default function SideBar() {
   const [myDashBoards, setMyDashBoards] = useState<DashBoard[]>([]);
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   async function getMyDashBoardList() {
     try {
@@ -39,6 +41,14 @@ export default function SideBar() {
   useEffect(() => {
     getMyDashBoardList();
   }, []);
+
+  const openModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+  };
 
   return (
     <div className="fixed left-0 top-0 z-10 flex h-full w-16 flex-col gap-10 border border-r-gray-D9D9D9 bg-white px-3 py-5 tablet:w-40 tablet:gap-14 pc:w-72 pc:px-2">
@@ -58,7 +68,10 @@ export default function SideBar() {
         />
       </Link>
       <div className="flex h-full w-full flex-col gap-4">
-        <button className="flex w-full items-center justify-center tablet:justify-between">
+        <button
+          onClick={openModal}
+          className="flex w-full items-center justify-center tablet:justify-between"
+        >
           <div className="hidden text-xs text-gray-787486 tablet:block">
             Dash Boards
           </div>
@@ -97,6 +110,7 @@ export default function SideBar() {
           {myDashBoards.length === 0 && <div></div>}
         </div>
       </div>
+      {isModalOpen && <CreateDashboardModal onClose={closeModal} />}
     </div>
   );
 }
