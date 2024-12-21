@@ -66,7 +66,7 @@ export default function SideBar() {
           <Image
             width={20}
             height={20}
-            src="/images/sidebar-plusbtn.svg"
+            src="/images/icon/ic-plusbtn.svg"
             alt="Plusbtn"
           />
         </button>
