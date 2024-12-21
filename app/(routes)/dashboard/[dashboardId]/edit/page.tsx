@@ -5,16 +5,18 @@ import MainContent from './MainContent';
 import iconArrow from '@images/icon/icon_arrow.svg';
 import Image from 'next/image';
 import ModifyBox from './ModifyBox';
-import { detailDashboard, UpdateDashboardReturn } from '@/api/dashboard';
+import { detailDashboard, UpdateDashboardIdReturn } from '@/api/dashboard';
 import Link from 'next/link';
 
-interface Params {
-  params: {
+interface PageProps {
+  params: Promise<{
     dashboardId: number;
-  };
+  }>;
 }
 
-async function fetchData(dashboardId: number): Promise<UpdateDashboardReturn> {
+async function fetchData(
+  dashboardId: number,
+): Promise<UpdateDashboardIdReturn> {
   const res = await detailDashboard(dashboardId);
   if (!res) {
     throw new Error('Failed to fetch data');
@@ -22,8 +24,9 @@ async function fetchData(dashboardId: number): Promise<UpdateDashboardReturn> {
   return res;
 }
 
-export default async function Dashboard({ params }: Params) {
-  const { dashboardId } = await params;
+export default async function Dashboard({ params }: PageProps) {
+  const resolvedParams = await params;
+  const { dashboardId } = resolvedParams;
   const data = await fetchData(dashboardId);
 
   return (
