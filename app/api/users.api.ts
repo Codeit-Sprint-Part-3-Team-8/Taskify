@@ -4,7 +4,7 @@ import {
   ProfileImageType,
   UpdateUserParams,
   UserType,
-} from '@/_types/user.type';
+} from '@/_types/users.type';
 import axios from './axios';
 
 async function createUser({
