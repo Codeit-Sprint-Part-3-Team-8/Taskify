@@ -1,3 +1,5 @@
+import { InvitationType } from './invitations.type';
+
 interface DashboardType {
   id: number;
   title: string;
@@ -14,29 +16,7 @@ interface DashboardListType {
   dashboards: DashboardType[];
 }
 
-interface InvitationType {
-  id: number;
-  inviter: {
-    nickname: string;
-    email: string;
-    id: number;
-  };
-  teamId: string;
-  dashboard: {
-    title: string;
-    id: number;
-  };
-  invitee: {
-    nickname: string;
-    email: string;
-    id: number;
-  };
-  inviteAccepted: boolean | null;
-  createdAt: string;
-  updatedAt: string;
-}
-
-interface InvitationListType {
+interface DashboardInvitationListType {
   totalCount: number;
   invitations: InvitationType[];
 }
@@ -72,7 +52,7 @@ interface CreateInvitationParams {
   email: string;
 }
 
-interface GetInvitationListParams {
+interface GetInvitationListByDashboardIdParams {
   dashboardId: number | string;
   page?: number;
   size?: number;
@@ -93,7 +73,7 @@ export type {
   DeleteDashboardParams,
   CreateInvitationParams,
   InvitationType,
-  GetInvitationListParams,
-  InvitationListType,
+  GetInvitationListByDashboardIdParams,
+  DashboardInvitationListType,
   DeleteInvitationParams,
 };

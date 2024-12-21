@@ -6,11 +6,11 @@ import {
   DeleteDashboardParams,
   GetDashboardParams,
   GetDashboardListParams,
-  GetInvitationListParams,
-  InvitationListType,
   InvitationType,
   UpdateDashboardParams,
   DeleteInvitationParams,
+  GetInvitationListByDashboardIdParams,
+  DashboardInvitationListType,
 } from '@/_types/dashboards.type';
 import axios from './axios';
 
@@ -78,11 +78,11 @@ async function createInvitation({
   return response.data;
 }
 
-async function getInvitationList({
+async function getInvitationListByDashboardId({
   dashboardId,
   page = 1,
   size = 10,
-}: GetInvitationListParams): Promise<InvitationListType> {
+}: GetInvitationListByDashboardIdParams): Promise<DashboardInvitationListType> {
   const response = await axios.get(`/dashboards/${dashboardId}/invitations`, {
     params: {
       page,
@@ -109,6 +109,6 @@ export {
   updateDashboard,
   deleteDashboard,
   createInvitation,
-  getInvitationList,
+  getInvitationListByDashboardId,
   deleteInvitation,
 };
