@@ -89,7 +89,7 @@ export default function InputField({
           onClick={() => setIsVisible((prev) => !prev)}
         />
       )}
-      {!isValid && <p>{message}</p>}
+      <div className="h-4 text-sm text-red-D6173A">{message}</div>
     </fieldset>
   );
 }
