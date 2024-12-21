@@ -6,7 +6,7 @@ import { getDashboard, getMember } from '@/api/navbar';
 import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
 import DropdownMenu from './Dropdown';
-import DropdownContet from './DropdownContent';
+import DropdownContent from './DropdownContent';
 import Profile from './Profile';
 
 interface Member {
@@ -24,6 +24,12 @@ interface DashBoard {
   createdAt: string;
   updatedAt: string;
   createdByMe: boolean;
+}
+
+enum ScreenSize {
+  LARGE = 1280,
+  MEDIUM = 744,
+  SMALL = 0,
 }
 
 export default function DashboardNavBar() {
@@ -58,10 +64,11 @@ export default function DashboardNavBar() {
   }, [BOARD_ID]);
 
   useEffect(() => {
-    const getVisibleMembers = () => {
-      const screenSize = window.innerWidth;
-      if (screenSize >= 1280) return 4;
-      if (screenSize >= 744) return 3;
+    const getVisibleMembers = (): number => {
+      const screenSize: number = window.innerWidth;
+
+      if (screenSize >= ScreenSize.LARGE) return 4;
+      if (screenSize >= ScreenSize.MEDIUM) return 3;
       return 2;
     };
 
@@ -147,7 +154,7 @@ export default function DashboardNavBar() {
               />
             }
           >
-            <DropdownContet />
+            <DropdownContent />
           </DropdownMenu>
         </div>
       </div>
