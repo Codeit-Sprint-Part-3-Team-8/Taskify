@@ -12,7 +12,7 @@ const CreateColumnModal = ({
   dashboardId,
 }: {
   onClose: () => Promise<void> | void;
-  dashboardId: string;
+  dashboardId: number;
 }) => {
   const [newColumnName, setNewColumnName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
