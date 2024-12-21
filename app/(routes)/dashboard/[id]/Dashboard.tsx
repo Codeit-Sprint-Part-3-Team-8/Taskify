@@ -12,24 +12,30 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useEffect } from 'react';
 import { throttle } from 'lodash';
 import Droppable from './Droppable';
 import { Item } from './Item';
 import moveBetweenContainers from './MoveBetweenContainers';
+import { dashBoardType } from './page';
+import { getColumns } from '@/api/column';
+import { getCardsByColumn } from '@/api/card';
 
-export interface ItemGroupsProps {
-  todo: string[];
-  inProgress: string[];
-  done: string[];
+export interface cardType {
+  id: number;
+  title: string;
+  teamId: string;
+  dashboardId: number;
+  createdAt: string;
+  updatedAt: string;
 }
 
-export default function DashBoard({
-  initialData,
-}: {
-  initialData: ItemGroupsProps;
-}) {
-  const [itemGroups, setItemGroups] = useState<ItemGroupsProps>(initialData);
+export type itemGroupsType = {
+  [columnId: string]: { title: string; cards: cardType[] };
+};
+
+export default function DashBoard({ dashBoard }: { dashBoard: dashBoardType }) {
+  const [itemGroups, setItemGroups] = useState<itemGroupsType>({});
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
 
   const sensors = useSensors(
@@ -39,6 +45,44 @@ export default function DashBoard({
       coordinateGetter: sortableKeyboardCoordinates,
     }),
   );
+
+  useEffect(() => {
+    if (!dashBoard.id) return;
+
+    const fetchColumnsAndCards = async (dashboardId: number) => {
+      try {
+        const columnsData = await getColumns({ id: dashboardId });
+        const newItemGroups = (
+          await Promise.all(
+            columnsData.map(async (column) => {
+              try {
+                const cards: cardType[] =
+                  (await getCardsByColumn({ columnId: column.id, size: 10 })) ||
+                  [];
+                return {
+                  [column.id]: { title: column.title, cards: cards },
+                };
+              } catch (error) {
+                console.error(
+                  `Error fetching cards for column: ${column.title}`,
+                  error,
+                );
+                return {
+                  [column.id]: { title: column.title, cards: [] },
+                };
+              }
+            }),
+          )
+        ).reduce((acc, group) => ({ ...acc, ...group }), {});
+
+        setItemGroups(newItemGroups);
+      } catch (error) {
+        console.error('Error fetching columns or cards:', error);
+      }
+    };
+
+    fetchColumnsAndCards(dashBoard.id);
+  }, [dashBoard.id]);
 
   const handleDragStart = ({ active }: DragStartEvent) =>
     setActiveId(active.id);
@@ -51,9 +95,7 @@ export default function DashBoard({
         (active: DragOverEvent['active'], over: DragOverEvent['over']) => {
           const overId = over?.id;
 
-          if (!overId) {
-            return;
-          }
+          if (!overId) return;
 
           const activeContainer = active.data.current?.sortable.containerId;
           const overContainer =
@@ -67,25 +109,22 @@ export default function DashBoard({
             return;
           }
 
-          if (activeContainer !== overContainer) {
-            setItemGroups((itemGroups) => {
-              const activeIndex = active.data.current?.sortable.index;
-              const overIndex =
-                over.id in itemGroups
-                  ? itemGroups[overContainer as keyof ItemGroupsProps].length +
-                    1
-                  : over.data.current?.sortable.index;
+          setItemGroups((itemGroups) => {
+            const activeIndex = active.data.current?.sortable.index;
+            const overIndex =
+              over.id in itemGroups
+                ? itemGroups[overContainer].cards.length + 1
+                : over.data.current?.sortable.index;
 
-              return moveBetweenContainers({
-                items: itemGroups,
-                activeContainer,
-                activeIndex,
-                overContainer,
-                overIndex,
-                item: active.id,
-              });
+            return moveBetweenContainers({
+              items: itemGroups,
+              activeContainer,
+              activeIndex,
+              overContainer,
+              overIndex,
+              item: active.id,
             });
-          }
+          });
         },
         100,
       ),
@@ -111,10 +150,15 @@ export default function DashBoard({
       const activeIndex = active.data.current?.sortable.index;
       const overIndex =
         over.id in itemGroups
-          ? itemGroups[overContainer as keyof ItemGroupsProps].length + 1
+          ? itemGroups[overContainer].cards.length + 1
           : over.data.current?.sortable.index;
 
-      if (!activeContainer || !overContainer || !activeIndex || overIndex) {
+      if (
+        !activeContainer ||
+        !overContainer ||
+        activeIndex == null ||
+        overIndex == null
+      ) {
         return;
       }
 
@@ -124,7 +168,7 @@ export default function DashBoard({
           newItems = {
             ...itemGroups,
             [overContainer]: arrayMove(
-              itemGroups[overContainer as keyof ItemGroupsProps],
+              itemGroups[overContainer].cards,
               activeIndex,
               overIndex,
             ),
@@ -156,11 +200,12 @@ export default function DashBoard({
       onDragEnd={handleDragEnd}
     >
       <div className="m-4 flex w-fit justify-center rounded border border-gray-400 p-2">
-        {Object.keys(itemGroups).map((group) => (
+        {Object.keys(itemGroups).map((itemGroup) => (
           <Droppable
-            id={group}
-            items={itemGroups[group as keyof ItemGroupsProps]}
-            key={group}
+            key={itemGroup}
+            id={itemGroup}
+            title={itemGroups[itemGroup].title}
+            items={itemGroups[itemGroup].cards || []}
           />
         ))}
       </div>
