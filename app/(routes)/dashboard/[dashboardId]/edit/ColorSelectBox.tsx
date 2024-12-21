@@ -2,7 +2,7 @@
 import Image from 'next/image';
 import React, { useState } from 'react';
 import iconCheck from '@images/icon/icon_check.svg';
-const color = [
+const COLORS = [
   'bg-green-7AC555',
   'bg-purple-760DDE',
   'bg-orange-FFA500',
@@ -31,7 +31,7 @@ export default function ColorSelectBox({
 
   return (
     <div className="flex gap-2">
-      {color.map((data, index) => {
+      {COLORS.map((data, index) => {
         const clickedColor = `#${data.split('-')[2]}`;
         return (
           <div

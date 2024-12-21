@@ -15,7 +15,7 @@ async function detailDashboard(dashboardId: number) {
   return response.data;
 }
 
-export interface UpdateDashboardReturn {
+export interface UpdateDashboardIdReturn {
   id: number;
   title: string;
   color: string; // Hex 색상 코드로 저장된 문자열
@@ -25,17 +25,17 @@ export interface UpdateDashboardReturn {
   createdByMe: boolean; // 현재 사용자에 의해 생성되었는지 여부
 }
 
-export interface UpdateDashboardParams {
+export interface UpdateDashboardIdParams {
   title: string;
   color: string;
 }
 
 // :: 대시보드 수정 (생성자만 가능)
 
-async function updateDashboard(
+async function updateDashboardId(
   dashboardId: number,
-  dashboardData: UpdateDashboardParams,
-): Promise<UpdateDashboardReturn> {
+  dashboardData: UpdateDashboardIdParams,
+): Promise<UpdateDashboardIdReturn> {
   const response = await axios.put(
     `/dashboards/${dashboardId}`,
     dashboardData,
@@ -49,4 +49,4 @@ async function updateDashboard(
   return response.data;
 }
 
-export { updateDashboard, detailDashboard };
+export { updateDashboardId, detailDashboard };

@@ -4,13 +4,13 @@ import ColorSelectBox from './ColorSelectBox';
 import Button from '@/_components/Button/Button';
 import useAsync from '@/_hooks/useAsync';
 import {
-  updateDashboard,
-  UpdateDashboardParams,
-  UpdateDashboardReturn,
+  updateDashboardId,
+  UpdateDashboardIdParams,
+  UpdateDashboardIdReturn,
 } from '@/api/dashboard';
 
 interface ModifyBoxProps {
-  modifyData: UpdateDashboardReturn;
+  modifyData: UpdateDashboardIdReturn;
 }
 
 export default function ModifyBox({ modifyData }: ModifyBoxProps) {
@@ -18,8 +18,9 @@ export default function ModifyBox({ modifyData }: ModifyBoxProps) {
   const [colorData, setColorData] = useState(modifyData.color);
   const [dashboardData, setDashboardData] = useState(modifyData);
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
-  const { data: asyncData, excute } = useAsync(
-    (params: UpdateDashboardParams) => updateDashboard(modifyData.id, params),
+  const { data: asyncData, excute: updateDashBoardAsync } = useAsync(
+    (params: UpdateDashboardIdParams) =>
+      updateDashboardId(modifyData.id, params),
   );
 
   const { title, color } = dashboardData;
@@ -27,7 +28,7 @@ export default function ModifyBox({ modifyData }: ModifyBoxProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const param = { title: inputRef.current!.value, color: colorData };
-    await excute(param);
+    await updateDashBoardAsync(param);
   };
 
   const handleInputChange = () => {
