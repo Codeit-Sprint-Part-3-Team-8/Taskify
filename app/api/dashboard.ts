@@ -1,4 +1,4 @@
-import { dashBoardType } from '@/(routes)/dashboard//[id]/page';
+import { dashBoardType } from '@/(routes)/dashboard/[id]/page';
 import instance from './axios';
 
 const ACCESSTOKEN =

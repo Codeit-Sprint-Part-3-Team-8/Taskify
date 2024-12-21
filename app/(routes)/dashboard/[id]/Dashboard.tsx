@@ -18,8 +18,8 @@ import Droppable from './Droppable';
 import { Item } from './Item';
 import moveBetweenContainers from './MoveBetweenContainers';
 import { dashBoardType } from './page';
-import { getColumns } from '@/api/column';
-import { getCardsByColumn } from '@/api/card';
+import { getColumns } from '@/api/columns';
+import { getCardsByColumn } from '@/api/cards';
 
 export interface cardType {
   id: number;
