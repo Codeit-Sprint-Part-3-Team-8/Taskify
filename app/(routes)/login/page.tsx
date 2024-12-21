@@ -83,7 +83,7 @@ export default function LoginPage() {
       {showModal && (
         <Modal text={errorMessage as string} onClick={handleCloseModal} />
       )}
-      <div className="fixed left-1/2 right-1/2 top-1/2 w-full max-w-xs -translate-x-1/2 -translate-y-1/2 tablet:max-w-lg">
+      <div className="mx-auto w-full max-w-xs pb-8 pt-20 tablet:max-w-lg tablet:pt-52">
         <AuthHeader text="오늘도 만나서 반가워요!" />
         <form className="mb-6 flex flex-col gap-6" onSubmit={handleSubmit}>
           <InputField
