@@ -1,19 +1,19 @@
 import axios from './axios';
 
-export type memberProps = [
-  {
-    id: number;
-    email: string;
-    nickname: string;
-    profileImageUrl: string;
-    createdAt: string;
-    updatedAt: string;
-    isOwner: boolean;
-    userId: number;
-  },
-];
+export interface Member {
+  id: number;
+  email: string;
+  nickname: string;
+  profileImageUrl: string;
+  createdAt: string; // 또는 Date로 변경 가능
+  updatedAt: string; // 또는 Date로 변경 가능
+  isOwner: boolean;
+  userId: number;
+}
 
-export const getMember = async (id: number): Promise<memberProps> => {
+export type MemberProps = Member[];
+
+export const getMember = async (id: number): Promise<MemberProps> => {
   const response = await axios.get(`/members?dashboardId=${id}`);
   return response.data.members;
 };
