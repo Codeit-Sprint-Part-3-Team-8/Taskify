@@ -36,14 +36,15 @@ export default function LoginPage() {
 
   const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setValues((prev) => {
-      const next = { ...prev, [name]: value };
-      setValidations((prev) => ({
-        ...prev,
-        [name]: validateSchema(name, next),
-      }));
-      return next;
-    });
+    setValues((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleBlurInput = (event: React.FocusEvent<HTMLInputElement>) => {
+    const { name } = event.target;
+    setValidations((prev) => ({
+      ...prev,
+      [name]: validateSchema(name, values),
+    }));
   };
 
   const validateForm = useCallback(() => {
@@ -90,6 +91,7 @@ export default function LoginPage() {
             value={values.email}
             validation={validations.email}
             onChange={handleChangeValue}
+            onBlur={handleBlurInput}
           />
           <InputField
             name="password"
@@ -97,6 +99,7 @@ export default function LoginPage() {
             value={values.password}
             validation={validations.password}
             onChange={handleChangeValue}
+            onBlur={handleBlurInput}
           />
           <button
             className="w-full select-none rounded-lg border bg-violet-5534DA py-3.5 text-lg font-medium text-white disabled:bg-gray-9FA6B2"

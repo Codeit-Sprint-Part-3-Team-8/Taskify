@@ -31,6 +31,7 @@ interface InputFieldProps {
   value: string;
   validation: { isValid: boolean; message: string };
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur: (event: React.FocusEvent<HTMLInputElement>) => void;
 }
 
 export default function InputField({
@@ -39,6 +40,7 @@ export default function InputField({
   value,
   validation,
   onChange,
+  onBlur,
 }: InputFieldProps) {
   const [isVisible, setIsVisible] = useState(type !== 'password');
   const { isValid, message } = validation;
@@ -72,6 +74,7 @@ export default function InputField({
         value={value}
         placeholder={INPUT_FIELD_TEXT[name].placeholder}
         onChange={onChange}
+        onBlur={onBlur}
         required
       />
       {type === 'password' && (

@@ -39,11 +39,12 @@ export default function SignUp() {
 
   const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setValues((prev) => {
-      const next = { ...prev, [name]: value };
-      setValidations((prev) => ({ ...prev, ...validateSchema(name, next) }));
-      return next;
-    });
+    setValues((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleBlurInput = (event: React.FocusEvent<HTMLInputElement>) => {
+    const { name } = event.target;
+    setValidations((prev) => ({ ...prev, ...validateSchema(name, values) }));
   };
 
   const handleChangeCheckbox = () => setIsChecked((prev) => !prev);
@@ -98,12 +99,14 @@ export default function SignUp() {
             value={values.email}
             validation={validations.email}
             onChange={handleChangeValue}
+            onBlur={handleBlurInput}
           />
           <InputField
             name="nickname"
             value={values.nickname}
             validation={validations.nickname}
             onChange={handleChangeValue}
+            onBlur={handleBlurInput}
           />
           <InputField
             name="password"
@@ -111,6 +114,7 @@ export default function SignUp() {
             value={values.password}
             validation={validations.password}
             onChange={handleChangeValue}
+            onBlur={handleBlurInput}
           />
           <InputField
             name="repeat"
@@ -118,6 +122,7 @@ export default function SignUp() {
             value={values.repeat}
             validation={validations.repeat}
             onChange={handleChangeValue}
+            onBlur={handleBlurInput}
           />
           <CheckboxField
             isChecked={isChecked}
