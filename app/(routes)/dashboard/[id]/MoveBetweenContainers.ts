@@ -1,13 +1,12 @@
 import { UniqueIdentifier } from '@dnd-kit/core';
-import { ItemGroupsProps } from './Dashboard';
-import { insertAtIndex, removeAtIndex } from './array';
 
-type ContainerId = keyof ItemGroupsProps;
+import { insertAtIndex, removeAtIndex } from './array';
+import { itemGroupsType } from './Dashboard';
 
 interface MoveBetweenContainersProps {
-  items: ItemGroupsProps;
-  activeContainer: ContainerId;
-  overContainer: ContainerId;
+  items: itemGroupsType;
+  activeContainer: number;
+  overContainer: number;
   activeIndex: number;
   overIndex: number;
   item: UniqueIdentifier;
@@ -21,9 +20,17 @@ export default function MoveBetweenContainers({
   overIndex,
   item,
 }: MoveBetweenContainersProps) {
+  const activeCard = items[activeContainer].cards.find(
+    (card) => card.id.toString() === item.toString(),
+  );
+
   return {
     ...items,
-    [activeContainer]: removeAtIndex(items[activeContainer], activeIndex),
-    [overContainer]: insertAtIndex(items[overContainer], overIndex, item),
+    [activeContainer]: removeAtIndex(items[activeContainer].cards, activeIndex),
+    [overContainer]: insertAtIndex(
+      items[overContainer].cards,
+      overIndex,
+      activeCard,
+    ),
   };
 }
