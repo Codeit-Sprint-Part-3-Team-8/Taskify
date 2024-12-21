@@ -2,8 +2,9 @@
 
 import useAsync from '@/_hooks/useAsync';
 import { LoginUserParams } from '@/_types/auth.type';
+import { UserType } from '@/_types/user.type';
 import { loginUser } from '@/api/auth.api';
-import { getUser, UserType } from '@/api/users.api';
+import { getUser } from '@/api/users.api';
 import { createContext, useContext, useEffect } from 'react';
 
 /**
