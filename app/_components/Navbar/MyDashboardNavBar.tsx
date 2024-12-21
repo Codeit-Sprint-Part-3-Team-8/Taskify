@@ -3,24 +3,11 @@
 import React, { useState, useEffect, useRef } from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { getUser } from '@/api/users';
-
-interface User {
-  id: number;
-  email: string;
-  nickname: string;
-  profileImageUrl: string | null;
-}
+import { useAuth } from '@/context/AuthContext';
 
 export default function MyDashboardNavBar() {
   const [isDropdownVisible, setIsDropdownVisible] = useState(false);
-
-  const [user, setUser] = useState<User>({
-    id: 0,
-    email: '',
-    nickname: '',
-    profileImageUrl: null,
-  });
+  const { user } = useAuth();
 
   const dropdownRef = useRef<HTMLDivElement>(null);
   const router = useRouter();
@@ -50,19 +37,6 @@ export default function MyDashboardNavBar() {
     };
   }, [isDropdownVisible]);
 
-  useEffect(() => {
-    async function fetchUser() {
-      try {
-        const userData = await getUser();
-        setUser(userData);
-      } catch (error) {
-        console.error('유저 데이터를 가져오는데 실패했습니다.', error);
-      }
-    }
-
-    fetchUser();
-  }, []);
-
   return (
     <div className="flex h-[3.75rem] w-full items-center justify-between border-b border-gray-D9D9D9 pl-[5.25rem] pr-2 tablet:h-[4.375rem] tablet:pl-[12.5rem] tablet:pr-8 pc:pl-80 pc:pr-20">
       <div className="text-lg text-black-333236 tablet:text-xl">
@@ -79,12 +53,14 @@ export default function MyDashboardNavBar() {
           <Image
             width={38}
             height={38}
-            src={user.profileImageUrl || '/images/contents/default-profile.svg'}
-            alt={user.nickname || '프로필 이미지'}
+            src={
+              user?.profileImageUrl || '/images/contents/default-profile.svg'
+            }
+            alt={user?.nickname || '프로필 이미지'}
             className="rounded-full"
           />
           <div className="hidden text-lg text-black-333236 tablet:block">
-            {user.nickname || '사용자'}
+            {user?.nickname || '사용자'}
           </div>
         </button>
         {isDropdownVisible && (
