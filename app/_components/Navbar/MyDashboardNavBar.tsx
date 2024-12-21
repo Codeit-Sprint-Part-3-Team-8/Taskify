@@ -11,7 +11,7 @@ export default function MyDashboardNavBar() {
 
   return (
     <div className="flex h-[3.75rem] w-full items-center justify-between border-b border-gray-D9D9D9 pl-[5.25rem] pr-2 tablet:h-[4.375rem] tablet:pl-[12.5rem] tablet:pr-8 pc:pl-80 pc:pr-20">
-      <div className="text-lg text-black-333236 tablet:text-xl">
+      <div className="font-pretendard text-lg font-bold text-black-333236 tablet:text-xl">
         내 대시보드
       </div>
       <div className="relative flex items-center">
