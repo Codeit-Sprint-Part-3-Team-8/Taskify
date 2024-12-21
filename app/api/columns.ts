@@ -1,6 +1,6 @@
 import instance from './axios';
 
-export interface columnType {
+export interface ColumnType {
   id: number;
   title: string;
   teamId: string;
@@ -16,7 +16,7 @@ export async function getColumns({
   id,
 }: {
   id: number;
-}): Promise<columnType[]> {
+}): Promise<ColumnType[]> {
   const response = await instance.get(`/columns`, {
     params: {
       dashboardId: id,

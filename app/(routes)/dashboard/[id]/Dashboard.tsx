@@ -17,11 +17,11 @@ import { throttle } from 'lodash';
 import Droppable from './Droppable';
 import { Item } from './Item';
 import moveBetweenContainers from './MoveBetweenContainers';
-import { dashBoardType } from './page';
+import { DashBoardType } from './page';
 import { getColumns } from '@/api/columns';
 import { getCardsByColumn } from '@/api/cards';
 
-export interface cardType {
+export interface CardType {
   id: number;
   title: string;
   teamId: string;
@@ -30,12 +30,12 @@ export interface cardType {
   updatedAt: string;
 }
 
-export type itemGroupsType = {
-  [columnId: string]: { title: string; cards: cardType[] };
+export type ItemGroupsType = {
+  [columnId: string]: { title: string; cards: CardType[] };
 };
 
-export default function DashBoard({ dashBoard }: { dashBoard: dashBoardType }) {
-  const [itemGroups, setItemGroups] = useState<itemGroupsType>({});
+export default function DashBoard({ dashBoard }: { dashBoard: DashBoardType }) {
+  const [itemGroups, setItemGroups] = useState<ItemGroupsType>({});
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
 
   const sensors = useSensors(
@@ -56,7 +56,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: dashBoardType }) {
           await Promise.all(
             columnsData.map(async (column) => {
               try {
-                const cards: cardType[] =
+                const cards: CardType[] =
                   (await getCardsByColumn({ columnId: column.id, size: 10 })) ||
                   [];
                 return {

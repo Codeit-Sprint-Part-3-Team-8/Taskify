@@ -1,4 +1,4 @@
-import { dashBoardType } from '@/(routes)/dashboard/[id]/page';
+import { DashBoardType } from '@/(routes)/dashboard/[id]/page';
 import instance from './axios';
 
 const ACCESSTOKEN =
@@ -8,7 +8,7 @@ export async function getDashBoardById({
   id,
 }: {
   id: string | string[] | undefined;
-}): Promise<dashBoardType> {
+}): Promise<DashBoardType> {
   const response = await instance.get(`/dashboards/${id}`, {
     headers: {
       Authorization: `Bearer ${ACCESSTOKEN}`,

@@ -7,7 +7,7 @@ import { useEffect, useState } from 'react';
 
 const DashBoard = dynamic(() => import('./Dashboard'), { ssr: false });
 
-export interface dashBoardType {
+export interface DashBoardType {
   id: number;
   title: string;
   color: string;
@@ -19,7 +19,7 @@ export interface dashBoardType {
 
 export default function DashBoardPage() {
   const { id } = useParams();
-  const [dashBoard, setDashBoard] = useState<dashBoardType>({
+  const [dashBoard, setDashBoard] = useState<DashBoardType>({
     id: 0,
     title: '',
     color: '',

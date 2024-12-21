@@ -1,10 +1,10 @@
 import { UniqueIdentifier } from '@dnd-kit/core';
 
 import { insertAtIndex, removeAtIndex } from './array';
-import { itemGroupsType } from './Dashboard';
+import { ItemGroupsType } from './Dashboard';
 
 interface MoveBetweenContainersProps {
-  items: itemGroupsType;
+  items: ItemGroupsType;
   activeContainer: number;
   overContainer: number;
   activeIndex: number;
