@@ -4,7 +4,11 @@ import Image from 'next/image';
 import Link from 'next/link';
 import instance from '@/api/axios';
 import { useEffect, useState } from 'react';
+<<<<<<< HEAD
 import CreateDashboardModal from '@/(routes)/mydashboard/CreateDashboardModal';
+=======
+import CreateDashboardModal from '../Modals/Dashboard/CreateDashboardModal';
+>>>>>>> 53dbb28 (feat: 사이드바 대시보드 생성 기능 추가)
 
 interface DashBoard {
   id: number;
