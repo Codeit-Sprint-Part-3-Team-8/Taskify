@@ -1,7 +1,8 @@
 import { useAuth } from '@/context/AuthContext';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
-export default function DropdownContet() {
+export default function DropdownContent() {
   const router = useRouter();
   const { logout } = useAuth();
 
@@ -12,20 +13,18 @@ export default function DropdownContet() {
 
   return (
     <>
-      <button
+      <Link
         className="block w-full border-b px-4 py-2 text-center text-sm text-black-333236 hover:bg-gray-100"
-        type="button"
-        onClick={() => router.push('/mypage')}
+        href="/mypage"
       >
         내 정보
-      </button>
-      <button
+      </Link>
+      <Link
         className="block w-full border-b px-4 py-2 text-center text-sm text-black-333236 hover:bg-gray-100"
-        type="button"
-        onClick={() => router.push('/mydashboard')}
+        href="/mydashboard"
       >
         내 대시보드
-      </button>
+      </Link>
       <button
         className="block w-full px-4 py-2 text-center text-sm text-black-333236 hover:bg-gray-100"
         type="button"
