@@ -28,39 +28,39 @@ interface CreateDashboardParams {
 
 interface GetDashboardListParams {
   navigationMethod?: 'infiniteScroll' | 'pagination';
-  cursorId?: number | undefined;
+  cursorId?: number;
   page?: number;
   size?: number;
 }
 
 interface GetDashboardParams {
-  dashboardId: number | string;
+  dashboardId: number;
 }
 
 interface UpdateDashboardParams {
-  dashboardId: number | string;
+  dashboardId: number;
   title: string;
   color: string;
 }
 
 interface DeleteDashboardParams {
-  dashboardId: number | string;
+  dashboardId: number;
 }
 
 interface CreateInvitationParams {
-  dashboardId: number | string;
+  dashboardId: number;
   email: string;
 }
 
 interface GetInvitationListByDashboardIdParams {
-  dashboardId: number | string;
+  dashboardId: number;
   page?: number;
   size?: number;
 }
 
 interface DeleteInvitationParams {
-  dashboardId: number | string;
-  invitationId: number | string;
+  dashboardId: number;
+  invitationId: number;
 }
 
 export type {
