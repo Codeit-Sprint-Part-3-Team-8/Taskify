@@ -2,7 +2,7 @@
 
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { getMyDashBoardList } from '@/api/mydashboard';
+import { getDashboardList } from '@/api/dashboards.api';
 import useAsync from '@/_hooks/useAsync';
 import Link from 'next/link';
 
@@ -26,7 +26,11 @@ export default function DashboardList() {
     loading,
   } = useAsync(
     async ({ page }: { page: number }) =>
-      await getMyDashBoardList('pagination', page, SIZE),
+      await getDashboardList({
+        navigationMethod: 'pagination',
+        page,
+        size: SIZE,
+      }),
   );
 
   useEffect(() => {
