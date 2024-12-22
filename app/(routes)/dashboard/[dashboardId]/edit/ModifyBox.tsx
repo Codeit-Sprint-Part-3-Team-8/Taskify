@@ -67,7 +67,7 @@ export default function ModifyBox({ modifyData }: ModifyBoxProps) {
         </div>
         <Button
           backgroundColor="purple"
-          customStyle="w-full py-3"
+          className="w-full py-3"
           type="submit"
           disabled={isButtonDisabled}
         >

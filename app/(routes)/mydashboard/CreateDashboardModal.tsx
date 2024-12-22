@@ -2,10 +2,10 @@ import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import GenericModal from '@/_components/Modals/GenericModal';
 import Button from '@/_components/Button/Button';
-import Input from '@/_components/Input/Input';
+import ModalInput from '@/_components/Modals/ModalInput';
 import CheckIcon from '@images/icon/check.svg';
-import { ModalApi } from '@/api/modalApi';
 import { useState } from 'react';
+import { createDashboard } from '@/api/dashboards.api';
 
 const BUTTON_SIZE =
   'tablet:w-[16rem] tablet:h-[3.375rem] mobile:w-[9rem] mobile:h-[3.375rem]';
@@ -49,7 +49,7 @@ const CreateDashboardModal = ({ onClose }: { onClose: () => void }) => {
     setIsLoading(true);
 
     try {
-      const response = await ModalApi.createDashboard({
+      const response = await createDashboard({
         title: newDashboardName,
         color: selectedColor,
       });
@@ -66,11 +66,11 @@ const CreateDashboardModal = ({ onClose }: { onClose: () => void }) => {
 
   const mainContent = (
     <div className="flex flex-col gap-3">
-      <Input
+      <ModalInput
         value={newDashboardName}
         onChange={(e) => setNewDashboardName(e.target.value)}
         placeholder="새로운 대시보드 이름을 입력해주세요."
-        customStyle="w-full h-10"
+        className="h-10 w-full"
         disabled={isLoading}
       />
 
@@ -98,7 +98,7 @@ const CreateDashboardModal = ({ onClose }: { onClose: () => void }) => {
     <div className="mt-6 flex gap-4">
       <Button
         backgroundColor="white"
-        customStyle={BUTTON_SIZE}
+        className={BUTTON_SIZE}
         onClick={handleClosingModal}
         disabled={isLoading}
       >
@@ -106,7 +106,7 @@ const CreateDashboardModal = ({ onClose }: { onClose: () => void }) => {
       </Button>
       <Button
         backgroundColor="purple"
-        customStyle={BUTTON_SIZE}
+        className={BUTTON_SIZE}
         onClick={handleCreateDashboard}
         disabled={isLoading || !isNameValid}
       >

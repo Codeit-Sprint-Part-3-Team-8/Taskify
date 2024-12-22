@@ -1,7 +1,7 @@
 import GenericModal from '@/_components/Modals/GenericModal';
 import Button from '@/_components/Button/Button';
-import Input from '@/_components/Input/Input';
-import { ModalApi } from '@/api/modalApi';
+import ModalInput from '@/_components/Modals/ModalInput';
+import { createColumn } from '@/api/columns.api';
 import { useState } from 'react';
 
 const BUTTON_SIZE =
@@ -35,7 +35,7 @@ const CreateColumnModal = ({
     setIsLoading(true);
 
     try {
-      await ModalApi.createColumn({
+      await createColumn({
         title: newColumnName,
         dashboardId: dashboardId,
       });
@@ -49,11 +49,11 @@ const CreateColumnModal = ({
   };
 
   const mainContent = (
-    <Input
+    <ModalInput
       value={newColumnName}
       onChange={(e) => setNewColumnName(e.target.value)}
       placeholder="컬럼 이름을 입력해주세요."
-      customStyle="w-full h-10"
+      className="h-10 w-full"
       disabled={isLoading}
     />
   );
@@ -62,7 +62,7 @@ const CreateColumnModal = ({
     <div className="mt-6 flex gap-4">
       <Button
         backgroundColor="white"
-        customStyle={BUTTON_SIZE}
+        className={BUTTON_SIZE}
         onClick={handleClosingModal}
         disabled={isLoading}
       >
@@ -70,7 +70,7 @@ const CreateColumnModal = ({
       </Button>
       <Button
         backgroundColor="purple"
-        customStyle={BUTTON_SIZE}
+        className={BUTTON_SIZE}
         onClick={handleCreateColumn}
         disabled={isLoading || !isNameValid}
       >

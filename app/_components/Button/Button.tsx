@@ -13,25 +13,25 @@ const BUTTON_STYLES = {
   },
   state: {
     enabled: 'hover:opacity-80',
-    disabled: 'opacity-50 cursor-not-allowed'
-  }
+    disabled: 'opacity-50 cursor-not-allowed',
+  },
 } as const;
 
 const Button = ({
   backgroundColor,
+  className,
   children,
-  customStyle,
   disabled,
   ...props
 }: ButtonProps) => {
   return (
     <button
       className={`
-        ${BUTTON_STYLES.variant[backgroundColor]}
-        ${BUTTON_STYLES.base}
-        ${disabled ? BUTTON_STYLES.state.disabled : BUTTON_STYLES.state.enabled}
-        ${customStyle}
-      `}
+         ${BUTTON_STYLES.variant[backgroundColor]}
+         ${BUTTON_STYLES.base}
+         ${disabled ? BUTTON_STYLES.state.disabled : BUTTON_STYLES.state.enabled}
+         ${className}`
+        }
       disabled={disabled}
       {...props}
     >

@@ -1,23 +1,24 @@
 import GenericModal from '@/_components/Modals/GenericModal';
 import Button from '@/_components/Button/Button';
-import Input from '@/_components/Input/Input';
-import { ModalApi } from '@/api/modalApi';
+import ModalInput from '@/_components/Modals/ModalInput';
 import { useState } from 'react';
+import { updateColumn } from '@/api/columns.api';
+import { deleteColumn } from '@/api/columns.api';
 
 const BUTTON_SIZE =
   'tablet:w-[16rem] tablet:h-[3.375rem] mobile:w-[9rem] mobile:h-[3.375rem]';
 
 interface EditColumnModalProps {
   onClose: () => Promise<void> | void;
-  columnId: string;
-  selectedColumnName: string;
+  columnId: number;
   initialTitle?: string;
 }
 
-const EditColumnModal = ({ onClose }: EditColumnModalProps) => {
-  const initialTitle = 'initialTitle'; // 제거하시고 불러온 초기 컬럼 이름 사용하시면 됩니다
-  const columnId = 'columnId'; // 제거하시고 불러온 컬럼 ID 사용하시면 됩니다
-
+const EditColumnModal = ({
+  onClose,
+  initialTitle = '',
+  columnId,
+}: EditColumnModalProps) => {
   const [editedColumnName, setEditedColumnName] = useState(initialTitle);
   const [isLoading, setIsLoading] = useState(false);
 
@@ -37,7 +38,7 @@ const EditColumnModal = ({ onClose }: EditColumnModalProps) => {
     setIsLoading(true);
 
     try {
-      await ModalApi.deleteColumn(columnId);
+      await deleteColumn({ columnId });
     } catch (error) {
       alert('컬럼 삭제에 실패했습니다.');
       console.error(error);
@@ -55,7 +56,7 @@ const EditColumnModal = ({ onClose }: EditColumnModalProps) => {
     }
 
     try {
-      await ModalApi.updateColumn({
+      await updateColumn({
         columnId: columnId,
         title: editedColumnName,
       });
@@ -68,11 +69,11 @@ const EditColumnModal = ({ onClose }: EditColumnModalProps) => {
   };
 
   const mainContent = (
-    <Input
+    <ModalInput
       value={editedColumnName}
       onChange={(e) => setEditedColumnName(e.target.value)}
       placeholder="컬럼 이름을 입력해주세요."
-      customStyle="w-full h-10"
+      className="h-10 w-full"
       disabled={isLoading}
       initialvalue={initialTitle}
     />
@@ -82,7 +83,7 @@ const EditColumnModal = ({ onClose }: EditColumnModalProps) => {
     <div className="mt-6 flex gap-4">
       <Button
         backgroundColor="white"
-        customStyle={BUTTON_SIZE}
+        className={BUTTON_SIZE}
         onClick={handleDeleteColumn}
         disabled={isLoading}
       >
@@ -90,7 +91,7 @@ const EditColumnModal = ({ onClose }: EditColumnModalProps) => {
       </Button>
       <Button
         backgroundColor="purple"
-        customStyle={BUTTON_SIZE}
+        className={BUTTON_SIZE}
         onClick={handleUpdateColumn}
         disabled={
           isLoading || !isNameValid || editedColumnName === initialTitle
