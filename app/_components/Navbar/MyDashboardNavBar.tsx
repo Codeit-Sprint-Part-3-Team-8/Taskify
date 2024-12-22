@@ -4,7 +4,7 @@ import React from 'react';
 import { useAuth } from '@/context/AuthContext';
 import DropdownMenu from './Dropdown';
 import Profile from './Profile';
-import DropdownContet from './DropdownContent';
+import DropdownContent from './DropdownContent';
 
 export default function MyDashboardNavBar() {
   const { user } = useAuth();
@@ -23,7 +23,7 @@ export default function MyDashboardNavBar() {
             />
           }
         >
-          <DropdownContet />
+          <DropdownContent />
         </DropdownMenu>
       </div>
     </div>

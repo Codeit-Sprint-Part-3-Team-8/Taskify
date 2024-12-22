@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { useEffect, useState } from 'react';
 import { getMyDashBoardList } from '@/api/mydashboard';
 import useAsync from '@/_hooks/useAsync';
+import Link from 'next/link';
 
 interface Dashboard {
   id: number;
@@ -63,7 +64,8 @@ export default function DashboardList() {
           </div>
           {!loading &&
             data?.dashboards.map((dashboard: Dashboard) => (
-              <div
+              <Link
+                href={`/dashboard/${dashboard.id}`}
                 key={dashboard.id}
                 className="flex items-center justify-between gap-3 rounded-lg border border-gray-D9D9D9 px-5 py-5"
               >
@@ -82,7 +84,7 @@ export default function DashboardList() {
                   src="/images/icon/ic-blackarrow.svg"
                   alt="arrow"
                 />
-              </div>
+              </Link>
             ))}
           {loading && <div>Loading...</div>}
         </div>
