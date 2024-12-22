@@ -8,7 +8,7 @@ interface ColumnType {
 
 interface ColumnListType {
   result: 'SUCCESS';
-  data: ColumnType[];
+  data: ColumnType[] | null;
 }
 
 interface ColumnImageType {
