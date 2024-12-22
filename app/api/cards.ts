@@ -13,7 +13,7 @@ interface GetCardsByColumnParams {
 export async function getCardsByColumn({
   columnId,
   size,
-  cursorId = 1,
+  cursorId = null,
 }: GetCardsByColumnParams): Promise<CardResponseType> {
   const response = await instance.get(`/cards/`, {
     params: {
