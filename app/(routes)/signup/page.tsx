@@ -4,7 +4,7 @@ import { useCallback, useEffect, useState } from 'react';
 import CheckboxField from './CheckboxField';
 import { DEFAULT_VALIDATIONS, validateSchema } from './validate';
 import { ValuesType } from './signupType';
-import { createUser } from '@/api/users';
+import { createUser } from '@/api/users.api';
 import useAsync from '@/_hooks/useAsync';
 import { useRouter } from 'next/navigation';
 import InputField from '@/_components/Auth/InputField';
