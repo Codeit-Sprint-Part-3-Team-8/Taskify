@@ -67,9 +67,9 @@ export default function DashboardList() {
               <Link
                 href={`/dashboard/${dashboard.id}`}
                 key={dashboard.id}
-                className="flex items-center justify-between gap-3 rounded-lg border border-gray-D9D9D9 px-5 py-5"
+                className="flex w-full items-center justify-between gap-3 rounded-lg border border-gray-D9D9D9 px-5 py-5"
               >
-                <div className="flex items-center gap-3 pc:gap-4">
+                <div className="flex w-11/12 items-center gap-3 pc:gap-4">
                   <div
                     className="h-2 w-2 rounded-full"
                     style={{ backgroundColor: dashboard.color }}
@@ -77,6 +77,14 @@ export default function DashboardList() {
                   <p className="truncate font-pretendard text-md font-semibold text-black-333236 tablet:text-base">
                     {dashboard.title}
                   </p>
+                  {dashboard.createdByMe && (
+                    <Image
+                      width={18}
+                      height={18}
+                      src="/images/icon/ic-crown.svg"
+                      alt="crown"
+                    />
+                  )}
                 </div>
                 <Image
                   width={18}
