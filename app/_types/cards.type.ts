@@ -5,11 +5,11 @@ interface CardType {
   tags: string[];
   dueDate: string;
   assignee: {
-    profileImageUrl: string;
+    profileImageUrl: string | null;
     nickname: string;
     id: number;
   };
-  imageUrl: string;
+  imageUrl: string | null;
   teamId: string;
   columnId: number;
   createdAt: string;
@@ -30,7 +30,7 @@ interface CreateCardParams {
   description: string;
   dueDate?: string;
   tags?: string[];
-  imageUrl?: string;
+  imageUrl?: string | null;
 }
 
 interface GetCardListParams {
@@ -47,7 +47,7 @@ interface UpdateCardParams {
   description: string;
   dueDate: string;
   tags: string[];
-  imageUrl: string;
+  imageUrl: string | null;
 }
 
 interface GetCardParams {
