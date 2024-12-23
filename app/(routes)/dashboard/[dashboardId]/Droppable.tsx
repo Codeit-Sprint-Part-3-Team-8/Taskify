@@ -2,7 +2,7 @@ import { useDroppable } from '@dnd-kit/core';
 import { rectSortingStrategy, SortableContext } from '@dnd-kit/sortable';
 
 import SortableItem from './SortableItem';
-import { CardType } from './Dashboard';
+import { CardType } from '@/_types/cards.type';
 
 interface DroppableProps {
   id: string;

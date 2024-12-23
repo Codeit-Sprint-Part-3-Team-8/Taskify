@@ -17,39 +17,16 @@ import { throttle } from 'lodash';
 import Droppable from './Droppable';
 import { Item } from './Item';
 import moveBetweenContainers from './MoveBetweenContainers';
-import { DashBoardType } from './page';
-import { getColumns } from '@/api/columns';
-import { getCardsByColumn } from '@/api/cards';
-
-export interface CardType {
-  id: number;
-  title: string;
-  description: string;
-  tags: string[];
-  dueDate: string;
-  assignee: {
-    profileImageUrl: string;
-    nickname: string;
-    id: number;
-  };
-  imageUrl: string;
-  teamId: string;
-  columnId: number;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export interface CardResponseType {
-  cards: CardType[];
-  cursorId: number | null;
-  totalCount: number;
-}
+import { CardListType } from '@/_types/cards.type';
+import { DashboardType } from '@/_types/dashboards.type';
+import { getColumnList } from '@/api/columns.api';
+import { getCardList } from '@/api/cards.api';
 
 export type ItemGroupsType = {
-  [columnId: string]: { title: string; cardData: CardResponseType };
+  [columnId: string]: { title: string; cardData: CardListType };
 };
 
-export default function DashBoard({ dashBoard }: { dashBoard: DashBoardType }) {
+export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
   const [itemGroups, setItemGroups] = useState<ItemGroupsType>({});
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
 
@@ -66,14 +43,14 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashBoardType }) {
 
     const fetchColumnsAndCards = async (dashboardId: number) => {
       try {
-        const columnsData = await getColumns({ id: dashboardId });
+        const columnsData = await getColumnList({ dashboardId: dashboardId });
+        console.log(columnsData);
         const newItemGroups = (
           await Promise.all(
-            columnsData.map(async (column) => {
+            columnsData.data.map(async (column) => {
               try {
                 const response =
-                  (await getCardsByColumn({ columnId: column.id, size: 10 })) ||
-                  [];
+                  (await getCardList({ columnId: column.id, size: 10 })) || [];
 
                 return {
                   [column.id]: { title: column.title, cardData: response },
