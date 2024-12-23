@@ -21,7 +21,7 @@ export default function PasswordForm() {
   console.log(values);
 
   return (
-    <form className="w-[18rem] rounded-lg bg-white p-4 tablet:w-[42rem] tablet:rounded-2xl tablet:p-6">
+    <form className="min-w-[18rem] rounded-lg bg-white p-4 tablet:w-[42rem] tablet:rounded-2xl tablet:p-6">
       <h2 className="mb-10 text-2lg font-bold text-black-333236 tablet:mb-6 tablet:text-2xl">
         비밀번호 변경
       </h2>
