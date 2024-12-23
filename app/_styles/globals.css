@@ -13,7 +13,7 @@
 @layer base {
   /* 기본 스타일 초기화 */
   * {
-    @apply box-border p-0 m-0;
+    @apply m-0 box-border p-0;
   }
   /* 부드러운 스크롤을 위한 속성 */
   html {
@@ -24,5 +24,11 @@
     @apply min-h-screen bg-white text-gray-900;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+  }
+}
+
+@layer components {
+  .sidebar-right-content {
+    @apply ml-16 h-full min-h-screen bg-gray-FAFAFA tablet:ml-40 pc:ml-[18rem];
   }
 }
