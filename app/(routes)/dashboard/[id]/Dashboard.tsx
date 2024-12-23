@@ -24,14 +24,29 @@ import { getCardsByColumn } from '@/api/cards';
 export interface CardType {
   id: number;
   title: string;
+  description: string;
+  tags: string[];
+  dueDate: string;
+  assignee: {
+    profileImageUrl: string;
+    nickname: string;
+    id: number;
+  };
+  imageUrl: string;
   teamId: string;
-  dashboardId: number;
+  columnId: number;
   createdAt: string;
   updatedAt: string;
 }
 
+export interface CardResponseType {
+  cards: CardType[];
+  cursorId: number | null;
+  totalCount: number;
+}
+
 export type ItemGroupsType = {
-  [columnId: string]: { title: string; cards: CardType[] };
+  [columnId: string]: { title: string; cardData: CardResponseType };
 };
 
 export default function DashBoard({ dashBoard }: { dashBoard: DashBoardType }) {
@@ -56,11 +71,12 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashBoardType }) {
           await Promise.all(
             columnsData.map(async (column) => {
               try {
-                const cards: CardType[] =
+                const response =
                   (await getCardsByColumn({ columnId: column.id, size: 10 })) ||
                   [];
+
                 return {
-                  [column.id]: { title: column.title, cards: cards },
+                  [column.id]: { title: column.title, cardData: response },
                 };
               } catch (error) {
                 console.error(
@@ -68,13 +84,15 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashBoardType }) {
                   error,
                 );
                 return {
-                  [column.id]: { title: column.title, cards: [] },
+                  [column.id]: {
+                    title: column.title,
+                    cardData: { card: [], cursorId: null, totalCount: 0 },
+                  },
                 };
               }
             }),
           )
-        ).reduce((acc, group) => ({ ...acc, ...group }), {});
-
+        ).reduce((acc: ItemGroupsType, group) => ({ ...acc, ...group }), {});
         setItemGroups(newItemGroups);
       } catch (error) {
         console.error('Error fetching columns or cards:', error);
@@ -113,10 +131,10 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashBoardType }) {
             const activeIndex = active.data.current?.sortable.index;
             const overIndex =
               over.id in itemGroups
-                ? itemGroups[overContainer].cards.length + 1
+                ? itemGroups[overContainer].cardData.cards.length + 1
                 : over.data.current?.sortable.index;
 
-            return moveBetweenContainers({
+            const data = moveBetweenContainers({
               items: itemGroups,
               activeContainer,
               activeIndex,
@@ -124,6 +142,9 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashBoardType }) {
               overIndex,
               item: active.id,
             });
+
+            console.log('after move itemGroups: ', itemGroups);
+            return data;
           });
         },
         100,
@@ -150,7 +171,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashBoardType }) {
       const activeIndex = active.data.current?.sortable.index;
       const overIndex =
         over.id in itemGroups
-          ? itemGroups[overContainer].cards.length + 1
+          ? itemGroups[overContainer].cardData.cards.length + 1
           : over.data.current?.sortable.index;
 
       if (
@@ -167,11 +188,17 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashBoardType }) {
         if (activeContainer === overContainer) {
           newItems = {
             ...itemGroups,
-            [overContainer]: arrayMove(
-              itemGroups[overContainer].cards,
-              activeIndex,
-              overIndex,
-            ),
+            [overContainer]: {
+              ...itemGroups[overContainer],
+              cardData: {
+                ...itemGroups[overContainer].cardData,
+                cards: arrayMove(
+                  itemGroups[overContainer].cardData.cards,
+                  activeIndex,
+                  overIndex,
+                ),
+              },
+            },
           };
         } else {
           newItems = moveBetweenContainers({
@@ -205,7 +232,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashBoardType }) {
             key={itemGroup}
             id={itemGroup}
             title={itemGroups[itemGroup].title}
-            items={itemGroups[itemGroup].cards || []}
+            items={itemGroups[itemGroup].cardData.cards || []}
           />
         ))}
       </div>
