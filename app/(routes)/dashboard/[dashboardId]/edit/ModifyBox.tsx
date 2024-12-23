@@ -3,30 +3,39 @@ import React, { useEffect, useRef, useState } from 'react';
 import ColorSelectBox from './ColorSelectBox';
 import Button from '@/_components/Button/Button';
 import useAsync from '@/_hooks/useAsync';
-import {
-  updateDashboardId,
-  UpdateDashboardIdParams,
-  UpdateDashboardIdReturn,
-} from '@/api/dashboard';
+import { updateDashboardId, UpdateDashboardIdParams } from '@/api/dashboard';
+import { DashboardType } from '@/_types/dashboards.type';
 
 interface ModifyBoxProps {
-  modifyData: UpdateDashboardIdReturn;
+  modifyData: DashboardType | null;
 }
 
 export default function ModifyBox({ modifyData }: ModifyBoxProps) {
   const inputRef = useRef<HTMLInputElement>(null);
-  const [colorData, setColorData] = useState(modifyData.color);
-  const [dashboardData, setDashboardData] = useState(modifyData);
+  const [colorData, setColorData] = useState<string>('');
+  const [dashboardData, setDashboardData] = useState<DashboardType | null>(
+    modifyData,
+  );
   const [isButtonDisabled, setIsButtonDisabled] = useState(true);
   const { data: asyncData, excute: updateDashBoardAsync } = useAsync(
     (params: UpdateDashboardIdParams) =>
-      updateDashboardId(modifyData.id, params),
+      updateDashboardId(modifyData?.id || 0, params),
   );
 
-  const { title, color } = dashboardData;
+  useEffect(() => {
+    if (modifyData) {
+      setDashboardData(modifyData);
+      setColorData(modifyData.color);
+    }
+  }, [modifyData]);
+
+  const { title, color } = dashboardData || {};
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!inputRef.current?.value.trim()) {
+      return;
+    }
     const param = { title: inputRef.current!.value, color: colorData };
     await updateDashBoardAsync(param);
   };
@@ -41,10 +50,13 @@ export default function ModifyBox({ modifyData }: ModifyBoxProps) {
 
   useEffect(() => {
     if (asyncData) {
-      // asyncData가 업데이트되면 dashboardData 상태를 즉시 갱신!!
       setDashboardData(asyncData);
     }
   }, [asyncData]);
+
+  if (!dashboardData) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <div className="mx-3 bg-white px-4 py-5 tablet:w-[34rem] tablet:py-8 pc:w-[38rem]">
@@ -58,11 +70,12 @@ export default function ModifyBox({ modifyData }: ModifyBoxProps) {
               onChange={handleInputChange}
               ref={inputRef}
               className="border-D9D9D9 rounded-lg border border-solid border-gray-D9D9D9 p-4"
-            ></input>
+              defaultValue={title}
+            />
           </div>
           <ColorSelectBox
             onChangeColor={(color) => setColorData(color)}
-            usedColor={color}
+            usedColor={color || ''}
           />
         </div>
         <Button
