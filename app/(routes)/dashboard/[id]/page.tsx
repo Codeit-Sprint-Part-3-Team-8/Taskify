@@ -1,25 +1,16 @@
 'use client';
 
-import { getDashBoardById } from '@/api/dashboard';
+import { DashboardType } from '@/_types/dashboards.type';
+import { getDashboard } from '@/api/dashboards.api';
 import dynamic from 'next/dynamic';
 import { useParams } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
 const DashBoard = dynamic(() => import('./Dashboard'), { ssr: false });
 
-export interface DashBoardType {
-  id: number;
-  title: string;
-  color: string;
-  userId: number;
-  createdAt: string;
-  updatedAt: string;
-  createdByMe: boolean;
-}
-
 export default function DashBoardPage() {
   const { id } = useParams();
-  const [dashBoard, setDashBoard] = useState<DashBoardType>({
+  const [dashBoard, setDashBoard] = useState<DashboardType>({
     id: 0,
     title: '',
     color: '',
@@ -31,8 +22,9 @@ export default function DashBoardPage() {
 
   useEffect(() => {
     const fetchDashBoard = async () => {
+      const numericId = Number(id);
       try {
-        const data = await getDashBoardById({ id });
+        const data = await getDashboard({ dashboardId: numericId });
 
         setDashBoard(data);
       } catch (error) {
