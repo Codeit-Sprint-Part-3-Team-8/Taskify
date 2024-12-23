@@ -1,7 +1,14 @@
+import InputField from '@/_components/Auth/InputField';
 import { ChangeEvent, useState } from 'react';
 
+const INIT_VALUES = {
+  current: '',
+  new: '',
+  repeat: '',
+};
+
 export default function PasswordForm() {
-  const [values, setValues] = useState({ current: '', new: '', repeat: '' });
+  const [values, setValues] = useState(INIT_VALUES);
 
   const handleChangeValue = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -14,39 +21,42 @@ export default function PasswordForm() {
   console.log(values);
 
   return (
-    <form>
-      <h2>비밀번호 변경</h2>
-      <fieldset>
-        <label htmlFor="current-password">현재 비밀번호</label>
-        <input
+    <form className="min-w-[18rem] rounded-lg bg-white p-4 tablet:w-[42rem] tablet:rounded-2xl tablet:p-6">
+      <h2 className="mb-10 text-2lg font-bold text-black-333236 tablet:mb-6 tablet:text-2xl">
+        비밀번호 변경
+      </h2>
+      <div className="flex flex-col gap-2">
+        <InputField
           name="current"
-          id="current-paasword"
-          type="text"
+          value={values.current}
           onChange={handleChangeValue}
+          validation={{ isValid: false, message: '' }}
+          label="현재 비밀번호"
           placeholder="비밀번호 입력"
         />
-      </fieldset>
-      <fieldset>
-        <label htmlFor="new-password">새 비밀번호</label>
-        <input
+        <InputField
           name="new"
-          id="new-paasword"
-          type="text"
+          value={values.new}
           onChange={handleChangeValue}
+          validation={{ isValid: false, message: '' }}
+          label="새 비밀번호"
           placeholder="새 비밀번호 입력"
         />
-      </fieldset>
-      <fieldset>
-        <label htmlFor="new-repeat">새 비밀번호 확인</label>
-        <input
+        <InputField
           name="repeat"
-          id="new-repeat"
-          type="text"
+          value={values.repeat}
           onChange={handleChangeValue}
-          placeholder="새 비밀번호 입력"
+          validation={{ isValid: false, message: '' }}
+          label="새 비밀번호 확인"
+          placeholder="새 비밀번호 확인 입력"
         />
-      </fieldset>
-      <button type="submit">변경</button>
+        <button
+          className="w-full select-none rounded-lg border bg-violet-5534DA py-3.5 text-lg font-medium text-white disabled:bg-gray-9FA6B2"
+          type="submit"
+        >
+          변경
+        </button>
+      </div>
     </form>
   );
 }

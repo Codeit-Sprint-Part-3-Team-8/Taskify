@@ -29,6 +29,7 @@ module.exports = {
           D9D9D9: '#D9D9D9',
           EEEEEE: '#EEEEEE',
           FAFAFA: '#FAFAFA',
+          F5F5F5: '#F5F5F5',
         },
         white: '#FFFFFF',
         violet: {
