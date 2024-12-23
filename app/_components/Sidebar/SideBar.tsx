@@ -47,6 +47,20 @@ export default function SideBar() {
     setIsModalOpen(false);
   };
 
+  const totalPages = data?.totalCount ? Math.ceil(data.totalCount / SIZE) : 0;
+
+  const handleNextPage = () => {
+    if (page < totalPages) {
+      setPage((prevPage) => prevPage + 1);
+    }
+  };
+
+  const handlePreviousPage = () => {
+    if (page > 1) {
+      setPage((prevPage) => prevPage - 1);
+    }
+  };
+
   return (
     <div className="fixed left-0 top-0 z-10 flex h-full w-16 flex-col gap-10 border border-r-gray-D9D9D9 bg-white px-3 py-5 tablet:w-40 tablet:gap-14 pc:w-72 pc:px-2">
       <Link className="flex justify-center tablet:justify-start" href={'/'}>
@@ -110,6 +124,32 @@ export default function SideBar() {
             )}
             {loading && <div></div>}
           </div>
+        </div>
+        <div className="hidden tablet:block">
+          <button
+            onClick={handlePreviousPage}
+            disabled={page === 1}
+            className="rounded-md border border-gray-D9D9D9 px-2.5 py-2.5 tablet:px-3 tablet:py-3"
+          >
+            <Image
+              width={16}
+              height={16}
+              src="/images/icon/ic-leftarrow-gray.svg"
+              alt="leftarrow"
+            />
+          </button>
+          <button
+            onClick={handleNextPage}
+            disabled={data?.dashboards.length !== SIZE}
+            className="rounded-md border border-gray-D9D9D9 px-2.5 py-2.5 tablet:px-3 tablet:py-3"
+          >
+            <Image
+              width={16}
+              height={16}
+              src="/images/icon/ic-rightarrow-gray.svg"
+              alt="rightarrow"
+            />
+          </button>
         </div>
         {isModalOpen && (
           <CreateDashboardModal onClose={handleCloseCreateModal} />
