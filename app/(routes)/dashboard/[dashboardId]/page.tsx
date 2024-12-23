@@ -9,7 +9,7 @@ import { useEffect, useState } from 'react';
 const DashBoard = dynamic(() => import('./Dashboard'), { ssr: false });
 
 export default function DashBoardPage() {
-  const { id } = useParams();
+  const { dashboardId } = useParams();
   const [dashBoard, setDashBoard] = useState<DashboardType>({
     id: 0,
     title: '',
@@ -22,9 +22,10 @@ export default function DashBoardPage() {
 
   useEffect(() => {
     const fetchDashBoard = async () => {
-      const numericId = Number(id);
+      const numericDashboardId = Number(dashboardId);
       try {
-        const data = await getDashboard({ dashboardId: numericId });
+        console.log(dashboardId);
+        const data = await getDashboard({ dashboardId: numericDashboardId });
 
         setDashBoard(data);
       } catch (error) {
@@ -33,7 +34,7 @@ export default function DashBoardPage() {
     };
 
     fetchDashBoard();
-  }, [id]);
+  }, [dashboardId]);
 
   return (
     <main>
