@@ -86,7 +86,7 @@ export default function DashboardNavBar() {
   }, []);
 
   return (
-    <div className="flex h-[3.75rem] w-full items-center justify-end border-b border-gray-D9D9D9 pl-[5.25rem] pr-2 tablet:h-[4.375rem] tablet:pl-[12.5rem] tablet:pr-8 pc:justify-between pc:pl-80 pc:pr-20">
+    <div className="fixed top-0 flex h-[3.75rem] w-full items-center justify-end border-b border-gray-D9D9D9 pl-[5.25rem] pr-2 tablet:h-[4.375rem] tablet:pl-[12.5rem] tablet:pr-8 pc:justify-between pc:pl-80 pc:pr-20">
       <div className="hidden gap-2 font-pretendard text-lg font-bold text-black-333236 pc:flex pc:text-xl">
         {dashboard?.title}
         {dashboard?.createdByMe && (
