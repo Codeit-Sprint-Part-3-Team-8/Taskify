@@ -4,7 +4,7 @@ import Image from 'next/image';
 import Link from 'next/link';
 import instance from '@/api/axios';
 import { useEffect, useState } from 'react';
-import CreateDashboardModal from '../Modals/Dashboard/CreateDashboardModal';
+import CreateDashboardModal from '@/(routes)/mydashboard/CreateDashboardModal';
 
 interface DashBoard {
   id: number;
@@ -78,7 +78,7 @@ export default function SideBar() {
           <Image
             width={20}
             height={20}
-            src="/images/sidebar-plusbtn.svg"
+            src="/images/icon/ic-plusbtn.svg"
             alt="Plusbtn"
           />
         </button>

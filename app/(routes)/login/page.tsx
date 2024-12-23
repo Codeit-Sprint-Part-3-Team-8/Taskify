@@ -36,14 +36,15 @@ export default function LoginPage() {
 
   const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setValues((prev) => {
-      const next = { ...prev, [name]: value };
-      setValidations((prev) => ({
-        ...prev,
-        [name]: validateSchema(name, next),
-      }));
-      return next;
-    });
+    setValues((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleBlurInput = (event: React.FocusEvent<HTMLInputElement>) => {
+    const { name } = event.target;
+    setValidations((prev) => ({
+      ...prev,
+      [name]: validateSchema(name, values),
+    }));
   };
 
   const validateForm = useCallback(() => {
@@ -82,7 +83,7 @@ export default function LoginPage() {
       {showModal && (
         <Modal text={errorMessage as string} onClick={handleCloseModal} />
       )}
-      <div className="fixed left-1/2 right-1/2 top-1/2 w-full max-w-xs -translate-x-1/2 -translate-y-1/2 tablet:max-w-lg">
+      <div className="mx-auto w-full max-w-xs pb-8 pt-20 tablet:max-w-lg tablet:pt-52">
         <AuthHeader text="오늘도 만나서 반가워요!" />
         <form className="mb-6 flex flex-col gap-6" onSubmit={handleSubmit}>
           <InputField
@@ -90,12 +91,15 @@ export default function LoginPage() {
             value={values.email}
             validation={validations.email}
             onChange={handleChangeValue}
+            onBlur={handleBlurInput}
           />
           <InputField
             name="password"
+            type="password"
             value={values.password}
             validation={validations.password}
             onChange={handleChangeValue}
+            onBlur={handleBlurInput}
           />
           <button
             className="w-full select-none rounded-lg border bg-violet-5534DA py-3.5 text-lg font-medium text-white disabled:bg-gray-9FA6B2"
