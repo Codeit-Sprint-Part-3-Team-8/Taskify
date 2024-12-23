@@ -25,7 +25,6 @@ const MODAL_INPUT_TEXT: {
 
 interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   name: string;
-  initialValue?: string;
   onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   value: string;
   disabled: boolean;
@@ -33,7 +32,6 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
 
 const ModalInput = ({
   name,
-  initialValue,
   onChange,
   value,
   disabled,
@@ -48,7 +46,7 @@ const ModalInput = ({
         id={name}
         name={name}
         type="text"
-        value={value || initialValue}
+        value={value}
         placeholder={MODAL_INPUT_TEXT[name].placeholder}
         disabled={disabled}
         onChange={onChange}
