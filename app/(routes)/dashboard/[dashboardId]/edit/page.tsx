@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import Image from 'next/image';
 import iconArrow from '@images/icon/icon_arrow.svg';
 import ModifyBox from './ModifyBox';
@@ -8,73 +8,56 @@ import Link from 'next/link';
 import SideBar from '@/_components/Sidebar/SideBar';
 import NavBar from '@/_components/Navbar/NavBar';
 import ModifyList from './ModifyList';
-import { DashboardType } from '@/_types/dashboards.type';
-import { MemberListType } from '@/_types/members.type';
 import { usePathname } from 'next/navigation';
-import { deleteMember, getMemberList } from '@/api/member.api';
+import { getMemberList } from '@/api/member.api';
 import { getDashboard } from '@/api/dashboards.api';
 import useAsync from '@/_hooks/useAsync';
+
+const PAGE_SIZE = 4;
 
 export default function Dashboard() {
   const pathname = usePathname();
   const dashboardId = Number(pathname.split('/')[2]);
-  const [dashboardData, setDashboardData] = useState<DashboardType | null>(
-    null,
-  );
-  const [memberData, setMemberData] = useState<MemberListType | null>(null);
-  const [loading, setLoading] = useState<boolean>(true);
-  const [error, setError] = useState<string | null>(null);
-  const { data: memberDataAsync, excute: deleteMemberAsync } =
-    useAsync(deleteMember);
 
-  const fetchData = useCallback(async () => {
-    try {
-      setLoading(true);
+  const {
+    data: dashboardData,
+    excute: getDashboardData,
+    // loading: dashboardLoading,
+    // error: dashboardError,
+  } = useAsync(getDashboard);
 
-      const dashboardResponse = await getDashboard({ dashboardId });
-      setDashboardData(dashboardResponse || []);
+  const {
+    data: memberData,
+    excute: getMemberData,
+    // loading: memberLoading,
+    // error: memberError,
+  } = useAsync(getMemberList);
 
-      const memberResponse = await getMemberList({ dashboardId });
-      setMemberData(memberResponse || []);
-
-      setLoading(false);
-    } catch (err) {
-      console.error('Error fetching data', err);
-      setError('Error fetching data');
-      setLoading(false);
-    }
-  }, [dashboardId]);
+  const handleClickPage = async (page: number) => {
+    await getMemberData({ dashboardId, page, size: PAGE_SIZE });
+  };
 
   useEffect(() => {
-    if (!dashboardId) return;
+    const fetchData = async () => {
+      try {
+        await Promise.all([
+          getDashboardData({ dashboardId }),
+          getMemberData({ dashboardId, size: PAGE_SIZE }),
+        ]);
+      } catch (error) {
+        console.error('Error fetching data', error);
+      }
+    };
 
     fetchData();
-  }, [dashboardId, fetchData]);
-
-  if (loading) {
-    return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div>{error}</div>;
-  }
-
-  if (!dashboardData || !memberData) {
-    return <div>Not Found</div>;
-  }
-
-  const handleRemoveMember = async (memberId: number) => {
-    await deleteMemberAsync({ memberId: memberId });
-    fetchData();
-    console.log(memberDataAsync);
-  };
+  }, [dashboardId, getDashboardData, getMemberData]);
 
   return (
     <>
       <NavBar type="mydashboard" />
       <SideBar />
-      <div className="dashboard-content">
-        <div className="bg-gray-FAFAFA pl-3 pt-4">
+      <div className="sidebar-right-content">
+        <div className="pl-3 pt-4">
           <Link href={`/dashboard/${dashboardId}`}>
             <div className="mb-5 flex pr-1 pc:mb-9">
               <Image src={iconArrow} alt="돌아가기" width={18} height={18} />
@@ -85,10 +68,7 @@ export default function Dashboard() {
           </Link>
           <div className="flex flex-col gap-4">
             <ModifyBox modifyData={dashboardData} />
-            <ModifyList
-              memberData={memberData}
-              onClickRemoveMember={handleRemoveMember}
-            />
+            <ModifyList memberData={memberData} onClickPage={handleClickPage} />
           </div>
         </div>
       </div>

@@ -28,7 +28,7 @@
 }
 
 @layer components {
-  .dashboard-content {
-    @apply ml-16 tablet:ml-40 pc:ml-[18rem];
+  .sidebar-right-content {
+    @apply ml-16 h-full min-h-screen bg-gray-FAFAFA tablet:ml-40 pc:ml-[18rem];
   }
 }
