@@ -52,7 +52,7 @@ export default function DashboardList() {
   };
 
   return (
-    <div className="p-4 py-[5.25rem] pl-[5.5rem] tablet:py-[6.875rem] tablet:pl-[12.5rem] pc:py-28 pc:pl-[21.25rem]">
+    <div className="p-4 pl-[5.5rem] pt-[5.25rem] tablet:pl-[12.5rem] tablet:pt-[6.875rem] pc:pl-[21.25rem] pc:pt-28">
       <div className="max-w-5xl">
         <div className="grid grid-cols-1 grid-rows-6 gap-4 tablet:grid-cols-2 tablet:grid-rows-3 pc:grid-cols-3 pc:grid-rows-2">
           <div className="flex items-center justify-center gap-3 rounded-lg border border-gray-D9D9D9 px-14 py-5 hover:cursor-pointer">
