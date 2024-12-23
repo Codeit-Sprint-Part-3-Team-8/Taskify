@@ -39,11 +39,12 @@ export default function SignUp() {
 
   const handleChangeValue = (event: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
-    setValues((prev) => {
-      const next = { ...prev, [name]: value };
-      setValidations((prev) => ({ ...prev, ...validateSchema(name, next) }));
-      return next;
-    });
+    setValues((prev) => ({ ...prev, [name]: value }));
+  };
+
+  const handleBlurInput = (event: React.FocusEvent<HTMLInputElement>) => {
+    const { name } = event.target;
+    setValidations((prev) => ({ ...prev, ...validateSchema(name, values) }));
   };
 
   const handleChangeCheckbox = () => setIsChecked((prev) => !prev);
@@ -90,7 +91,7 @@ export default function SignUp() {
       {showError && (
         <Modal text={errorMessage as string} onClick={handleClickClose} />
       )}
-      <div className="fixed left-1/2 right-1/2 top-1/2 w-full max-w-xs -translate-x-1/2 -translate-y-1/2 tablet:max-w-lg">
+      <div className="mx-auto w-full max-w-xs pb-8 pt-16 target:mt-40 tablet:max-w-lg">
         <AuthHeader text="첫 방문을 환영합니다!!" />
         <form className="mb-6 flex flex-col gap-6" onSubmit={handleSubmit}>
           <InputField
@@ -98,24 +99,30 @@ export default function SignUp() {
             value={values.email}
             validation={validations.email}
             onChange={handleChangeValue}
+            onBlur={handleBlurInput}
           />
           <InputField
             name="nickname"
             value={values.nickname}
             validation={validations.nickname}
             onChange={handleChangeValue}
+            onBlur={handleBlurInput}
           />
           <InputField
             name="password"
+            type="password"
             value={values.password}
             validation={validations.password}
             onChange={handleChangeValue}
+            onBlur={handleBlurInput}
           />
           <InputField
             name="repeat"
+            type="password"
             value={values.repeat}
             validation={validations.repeat}
             onChange={handleChangeValue}
+            onBlur={handleBlurInput}
           />
           <CheckboxField
             isChecked={isChecked}
