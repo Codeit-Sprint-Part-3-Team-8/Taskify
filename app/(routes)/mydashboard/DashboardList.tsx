@@ -37,8 +37,10 @@ export default function DashboardList() {
     fetchDashboards({ page });
   }, [page]);
 
+  const totalPages = data?.totalCount ? Math.ceil(data.totalCount / SIZE) : 0;
+
   const handleNextPage = () => {
-    if (data?.dashboards.length === SIZE) {
+    if (page < totalPages) {
       setPage((prevPage) => prevPage + 1);
     }
   };
@@ -48,8 +50,6 @@ export default function DashboardList() {
       setPage((prevPage) => prevPage - 1);
     }
   };
-
-  const totalPages = data?.totalCount ? Math.ceil(data.totalCount / SIZE) : 0;
 
   return (
     <div className="p-4 py-[5.25rem] pl-[5.5rem] tablet:py-[6.875rem] tablet:pl-[12.5rem] pc:py-28 pc:pl-[21.25rem]">
