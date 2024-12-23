@@ -47,7 +47,6 @@ const CreateDashboardModal = ({ onClose }: { onClose: () => void }) => {
     }
 
     setIsLoading(true);
-
     try {
       const response = await createDashboard({
         title: newDashboardName,
@@ -67,11 +66,10 @@ const CreateDashboardModal = ({ onClose }: { onClose: () => void }) => {
   const mainContent = (
     <div className="flex flex-col gap-3">
       <ModalInput
+        name="dashboard"
         value={newDashboardName}
-        onChange={(e) => setNewDashboardName(e.target.value)}
-        placeholder="새로운 대시보드 이름을 입력해주세요."
-        className="h-10 w-full"
         disabled={isLoading}
+        onChange={(e) => setNewDashboardName(e.target.value)}
       />
 
       <div className="flex gap-3">

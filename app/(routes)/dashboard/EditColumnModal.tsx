@@ -55,11 +55,13 @@ const EditColumnModal = ({
       return;
     }
 
+    setIsLoading(true);
     try {
       await updateColumn({
         columnId: columnId,
         title: editedColumnName,
       });
+      onClose();
     } catch (error) {
       alert('컬럼 수정에 실패했습니다.');
       console.error(error);
@@ -70,12 +72,10 @@ const EditColumnModal = ({
 
   const mainContent = (
     <ModalInput
+      name="column"
       value={editedColumnName}
       onChange={(e) => setEditedColumnName(e.target.value)}
-      placeholder="컬럼 이름을 입력해주세요."
-      className="h-10 w-full"
       disabled={isLoading}
-      initialvalue={initialTitle}
     />
   );
 

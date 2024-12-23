@@ -44,10 +44,9 @@ const InviteModal = ({ onClose, dashboardId }: InviteModalProps) => {
 
   const mainContent = (
     <ModalInput
+      name="invitation"
       value={invitationEmail}
       onChange={(e) => setInvitationEmail(e.target.value)}
-      placeholder="초대할 이메일을 입력해주세요."
-      className="w-full h-10"
       disabled={isLoading}
     />
   );
