@@ -2,13 +2,10 @@
 
 import Image from 'next/image';
 import Link from 'next/link';
-import instance from '@/api/axios';
 import { useEffect, useState } from 'react';
-<<<<<<< HEAD
 import CreateDashboardModal from '@/(routes)/mydashboard/CreateDashboardModal';
-=======
-import CreateDashboardModal from '../Modals/Dashboard/CreateDashboardModal';
->>>>>>> 53dbb28 (feat: 사이드바 대시보드 생성 기능 추가)
+import useAsync from '@/_hooks/useAsync';
+import { getDashboardList } from '@/api/dashboards.api';
 
 interface DashBoard {
   id: number;
@@ -20,37 +17,33 @@ interface DashBoard {
   createdByMe: boolean;
 }
 
-interface DashBoardResponse {
-  dashboards: DashBoard[];
-  totalCount: number;
-  cursorId: number | null;
-}
+const SIZE = 10;
 
 export default function SideBar() {
-  const [myDashBoards, setMyDashBoards] = useState<DashBoard[]>([]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
-
-  async function getMyDashBoardList() {
-    try {
-      const response = await instance.get<DashBoardResponse>(
-        `/dashboards?navigationMethod=pagination`,
-      );
-
-      setMyDashBoards(response.data.dashboards || []);
-    } catch (error) {
-      console.error('내 대시보드를 불러오는데 실패했습니다.', error);
-    }
-  }
+  const [page, setPage] = useState(1);
+  const {
+    data,
+    excute: fetchDashboards,
+    loading,
+  } = useAsync(
+    async ({ page }: { page: number }) =>
+      await getDashboardList({
+        navigationMethod: 'pagination',
+        page,
+        size: SIZE,
+      }),
+  );
 
   useEffect(() => {
-    getMyDashBoardList();
-  }, []);
+    fetchDashboards({ page });
+  }, [page]);
 
-  const openModal = () => {
+  const handleOpenCreateModal = () => {
     setIsModalOpen(true);
   };
 
-  const closeModal = () => {
+  const handleCloseCreateModal = () => {
     setIsModalOpen(false);
   };
 
@@ -71,50 +64,57 @@ export default function SideBar() {
           alt="Taskify"
         />
       </Link>
-      <div className="flex h-full w-full flex-col gap-4">
-        <button
-          onClick={openModal}
-          className="flex w-full items-center justify-center tablet:justify-between"
-        >
-          <div className="hidden text-xs text-gray-787486 tablet:block">
-            Dash Boards
+      <div className="flex h-full w-full flex-col gap-8">
+        <div className='gap-4" flex w-full flex-col gap-4'>
+          <button
+            onClick={handleOpenCreateModal}
+            className="flex w-full items-center justify-center tablet:justify-between"
+          >
+            <div className="hidden text-xs text-gray-787486 tablet:block">
+              Dash Boards
+            </div>
+            <Image
+              width={20}
+              height={20}
+              src="/images/icon/ic-plusbtn.svg"
+              alt="Plusbtn"
+            />
+          </button>
+          <div className="flex h-[30rem] w-full flex-col gap-3.5 tablet:gap-0.5 pc:gap-2">
+            {!loading && data?.dashboards?.length ? (
+              data.dashboards.map((dashboard: DashBoard) => (
+                <Link
+                  href={`/dashboard/${dashboard.id}`}
+                  key={dashboard.id}
+                  className="flex w-full items-center justify-center gap-4 rounded p-4 tablet:justify-start tablet:gap-2.5 tablet:px-3 tablet:py-2"
+                >
+                  <span
+                    className="sh h-2 w-2 shrink-0 rounded-full"
+                    style={{ backgroundColor: dashboard.color }}
+                  />
+                  <div className="hidden w-full text-gray-787486 tablet:flex tablet:gap-1 tablet:text-base pc:gap-1.5">
+                    <div className="w-0 flex-1 truncate">{dashboard.title}</div>
+                    {dashboard.createdByMe && (
+                      <Image
+                        width={17.59}
+                        height={14}
+                        src="/images/icon/ic-crown.svg"
+                        alt="CrownIcon"
+                      />
+                    )}
+                  </div>
+                </Link>
+              ))
+            ) : (
+              <div></div>
+            )}
+            {loading && <div></div>}
           </div>
-          <Image
-            width={20}
-            height={20}
-            src="/images/icon/ic-plusbtn.svg"
-            alt="Plusbtn"
-          />
-        </button>
-        <div className="flex h-full w-full flex-col gap-3.5 tablet:gap-0.5 pc:gap-2">
-          {myDashBoards.length > 0 &&
-            myDashBoards.map((dashboard) => (
-              <Link
-                href={`/dashboard/${dashboard.id}`}
-                key={dashboard.id}
-                className="flex w-full items-center justify-center gap-4 rounded p-4 tablet:justify-start tablet:gap-2.5 tablet:px-3 tablet:py-2"
-              >
-                <span
-                  className="sh h-2 w-2 shrink-0 rounded-full"
-                  style={{ backgroundColor: dashboard.color }}
-                />
-                <div className="hidden w-full text-gray-787486 tablet:flex tablet:gap-1 tablet:text-base pc:gap-1.5">
-                  <div className="w-0 flex-1 truncate">{dashboard.title}</div>
-                  {dashboard.createdByMe && (
-                    <Image
-                      width={17.59}
-                      height={14}
-                      src="/images/icon/ic-crown.svg"
-                      alt="CrownIcon"
-                    />
-                  )}
-                </div>
-              </Link>
-            ))}
-          {myDashBoards.length === 0 && <div></div>}
         </div>
+        {isModalOpen && (
+          <CreateDashboardModal onClose={handleCloseCreateModal} />
+        )}
       </div>
-      {isModalOpen && <CreateDashboardModal onClose={closeModal} />}
     </div>
   );
 }
