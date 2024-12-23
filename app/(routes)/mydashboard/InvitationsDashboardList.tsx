@@ -11,9 +11,12 @@ export default function InvitationsDashboardList() {
             초대받은 대시보드
           </h1>
           <div className="flex flex-col items-center">
-            <div className="relative h-[3.75rem] w-[3.75rem] tablet:h-[6.25rem] tablet:w-[6.25rem]">
-              <Image fill src="/images/icon/ic-invite.svg" alt="invitations" />
-            </div>
+            <Image
+              width={100}
+              height={100}
+              src="/images/icon/ic-invite.svg"
+              alt="invitations"
+            />
             <p className="font-pretendard text-xs font-normal text-gray-9FA6B2 tablet:text-lg">
               아직 초대받은 대시보드가 없어요
             </p>

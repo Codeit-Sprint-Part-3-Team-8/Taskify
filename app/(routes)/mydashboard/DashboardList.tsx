@@ -5,6 +5,7 @@ import { useEffect, useState } from 'react';
 import { getDashboardList } from '@/api/dashboards.api';
 import useAsync from '@/_hooks/useAsync';
 import Link from 'next/link';
+import CreateDashboardModal from './CreateDashboardModal';
 
 interface Dashboard {
   id: number;
@@ -19,6 +20,7 @@ interface Dashboard {
 const SIZE = 5;
 
 export default function DashboardList() {
+  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [page, setPage] = useState(1);
   const {
     data,
@@ -51,11 +53,23 @@ export default function DashboardList() {
     }
   };
 
+  const handleOpenCreateModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseCreateModal = () => {
+    setIsModalOpen(false);
+  };
+
   return (
     <div className="p-4 pl-[5.5rem] pt-[5.25rem] tablet:pl-[12.5rem] tablet:pt-[6.875rem] pc:pl-[21.25rem] pc:pt-28">
       <div className="max-w-5xl">
         <div className="grid grid-cols-1 grid-rows-6 gap-4 tablet:grid-cols-2 tablet:grid-rows-3 pc:grid-cols-3 pc:grid-rows-2">
-          <div className="flex items-center justify-center gap-3 rounded-lg border border-gray-D9D9D9 px-14 py-5 hover:cursor-pointer">
+          <button
+            type="button"
+            onClick={handleOpenCreateModal}
+            className="flex items-center justify-center gap-3 rounded-lg border border-gray-D9D9D9 px-14 py-5 hover:cursor-pointer"
+          >
             <p className="font-pretendard text-md font-semibold text-black-333236 tablet:text-lg">
               새로운 대시보드
             </p>
@@ -65,7 +79,7 @@ export default function DashboardList() {
               width={22}
               height={22}
             />
-          </div>
+          </button>
           {!loading &&
             data?.dashboards.map((dashboard: Dashboard) => (
               <Link
@@ -130,6 +144,7 @@ export default function DashboardList() {
           </div>
         </div>
       </div>
+      {isModalOpen && <CreateDashboardModal onClose={handleCloseCreateModal} />}
     </div>
   );
 }
