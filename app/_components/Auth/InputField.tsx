@@ -71,7 +71,10 @@ export default function InputField({
 
   return (
     <fieldset className="relative flex w-full flex-col gap-2">
-      <label className="select-none text-black-333236" htmlFor={name}>
+      <label
+        className="select-none text-sm text-black-333236 tablet:text-lg"
+        htmlFor={name}
+      >
         {label || INPUT_FIELD_TEXT[name].label}
       </label>
       <input
@@ -101,7 +104,9 @@ export default function InputField({
           onClick={handleToggleType}
         />
       )}
-      <div className="h-4 text-sm text-red-D6173A">{message}</div>
+      <div className="h-4 text-sm text-red-D6173A tablet:text-lg">
+        {message}
+      </div>
     </fieldset>
   );
 }
