@@ -39,8 +39,9 @@ export default function ProfileForm({ email, nickname }: ProfileFormProps) {
             name="email"
             type="text"
             placeholder={email}
-            value={values.email}
+            value={''}
             validation={{ isValid: false, message: '' }}
+            readonly={true}
             onChange={handleChangeValue}
           />
           <InputField

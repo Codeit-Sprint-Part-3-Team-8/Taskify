@@ -32,6 +32,7 @@ interface InputFieldProps {
   validation: { isValid: boolean; message: string };
   label?: string;
   placeholder?: string;
+  readonly?: boolean;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
 }
@@ -43,6 +44,7 @@ export default function InputField({
   validation,
   label,
   placeholder,
+  readonly = false,
   onChange,
   onBlur,
 }: InputFieldProps) {
@@ -87,6 +89,7 @@ export default function InputField({
         placeholder={placeholder || INPUT_FIELD_TEXT[name].placeholder}
         onChange={onChange}
         onBlur={onBlur}
+        readOnly={readonly}
         required
       />
       {type === 'password' && (
