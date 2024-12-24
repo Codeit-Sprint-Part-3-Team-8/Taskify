@@ -62,7 +62,7 @@ export default function SideBar() {
   };
 
   return (
-    <div className="fixed left-0 top-0 flex h-full w-16 flex-col gap-10 border border-r-gray-D9D9D9 bg-white px-3 py-5 tablet:w-40 tablet:gap-14 pc:w-72 pc:px-2">
+    <div className="fixed left-0 top-0 z-20 flex h-full w-16 flex-col gap-10 border border-r-gray-D9D9D9 bg-white px-3 py-5 tablet:w-40 tablet:gap-14 pc:w-72 pc:px-2">
       <Link className="flex justify-center tablet:justify-start" href={'/'}>
         <Image
           width={28.82}
