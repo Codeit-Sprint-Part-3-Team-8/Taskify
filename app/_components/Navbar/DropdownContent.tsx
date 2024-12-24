@@ -14,19 +14,19 @@ export default function DropdownContent() {
   return (
     <>
       <Link
-        className="block w-full border-b px-4 py-2 text-center text-sm text-black-333236 hover:bg-gray-100"
+        className="block w-full border-b px-4 py-2 text-center text-md text-black-333236 hover:bg-gray-100"
         href="/mypage"
       >
         내 정보
       </Link>
       <Link
-        className="block w-full border-b px-4 py-2 text-center text-sm text-black-333236 hover:bg-gray-100"
+        className="block w-full border-b px-4 py-2 text-center text-md text-black-333236 hover:bg-gray-100"
         href="/mydashboard"
       >
         내 대시보드
       </Link>
       <button
-        className="block w-full px-4 py-2 text-center text-sm text-black-333236 hover:bg-gray-100"
+        className="block w-full px-4 py-2 text-center text-md text-black-333236 hover:bg-gray-100"
         type="button"
         onClick={handleLogout}
       >
