@@ -15,7 +15,7 @@ export default function MyPage() {
     <>
       <SideBar />
       <MyDashboardNavBar />
-      <div className="bg-gray-F5F5F5 ml-16 tablet:ml-40">
+      <div className="ml-16 bg-gray-F5F5F5 tablet:ml-40">
         <div className="flex flex-col gap-6 p-6">
           <Link
             href="/mydashboard"
@@ -29,6 +29,7 @@ export default function MyPage() {
           <ProfileForm
             email={user?.email as string}
             nickname={user?.nickname as string}
+            profileImageUrl={user?.profileImageUrl as string | null}
           />
           <PasswordForm />
         </div>

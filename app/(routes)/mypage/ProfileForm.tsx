@@ -1,19 +1,29 @@
 import InputField from '@/_components/Auth/InputField';
 import { ChangeEvent, useEffect, useState } from 'react';
 import ImageInputField from './ImageInputField';
+import useAsync from '@/_hooks/useAsync';
+import { createProfileImage } from '@/api/users.api';
 
 interface ProfileFormProps {
   email: string;
   nickname: string;
+  profileImageUrl: string | null;
 }
 
 const INIT_VALUES: ProfileFormProps = {
   email: '',
   nickname: '',
+  profileImageUrl: null,
 };
 
-export default function ProfileForm({ email, nickname }: ProfileFormProps) {
+export default function ProfileForm({
+  email,
+  nickname,
+  profileImageUrl,
+}: ProfileFormProps) {
   const [values, setValues] = useState(INIT_VALUES);
+  const { data: profileDate, excute: fetchProfile } =
+    useAsync(createProfileImage);
 
   const handleChangeValue = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -23,8 +33,26 @@ export default function ProfileForm({ email, nickname }: ProfileFormProps) {
     }));
   };
 
+  const handleChangeProfile = (value: FormData | null) => {
+    if (value) {
+      fetchProfile({ image: value });
+    } else {
+      setValues((prev) => ({
+        ...prev,
+        profileImageUrl: null,
+      }));
+    }
+  };
+
   useEffect(() => {
-    setValues({ email, nickname });
+    setValues((prev) => ({
+      ...prev,
+      profileImageUrl: profileDate?.profileImageUrl as string,
+    }));
+  }, [profileDate]);
+
+  useEffect(() => {
+    setValues((prev) => ({ ...prev, email, nickname }));
   }, [email, nickname]);
 
   return (
@@ -33,7 +61,11 @@ export default function ProfileForm({ email, nickname }: ProfileFormProps) {
         프로필
       </h2>
       <div className="tablet:flex">
-        <ImageInputField />
+        <ImageInputField
+          initProfileImageUrl={profileImageUrl}
+          profileImageUrl={values.profileImageUrl}
+          onChange={handleChangeProfile}
+        />
         <div className="mt-10 flex flex-col gap-2 tablet:ml-10 tablet:mt-0 tablet:grow">
           <InputField
             name="email"
