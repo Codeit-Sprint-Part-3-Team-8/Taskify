@@ -1,5 +1,7 @@
 'use client';
 
+import NavBar from '@/_components/Navbar/NavBar';
+import SideBar from '@/_components/Sidebar/SideBar';
 import { DashboardType } from '@/_types/dashboards.type';
 import { getDashboard } from '@/api/dashboards.api';
 import dynamic from 'next/dynamic';
@@ -38,6 +40,8 @@ export default function DashBoardPage() {
 
   return (
     <main>
+      <NavBar type="mydashboard" />
+      <SideBar />
       <DashBoard dashBoard={dashBoard} />
     </main>
   );
