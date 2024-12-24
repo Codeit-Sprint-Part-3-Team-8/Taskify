@@ -196,26 +196,28 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
   };
 
   return (
-    <DndContext
-      sensors={sensors}
-      onDragStart={handleDragStart}
-      onDragCancel={handleDragCancel}
-      onDragOver={handleDragOver}
-      onDragEnd={handleDragEnd}
-    >
-      <div className="m-4 flex w-fit justify-center rounded border border-gray-400 p-2">
-        {Object.keys(itemGroups).map((itemGroup) => (
-          <Droppable
-            key={itemGroup}
-            id={itemGroup}
-            title={itemGroups[itemGroup].title}
-            items={itemGroups[itemGroup].cardData.cards || []}
-          />
-        ))}
-      </div>
-      <DragOverlay>
-        {activeId ? <Item id={activeId} dragOverlay /> : null}
-      </DragOverlay>
-    </DndContext>
+    <div className="sidebar-right-content">
+      <DndContext
+        sensors={sensors}
+        onDragStart={handleDragStart}
+        onDragCancel={handleDragCancel}
+        onDragOver={handleDragOver}
+        onDragEnd={handleDragEnd}
+      >
+        <div className="mt-[70px] flex w-fit justify-center rounded border border-gray-400">
+          {Object.keys(itemGroups).map((itemGroup) => (
+            <Droppable
+              key={itemGroup}
+              id={itemGroup}
+              title={itemGroups[itemGroup].title}
+              items={itemGroups[itemGroup].cardData.cards || []}
+            />
+          ))}
+        </div>
+        <DragOverlay>
+          {activeId ? <Item id={activeId} dragOverlay /> : null}
+        </DragOverlay>
+      </DndContext>
+    </div>
   );
 }
