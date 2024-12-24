@@ -15,7 +15,7 @@ interface UserType {
 
 interface UpdateUserParams {
   nickname: string;
-  profileImageUrl: string;
+  profileImageUrl: string | null;
 }
 
 interface CreateProfileImageParams {
