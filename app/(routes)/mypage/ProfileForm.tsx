@@ -22,6 +22,7 @@ export default function ProfileForm({
   profileImageUrl,
 }: ProfileFormProps) {
   const [values, setValues] = useState(INIT_VALUES);
+  // const [isFormValid, setIsFormValid] = useState(false);
   const { data: profileDate, excute: fetchProfile } =
     useAsync(createProfileImage);
   const { data: updateData, excute: _updateUser } = useAsync(updateUser);
@@ -65,8 +66,8 @@ export default function ProfileForm({
   }, [updateData]);
 
   useEffect(() => {
-    setValues((prev) => ({ ...prev, email, nickname }));
-  }, [email, nickname]);
+    setValues({ email, nickname, profileImageUrl });
+  }, [email, nickname, profileImageUrl]);
 
   return (
     <form
@@ -78,7 +79,6 @@ export default function ProfileForm({
       </h2>
       <div className="tablet:flex">
         <ImageInputField
-          initProfileImageUrl={profileImageUrl}
           profileImageUrl={values.profileImageUrl}
           onChange={handleChangeProfile}
         />

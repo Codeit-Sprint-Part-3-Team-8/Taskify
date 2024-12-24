@@ -1,13 +1,11 @@
 import Image from 'next/image';
 
 interface ImageInputFieldProps {
-  initProfileImageUrl: string | null;
   profileImageUrl: string | null;
   onChange: (value: FormData | null) => void;
 }
 
 export default function ImageInputField({
-  initProfileImageUrl,
   profileImageUrl,
   onChange,
 }: ImageInputFieldProps) {
@@ -32,11 +30,11 @@ export default function ImageInputField({
         htmlFor="profile"
         className="relative flex h-40 w-40 items-center justify-center rounded-[0.4rem] bg-gray-F5F5F5 tablet:h-[11.5rem] tablet:w-[11.5rem]"
       >
-        {profileImageUrl || initProfileImageUrl ? (
+        {profileImageUrl ? (
           <Image
             fill
             sizes="100%, 100%, 100%, 100%"
-            src={profileImageUrl || (initProfileImageUrl as string)}
+            src={profileImageUrl}
             alt="프로필 이미지"
           />
         ) : (
