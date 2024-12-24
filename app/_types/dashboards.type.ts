@@ -1,7 +1,6 @@
 import { InvitationType } from './invitations.type';
 
 interface DashboardType {
-  [x: string]: any;
   id: number;
   title: string;
   color: string;
