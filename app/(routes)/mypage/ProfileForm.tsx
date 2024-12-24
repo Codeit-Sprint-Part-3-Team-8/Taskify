@@ -1,8 +1,8 @@
 import InputField from '@/_components/Auth/InputField';
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import ImageInputField from './ImageInputField';
 import useAsync from '@/_hooks/useAsync';
-import { createProfileImage } from '@/api/users.api';
+import { createProfileImage, updateUser } from '@/api/users.api';
 
 interface ProfileFormProps {
   email: string;
@@ -24,6 +24,7 @@ export default function ProfileForm({
   const [values, setValues] = useState(INIT_VALUES);
   const { data: profileDate, excute: fetchProfile } =
     useAsync(createProfileImage);
+  const { data: updateData, excute: _updateUser } = useAsync(updateUser);
 
   const handleChangeValue = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -44,6 +45,14 @@ export default function ProfileForm({
     }
   };
 
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    _updateUser({
+      nickname: values.nickname,
+      profileImageUrl: values.profileImageUrl,
+    });
+  };
+
   useEffect(() => {
     setValues((prev) => ({
       ...prev,
@@ -52,11 +61,18 @@ export default function ProfileForm({
   }, [profileDate]);
 
   useEffect(() => {
+    console.log(updateData);
+  }, [updateData]);
+
+  useEffect(() => {
     setValues((prev) => ({ ...prev, email, nickname }));
   }, [email, nickname]);
 
   return (
-    <form className="min-w-[18rem] rounded-lg bg-white p-4 tablet:w-[42rem] tablet:rounded-2xl tablet:p-6">
+    <form
+      className="min-w-[18rem] rounded-lg bg-white p-4 tablet:w-[42rem] tablet:rounded-2xl tablet:p-6"
+      onSubmit={handleSubmit}
+    >
       <h2 className="mb-10 text-2lg font-bold text-black-333236 tablet:mb-6 tablet:text-2xl">
         프로필
       </h2>
