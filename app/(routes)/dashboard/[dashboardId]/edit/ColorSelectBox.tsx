@@ -1,6 +1,6 @@
 'use client';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import iconCheck from '@images/icon/icon_check.svg';
 const COLORS = [
   'bg-green-7AC555',
@@ -29,6 +29,10 @@ export default function ColorSelectBox({
     onChangeColor(color);
   };
 
+  useEffect(() => {
+    setSelectedColor(usedColor);
+  }, [usedColor]);
+
   return (
     <div className="flex gap-2">
       {COLORS.map((data, index) => {
@@ -46,7 +50,7 @@ export default function ColorSelectBox({
                 width={28}
                 height={28}
                 alt="체크"
-              ></Image>
+              />
             )}
           </div>
         );
