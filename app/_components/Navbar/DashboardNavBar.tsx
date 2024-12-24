@@ -2,29 +2,15 @@
 
 import React, { useEffect, useState } from 'react';
 import Image from 'next/image';
-import { getDashboard, getMember } from '@/api/navbar';
+import { getDashboard } from '@/api/navbar';
 import { useAuth } from '@/context/AuthContext';
 import Link from 'next/link';
 import DropdownMenu from './Dropdown';
 import DropdownContent from './DropdownContent';
 import Profile from './Profile';
-
-interface Member {
-  id: number;
-  email: string;
-  nickname: string;
-  profileImageUrl: string | null;
-}
-
-interface DashBoard {
-  id: number;
-  title: string;
-  color: string;
-  userId: number;
-  createdAt: string;
-  updatedAt: string;
-  createdByMe: boolean;
-}
+import useAsync from '@/_hooks/useAsync';
+import { useParams } from 'next/navigation';
+import { getMemberList } from '@/api/member.api';
 
 enum ScreenSize {
   LARGE = 1280,
@@ -33,35 +19,29 @@ enum ScreenSize {
 }
 
 export default function DashboardNavBar() {
-  const BOARD_ID = 12827; // board id를 상수로 선언해 이용 후에 /dashboard/id 페이지 생성 후 수정 예정
-  const [dashboard, setDashboard] = useState<DashBoard>();
-  const [members, setMembers] = useState<Member[]>([]);
   const [visibleMembers, setVisibleMembers] = useState(2);
   const { user } = useAuth();
+  const params = useParams();
+  const id = Number(params.dashboardId);
+
+  const {
+    data: dashboardsData,
+    excute: fetchDashboards,
+    loading: dashboardsLoading,
+  } = useAsync(async ({ id }: { id: number }) => await getDashboard(id));
+
+  const {
+    data: membersData,
+    excute: fetchMembers,
+    loading: membersLoading,
+  } = useAsync(async ({ dashboardId }: { dashboardId: number }) =>
+    getMemberList({ dashboardId, page: 1, size: 20 }),
+  );
 
   useEffect(() => {
-    async function fetchDashboardData() {
-      try {
-        const dashboard = await getDashboard(BOARD_ID);
-        setDashboard(dashboard);
-      } catch (error) {
-        console.error('대시보드 정보를 가져오는데 실패했습니다:', error);
-      }
-    }
-    fetchDashboardData();
-  }, [BOARD_ID]);
-
-  useEffect(() => {
-    async function fetchMemberData() {
-      try {
-        const memberData = await getMember(BOARD_ID);
-        setMembers(memberData || []);
-      } catch (error) {
-        console.error('멤버 정보를 가져오는데 실패했습니다:', error);
-      }
-    }
-    fetchMemberData();
-  }, [BOARD_ID]);
+    fetchMembers({ dashboardId: id });
+    fetchDashboards({ id });
+  }, [id]);
 
   useEffect(() => {
     const getVisibleMembers = (): number => {
@@ -85,11 +65,13 @@ export default function DashboardNavBar() {
     };
   }, []);
 
+  const members = membersData?.members || []; //옵셔널 체이닝과 기본값(|| [])을 활용해 에러 방지
+
   return (
-    <div className="fixed top-0 flex h-[3.75rem] w-full items-center justify-end border-b border-gray-D9D9D9 pl-[5.25rem] pr-2 tablet:h-[4.375rem] tablet:pl-[12.5rem] tablet:pr-8 pc:justify-between pc:pl-80 pc:pr-20">
-      <div className="hidden gap-2 font-pretendard text-lg font-bold text-black-333236 pc:flex pc:text-xl">
-        {dashboard?.title}
-        {dashboard?.createdByMe && (
+    <div className="fixed top-0 z-10 flex h-[3.75rem] w-full items-center justify-end border-b border-gray-D9D9D9 pl-[5.25rem] pr-2 tablet:h-[4.375rem] tablet:pl-[12.5rem] tablet:pr-8 pc:justify-between pc:pl-80 pc:pr-20">
+      <div className="hidden w-1/3 gap-2 font-pretendard text-lg font-bold text-black-333236 pc:flex pc:text-xl">
+        <div className="truncate">{dashboardsData?.title}</div>
+        {dashboardsData?.createdByMe && (
           <Image
             width={20}
             height={20}
@@ -102,7 +84,7 @@ export default function DashboardNavBar() {
       <div className="flex items-center gap-2 tablet:gap-6 pc:gap-10">
         <div className="flex items-center gap-1.5 tablet:gap-3 pc:gap-4">
           <Link
-            href={`/dashboard/${BOARD_ID}/edit`}
+            href={`/dashboard/${id}/edit`}
             className="flex items-center justify-center rounded-md border border-gray-D9D9D9 px-3 py-1.5 font-pretendard text-md font-medium tablet:gap-2 tablet:rounded-lg tablet:py-2 pc:px-4 pc:py-2.5 pc:text-lg"
           >
             <Image
