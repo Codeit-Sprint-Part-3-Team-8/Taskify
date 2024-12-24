@@ -32,7 +32,10 @@ interface InputFieldProps {
   validation: { isValid: boolean; message: string };
   label?: string;
   placeholder?: string;
+<<<<<<< HEAD
   readonly?: boolean;
+=======
+>>>>>>> origin/feat/88--mypage
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
 }
@@ -44,7 +47,10 @@ export default function InputField({
   validation,
   label,
   placeholder,
+<<<<<<< HEAD
   readonly = false,
+=======
+>>>>>>> origin/feat/88--mypage
   onChange,
   onBlur,
 }: InputFieldProps) {
