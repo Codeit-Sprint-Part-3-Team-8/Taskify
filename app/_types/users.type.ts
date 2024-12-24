@@ -19,7 +19,7 @@ interface UpdateUserParams {
 }
 
 interface CreateProfileImageParams {
-  image: File;
+  image: FormData;
 }
 
 interface ProfileImageType {
