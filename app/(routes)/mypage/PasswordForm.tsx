@@ -5,6 +5,8 @@ import {
   DEFAULT_PASSWORD_VALIDATIONS,
   validate,
 } from './validate';
+import useAsync from '@/_hooks/useAsync';
+import { updatePassword } from '@/api/auth.api';
 
 const DEFAUTL_VALUES = {
   current: '',
@@ -16,6 +18,8 @@ export default function PasswordForm() {
   const [values, setValues] = useState(DEFAUTL_VALUES);
   const [validations, setValidations] = useState(DEFAULT_PASSWORD_VALIDATIONS);
   const [isFormValid, setIsFormValid] = useState(false);
+  const { data: updateData, excute: _updatePassword } =
+    useAsync(updatePassword);
 
   const handleChangeValue = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -52,7 +56,8 @@ export default function PasswordForm() {
 
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
-    console.log('submit!!');
+    if (!isFormValid) return;
+    _updatePassword({ password: values.current, newPassword: values.changed });
   };
 
   useEffect(() => {
@@ -62,6 +67,10 @@ export default function PasswordForm() {
         validations.confirmed.isValid,
     );
   }, [validations]);
+
+  useEffect(() => {
+    console.log(updateData);
+  }, [updateData]);
 
   return (
     <form
