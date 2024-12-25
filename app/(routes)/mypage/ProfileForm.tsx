@@ -21,7 +21,7 @@ export default function ProfileForm({
   const [validations, setValidations] = useState(DEFAULT_PROFILE_VALIDATIONS);
   const [isFormValid, setIsFormValid] = useState(false);
   const {
-    data: profileDate,
+    data: profileData,
     excute: _createProfileImage,
     clear: claerProfile,
   } = useAsync(createProfileImage);
@@ -103,12 +103,12 @@ export default function ProfileForm({
    * - 프로필 URL 상태 관리
    */
   useEffect(() => {
-    const next = profileDate?.profileImageUrl as string;
+    const next = profileData?.profileImageUrl as string;
     setValues((prev) => ({
       ...prev,
       profileImageUrl: next,
     }));
-  }, [profileDate]);
+  }, [profileData]);
 
   useEffect(() => {
     /**
