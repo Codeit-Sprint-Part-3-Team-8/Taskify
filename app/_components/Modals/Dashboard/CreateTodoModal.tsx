@@ -131,10 +131,10 @@ export default function CreateTodoModal({
             </>
           }
         >
-          {/*현재 page에서 members를 받아오고 있지 않아 오류가 
-             발생함으로 주석 처리 dev merge 시 주석 해제 예정
-          
-            {members.map((member) => (
+          {/* 현재 page에서 members를 받아오고 있지 않아 오류가 
+             발생함으로 주석 처리 dev merge 시 주석 해제 예정 */}
+
+          {members.map((member) => (
             <button
               onClick={() => setAssigneeUserId(member.id)}
               className="flex items-center gap-8 px-4 py-2"
@@ -143,7 +143,7 @@ export default function CreateTodoModal({
               <div>{member.profileImageUrl}</div>
               <div>{member.nickname}</div>
             </button>
-          ))} */}
+          ))}
         </DropdownMenu>
       </div>
 
