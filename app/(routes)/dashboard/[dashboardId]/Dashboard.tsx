@@ -204,11 +204,12 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
         onDragOver={handleDragOver}
         onDragEnd={handleDragEnd}
       >
-        <div className="mt-[70px] flex w-full mobile:flex-col pc:flex-row pc:justify-between">
+        <div className="mt-[60px] flex w-full mobile:flex-col tablet:mt-[70px] pc:flex-row pc:justify-between">
           {Object.keys(itemGroups).map((itemGroup) => (
             <Droppable
               key={itemGroup}
               id={itemGroup}
+              dashBoardColor={dashBoard.color}
               title={itemGroups[itemGroup].title}
               items={itemGroups[itemGroup].cardData.cards || []}
             />
