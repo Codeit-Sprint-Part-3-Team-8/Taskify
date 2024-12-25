@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import useAsync from '@/_hooks/useAsync';
 import { InvitationType } from '@/_types/invitations.type';
-import { getInvitationList } from '@/api/invitations.api';
+import { getInvitationList, updateInvitation } from '@/api/invitations.api';
 import { useEffect } from 'react';
 
 const INVITATION_SIZE = 10;
@@ -22,9 +22,33 @@ export default function InvitationsDashboard() {
       }),
   );
 
+  const { excute: handleInvitationResponse } = useAsync(
+    async ({
+      invitationId,
+      inviteAccepted,
+    }: {
+      invitationId: number;
+      inviteAccepted: boolean;
+    }) =>
+      await updateInvitation({
+        invitationId,
+        inviteAccepted,
+      }),
+  );
+
   useEffect(() => {
     fetchInvitationDashboards({});
   }, []);
+
+  const handleClickAccept = async (invitationId: number) => {
+    await handleInvitationResponse({ invitationId, inviteAccepted: true });
+    fetchInvitationDashboards({});
+  };
+
+  const handleClickReject = async (invitationId: number) => {
+    await handleInvitationResponse({ invitationId, inviteAccepted: false });
+    fetchInvitationDashboards({});
+  };
 
   return (
     <div className="mt-6 w-full py-6 pl-[5.5rem] tablet:mt-12 tablet:py-4 tablet:pl-[12.5rem] pc:mt-10 pc:py-8 pc:pl-[21.25rem]">
@@ -53,12 +77,18 @@ export default function InvitationsDashboard() {
                     <td className="px-6 py-4">{invitation.dashboard.title}</td>
                     <td className="px-6 py-4">{invitation.inviter.nickname}</td>
                     <td className="px-1.5 py-4 text-end">
-                      <button className="rounded bg-violet-5534DA text-white tablet:px-6 tablet:py-1.5 pc:px-7 pc:py-2">
+                      <button
+                        className="rounded bg-violet-5534DA text-white tablet:px-6 tablet:py-1.5 pc:px-7 pc:py-2"
+                        onClick={() => handleClickAccept(invitation.id)}
+                      >
                         수락
                       </button>
                     </td>
                     <td className="px-1.5 py-4 text-start">
-                      <button className="rounded border border-gray-D9D9D9 bg-white text-violet-5534DA tablet:px-6 tablet:py-1.5 pc:px-7 pc:py-2">
+                      <button
+                        className="rounded border border-gray-D9D9D9 bg-white text-violet-5534DA tablet:px-6 tablet:py-1.5 pc:px-7 pc:py-2"
+                        onClick={() => handleClickReject(invitation.id)}
+                      >
                         거절
                       </button>
                     </td>
