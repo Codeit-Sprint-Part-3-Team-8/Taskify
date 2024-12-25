@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
+import { useSearchParams } from 'next/navigation';
 import Image from 'next/image';
 import debounce from 'lodash/debounce';
 
@@ -13,7 +13,6 @@ const SearchBar: React.FC<SearchBarProps> = ({
   placeholder = '검색',
 }) => {
   const searchParams = useSearchParams();
-  const router = useRouter();
   const [keyword, setKeyword] = useState('');
 
   useEffect(() => {
@@ -45,7 +44,7 @@ const SearchBar: React.FC<SearchBarProps> = ({
   };
 
   return (
-    <div className="relative mb-6">
+    <div className="relative">
       <Image
         width={24}
         height={24}

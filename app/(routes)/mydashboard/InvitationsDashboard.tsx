@@ -106,6 +106,7 @@ export default function InvitationsDashboard() {
 
   const handleClickAccept = async (invitationId: number) => {
     await handleInvitationResponse({ invitationId, inviteAccepted: true });
+    alert('초대를 수락했습니다.');
     setInvitations((prev) =>
       prev.filter((invitation) => invitation.id !== invitationId),
     );
@@ -113,6 +114,7 @@ export default function InvitationsDashboard() {
 
   const handleClickReject = async (invitationId: number) => {
     await handleInvitationResponse({ invitationId, inviteAccepted: false });
+    alert('초대를 거절했습니다.');
     setInvitations((prev) =>
       prev.filter((invitation) => invitation.id !== invitationId),
     );
@@ -121,11 +123,13 @@ export default function InvitationsDashboard() {
   return (
     <div className="mt-6 w-full py-6 pl-[5.5rem] tablet:mt-12 tablet:py-4 tablet:pl-[12.5rem] pc:mt-10 pc:py-8 pc:pl-[21.25rem]">
       <div className="max-w-5xl">
-        <div className="tablet:pb-30 flex flex-col gap-[6.5625rem] px-5 pb-20 pt-6 tablet:gap-16 tablet:px-10 pc:gap-16 pc:pb-[7.5rem]">
-          <h1 className="font-pretendard text-md font-bold text-black-333236 tablet:text-2xl">
-            초대받은 대시보드
-          </h1>
-          <SearchBar onSearch={handleSearch} placeholder="검색" />
+        <div className="flex flex-col gap-3 px-5 pt-6 tablet:gap-6 tablet:px-10">
+          <div className="flex flex-col gap-4 pc:gap-8">
+            <h1 className="font-pretendard text-md font-bold text-black-333236 tablet:text-2xl">
+              초대받은 대시보드
+            </h1>
+            <SearchBar onSearch={handleSearch} placeholder="검색" />
+          </div>
           {loading && offset === 0 ? (
             <div className="flex justify-center">로딩 중...</div>
           ) : invitations.length > 0 ? (
