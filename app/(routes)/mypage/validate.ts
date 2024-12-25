@@ -12,8 +12,8 @@ const DEFAULT_PROFILE_VALIDATIONS: ProfileValidationsType = {
 
 const DEFAULT_PASSWORD_VALIDATIONS: PasswordValidationsType = {
   current: { isValid: false, message: '' },
-  new: { isValid: false, message: '' },
-  repeat: { isValid: false, message: '' },
+  changed: { isValid: false, message: '' },
+  confirmed: { isValid: false, message: '' },
 };
 
 const validate: {
@@ -47,7 +47,9 @@ const validate: {
   },
   password: (value: unknown) => {
     if (typeof value === 'string') {
-      const schema = new Validator(value).required().minLength(8);
+      const schema = new Validator(value)
+        .required('비밀번호를 입력해주세요.')
+        .minLength(8);
       return {
         isValid: schema.validate(),
         message: schema.validate() ? '' : schema.getErrors()[0],
@@ -57,4 +59,23 @@ const validate: {
   },
 };
 
-export { DEFAULT_PROFILE_VALIDATIONS, DEFAULT_PASSWORD_VALIDATIONS, validate };
+function confirmPassword(changed: string, confirmed: string): ValidationType {
+  const _changed = changed.trim();
+  const _confirmed = confirmed.trim();
+
+  const isValid = _changed === _confirmed;
+  const message =
+    !isValid && _confirmed.length > 0 ? '비밀번호가 일치하지 않습니다.' : '';
+
+  return {
+    isValid: isValid,
+    message: message,
+  };
+}
+
+export {
+  DEFAULT_PROFILE_VALIDATIONS,
+  DEFAULT_PASSWORD_VALIDATIONS,
+  validate,
+  confirmPassword,
+};

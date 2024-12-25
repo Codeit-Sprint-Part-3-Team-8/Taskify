@@ -10,8 +10,8 @@ interface ProfileValidationsType {
 
 interface PasswordValidationsType {
   current: ValidationType;
-  new: ValidationType;
-  repeat: ValidationType;
+  changed: ValidationType;
+  confirmed: ValidationType;
 }
 
 interface ProfileFormProps {

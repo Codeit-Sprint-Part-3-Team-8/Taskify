@@ -1,14 +1,21 @@
 import InputField from '@/_components/Auth/InputField';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, FocusEvent, useEffect, useState } from 'react';
+import {
+  confirmPassword,
+  DEFAULT_PASSWORD_VALIDATIONS,
+  validate,
+} from './validate';
 
-const INIT_VALUES = {
+const DEFAUTL_VALUES = {
   current: '',
-  new: '',
-  repeat: '',
+  changed: '',
+  confirmed: '',
 };
 
 export default function PasswordForm() {
-  const [values, setValues] = useState(INIT_VALUES);
+  const [values, setValues] = useState(DEFAUTL_VALUES);
+  const [validations, setValidations] = useState(DEFAULT_PASSWORD_VALIDATIONS);
+  const [isFormValid, setIsFormValid] = useState(false);
 
   const handleChangeValue = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -18,41 +25,72 @@ export default function PasswordForm() {
     }));
   };
 
-  console.log(values);
+  const handleBlurInput = (event: FocusEvent<HTMLInputElement>) => {
+    const { name } = event.target;
+
+    setValidations((prev) => {
+      if (name === 'current') {
+        return {
+          ...prev,
+          current: validate.password(values.current),
+        };
+      }
+      if (name === 'changed' || name === 'confirmed') {
+        return {
+          ...prev,
+          changed: validate.password(values.changed),
+          confirmed: confirmPassword(values.changed, values.confirmed),
+        };
+      }
+      return prev;
+    });
+  };
+
+  useEffect(() => {
+    setIsFormValid(
+      validations.current.isValid &&
+        validations.changed.isValid &&
+        validations.confirmed.isValid,
+    );
+  }, [validations]);
 
   return (
     <form className="min-w-[18rem] rounded-lg bg-white p-4 tablet:w-[42rem] tablet:rounded-2xl tablet:p-6">
       <h2 className="mb-10 text-2lg font-bold text-black-333236 tablet:mb-6 tablet:text-2xl">
         비밀번호 변경
       </h2>
-      <div className="flex flex-col gap-2">
+      <div className="flex flex-col gap-4">
         <InputField
           name="current"
           value={values.current}
           onChange={handleChangeValue}
-          validation={{ isValid: false, message: '' }}
+          validation={validations.current}
           label="현재 비밀번호"
           placeholder="비밀번호 입력"
+          onBlur={handleBlurInput}
         />
         <InputField
-          name="new"
-          value={values.new}
+          name="changed"
+          value={values.changed}
           onChange={handleChangeValue}
-          validation={{ isValid: false, message: '' }}
+          validation={validations.changed}
           label="새 비밀번호"
           placeholder="새 비밀번호 입력"
+          onBlur={handleBlurInput}
         />
         <InputField
-          name="repeat"
-          value={values.repeat}
+          name="confirmed"
+          value={values.confirmed}
           onChange={handleChangeValue}
-          validation={{ isValid: false, message: '' }}
+          validation={validations.confirmed}
           label="새 비밀번호 확인"
           placeholder="새 비밀번호 확인 입력"
+          onBlur={handleBlurInput}
         />
         <button
           className="w-full select-none rounded-lg border bg-violet-5534DA py-3.5 text-lg font-medium text-white disabled:bg-gray-9FA6B2"
           type="submit"
+          disabled={!isFormValid}
         >
           변경
         </button>
