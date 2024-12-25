@@ -4,11 +4,17 @@ import Image from 'next/image';
 import useAsync from '@/_hooks/useAsync';
 import { InvitationType } from '@/_types/invitations.type';
 import { getInvitationList, updateInvitation } from '@/api/invitations.api';
-import { useEffect } from 'react';
+import InvitationsTable from './InvitationTable';
+import { useEffect, useRef, useState } from 'react';
 
 const INVITATION_SIZE = 10;
 
 export default function InvitationsDashboard() {
+  const [offset, setOffset] = useState(0);
+  const [invitations, setInvitations] = useState<InvitationType[]>([]);
+  const [hasMore, setHasMore] = useState(true);
+  const loadMoreRef = useRef<HTMLDivElement | null>(null);
+
   const {
     data,
     excute: fetchInvitationDashboards,
@@ -16,7 +22,9 @@ export default function InvitationsDashboard() {
   } = useAsync(
     async () =>
       await getInvitationList({
-        cursorId: undefined,
+        cursorId: invitations.length
+          ? invitations[invitations.length - 1].id
+          : undefined,
         size: INVITATION_SIZE,
         title: undefined,
       }),
@@ -29,25 +37,67 @@ export default function InvitationsDashboard() {
     }: {
       invitationId: number;
       inviteAccepted: boolean;
-    }) =>
-      await updateInvitation({
-        invitationId,
-        inviteAccepted,
-      }),
+    }) => await updateInvitation({ invitationId, inviteAccepted }),
   );
 
   useEffect(() => {
-    fetchInvitationDashboards({});
-  }, []);
+    const fetchData = async () => {
+      fetchInvitationDashboards({});
+      if (data?.invitations) {
+        setInvitations((prev) => {
+          const newInvitations = data.invitations.filter(
+            (newItem: InvitationType) =>
+              !prev.some((existingItem) => existingItem.id === newItem.id),
+          );
+          return [...prev, ...newInvitations];
+        });
+        setHasMore(data.invitations.length === INVITATION_SIZE);
+      }
+    };
+
+    fetchData();
+  }, [offset]);
+
+  useEffect(() => {
+    const observerOptions = {
+      root: null,
+      rootMargin: '20px',
+      threshold: 1.0,
+    };
+
+    const observerCallback = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && hasMore && !loading) {
+          setOffset((prevOffset) => prevOffset + INVITATION_SIZE);
+        }
+      });
+    };
+
+    const observer = new IntersectionObserver(
+      observerCallback,
+      observerOptions,
+    );
+    const currentRef = loadMoreRef.current;
+
+    if (currentRef) observer.observe(currentRef);
+
+    return () => {
+      if (currentRef) observer.unobserve(currentRef);
+    };
+  }, [hasMore, loading]);
 
   const handleClickAccept = async (invitationId: number) => {
     await handleInvitationResponse({ invitationId, inviteAccepted: true });
-    fetchInvitationDashboards({});
+    setInvitations((prev) =>
+      prev.filter((invitation) => invitation.id !== invitationId),
+    );
   };
 
   const handleClickReject = async (invitationId: number) => {
     await handleInvitationResponse({ invitationId, inviteAccepted: false });
-    fetchInvitationDashboards({});
+    setInvitations((prev) =>
+      prev.filter((invitation) => invitation.id !== invitationId),
+    );
   };
 
   return (
@@ -57,58 +107,28 @@ export default function InvitationsDashboard() {
           <h1 className="font-pretendard text-md font-bold text-black-333236 tablet:text-2xl">
             초대받은 대시보드
           </h1>
-          {data?.invitations && data.invitations.length > 0 ? (
-            <table className="w-full border-collapse">
-              <thead>
-                <tr className="bg-gray-F7F8FA text-left text-sm font-medium text-gray-787486 tablet:text-md">
-                  <th className="px-6 py-3">이름</th>
-                  <th className="px-6 py-3">초대자</th>
-                  <th className="px-6 py-3 text-center" colSpan={2}>
-                    수락 여부
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.invitations.map((invitation: InvitationType) => (
-                  <tr
-                    key={invitation.dashboard.id}
-                    className="hover:bg-gray-F1EFFD border-b border-gray-EEEEEE text-md text-black-333236 tablet:text-lg"
-                  >
-                    <td className="px-6 py-4">{invitation.dashboard.title}</td>
-                    <td className="px-6 py-4">{invitation.inviter.nickname}</td>
-                    <td className="px-1.5 py-4 text-end">
-                      <button
-                        className="rounded bg-violet-5534DA text-white tablet:px-6 tablet:py-1.5 pc:px-7 pc:py-2"
-                        onClick={() => handleClickAccept(invitation.id)}
-                      >
-                        수락
-                      </button>
-                    </td>
-                    <td className="px-1.5 py-4 text-start">
-                      <button
-                        className="rounded border border-gray-D9D9D9 bg-white text-violet-5534DA tablet:px-6 tablet:py-1.5 pc:px-7 pc:py-2"
-                        onClick={() => handleClickReject(invitation.id)}
-                      >
-                        거절
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
+          {invitations.length > 0 ? (
+            <InvitationsTable
+              invitations={invitations}
+              onAccept={handleClickAccept}
+              onReject={handleClickReject}
+            />
           ) : (
-            <div className="flex flex-col items-center">
-              <Image
-                width={100}
-                height={100}
-                src="/images/icon/ic-invite.svg"
-                alt="invitations"
-              />
-              <p className="font-pretendard text-xs font-normal text-gray-9FA6B2 tablet:text-lg">
-                아직 초대받은 대시보드가 없어요
-              </p>
-            </div>
+            !loading && (
+              <div className="flex flex-col items-center">
+                <Image
+                  width={100}
+                  height={100}
+                  src="/images/icon/ic-invite.svg"
+                  alt="invitations"
+                />
+                <p className="font-pretendard text-xs font-normal text-gray-9FA6B2 tablet:text-lg">
+                  아직 초대받은 대시보드가 없어요
+                </p>
+              </div>
+            )
           )}
+          <div ref={loadMoreRef} className="h-10" />
         </div>
       </div>
     </div>
