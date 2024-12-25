@@ -6,6 +6,8 @@ import { InvitationType } from '@/_types/invitations.type';
 import { getInvitationList, updateInvitation } from '@/api/invitations.api';
 import InvitationsTable from './InvitationTable';
 import { useEffect, useRef, useState } from 'react';
+import { useSearchParams, useRouter } from 'next/navigation';
+import SearchBar from './SearchBar';
 
 const INVITATION_SIZE = 10;
 
@@ -14,49 +16,55 @@ export default function InvitationsDashboard() {
   const [invitations, setInvitations] = useState<InvitationType[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
+  const searchParams = useSearchParams();
+  const router = useRouter();
+
+  const searchKeyword = searchParams.get('q') || '';
 
   const {
     data,
-    excute: fetchInvitationDashboards,
     loading,
+    excute: fetchInvitationDashboards,
   } = useAsync(
     async () =>
       await getInvitationList({
-        cursorId: invitations.length
-          ? invitations[invitations.length - 1].id
-          : undefined,
+        cursorId:
+          offset === 0 ? undefined : invitations[invitations.length - 1]?.id,
         size: INVITATION_SIZE,
-        title: undefined,
+        title: searchKeyword || undefined,
       }),
   );
 
   const { excute: handleInvitationResponse } = useAsync(
-    async ({
-      invitationId,
-      inviteAccepted,
-    }: {
-      invitationId: number;
-      inviteAccepted: boolean;
-    }) => await updateInvitation({ invitationId, inviteAccepted }),
+    async (params: { invitationId: number; inviteAccepted: boolean }) =>
+      await updateInvitation(params),
   );
 
   useEffect(() => {
     const fetchData = async () => {
-      fetchInvitationDashboards({});
-      if (data?.invitations) {
-        setInvitations((prev) => {
-          const newInvitations = data.invitations.filter(
-            (newItem: InvitationType) =>
-              !prev.some((existingItem) => existingItem.id === newItem.id),
-          );
-          return [...prev, ...newInvitations];
-        });
-        setHasMore(data.invitations.length === INVITATION_SIZE);
-      }
+      await fetchInvitationDashboards({});
     };
-
     fetchData();
-  }, [offset]);
+  }, [offset, searchKeyword]);
+
+  useEffect(() => {
+    setOffset(0);
+    setInvitations([]);
+    setHasMore(true);
+  }, [searchKeyword]);
+
+  useEffect(() => {
+    if (data?.invitations) {
+      setInvitations((prev) => {
+        const newInvitations = data.invitations.filter(
+          (newItem: InvitationType) =>
+            !prev.some((existingItem) => existingItem.id === newItem.id),
+        );
+        return offset === 0 ? newInvitations : [...prev, ...newInvitations];
+      });
+      setHasMore(data.invitations.length === INVITATION_SIZE);
+    }
+  }, [data]);
 
   useEffect(() => {
     const observerOptions = {
@@ -86,6 +94,16 @@ export default function InvitationsDashboard() {
     };
   }, [hasMore, loading]);
 
+  const handleSearch = (searchKeyword: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+    if (searchKeyword.trim()) {
+      params.set('q', searchKeyword);
+    } else {
+      params.delete('q');
+    }
+    router.replace(`?${params.toString()}`);
+  };
+
   const handleClickAccept = async (invitationId: number) => {
     await handleInvitationResponse({ invitationId, inviteAccepted: true });
     setInvitations((prev) =>
@@ -107,7 +125,10 @@ export default function InvitationsDashboard() {
           <h1 className="font-pretendard text-md font-bold text-black-333236 tablet:text-2xl">
             초대받은 대시보드
           </h1>
-          {invitations.length > 0 ? (
+          <SearchBar onSearch={handleSearch} placeholder="검색" />
+          {loading && offset === 0 ? (
+            <div className="flex justify-center">로딩 중...</div>
+          ) : invitations.length > 0 ? (
             <InvitationsTable
               invitations={invitations}
               onAccept={handleClickAccept}
@@ -127,6 +148,9 @@ export default function InvitationsDashboard() {
                 </p>
               </div>
             )
+          )}
+          {loading && offset > 0 && (
+            <div className="flex justify-center">더 불러오는 중...</div>
           )}
           <div ref={loadMoreRef} className="h-10" />
         </div>
