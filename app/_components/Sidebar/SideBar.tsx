@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import CreateDashboardModal from '@/(routes)/mydashboard/CreateDashboardModal';
 import useAsync from '@/_hooks/useAsync';
 import { getDashboardList } from '@/api/dashboards.api';
+import { useParams } from 'next/navigation';
 
 interface DashBoard {
   id: number;
@@ -22,6 +23,9 @@ const SIZE = 10;
 export default function SideBar() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
   const [page, setPage] = useState(1);
+  const params = useParams();
+  const selectedDashboardId = Number(params.dashboardId);
+
   const {
     data,
     excute: fetchDashboards,
@@ -62,7 +66,7 @@ export default function SideBar() {
   };
 
   return (
-    <div className="fixed left-0 top-0 flex h-full w-16 flex-col gap-10 border border-r-gray-D9D9D9 bg-white px-3 py-5 tablet:w-40 tablet:gap-14 pc:w-72 pc:px-2">
+    <div className="fixed left-0 top-0 z-20 flex h-full w-16 flex-col gap-10 border border-r-gray-D9D9D9 bg-white px-3 py-5 tablet:w-40 tablet:gap-14 pc:w-72 pc:px-2">
       <Link className="flex justify-center tablet:justify-start" href={'/'}>
         <Image
           width={28.82}
@@ -101,6 +105,12 @@ export default function SideBar() {
                   href={`/dashboard/${dashboard.id}`}
                   key={dashboard.id}
                   className="flex w-full items-center justify-center gap-4 rounded p-4 tablet:justify-start tablet:gap-2.5 tablet:px-3 tablet:py-2"
+                  style={{
+                    backgroundColor:
+                      dashboard.id === selectedDashboardId
+                        ? '#F1EFFD'
+                        : 'transparent',
+                  }}
                 >
                   <span
                     className="sh h-2 w-2 shrink-0 rounded-full"
