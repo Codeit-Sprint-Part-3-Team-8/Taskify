@@ -29,7 +29,7 @@ export default function Pagenation({
 
   return (
     <div className="flex items-center gap-4">
-      <div>
+      <div className="text-sm">
         {totalPages} 페이지 중 {page}
       </div>
       <div className="flex">
