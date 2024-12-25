@@ -1,9 +1,19 @@
 import Validator from '@/_lib/validator';
-import { ValidationsType, ValidationType } from './types';
+import {
+  PasswordValidationsType,
+  ProfileValidationsType,
+  ValidationType,
+} from './types';
 
-const DEFAULT_PROFILE_VALIDATIONS: ValidationsType = {
+const DEFAULT_PROFILE_VALIDATIONS: ProfileValidationsType = {
   nickname: { isValid: false, message: '' },
   profileImageUrl: { isValid: false, message: '' },
+};
+
+const DEFAULT_PASSWORD_VALIDATIONS: PasswordValidationsType = {
+  current: { isValid: false, message: '' },
+  new: { isValid: false, message: '' },
+  repeat: { isValid: false, message: '' },
 };
 
 const validate: {
@@ -35,6 +45,16 @@ const validate: {
 
     return { isValid: false, message: '잘못된 형식의 입력입니다.' };
   },
+  password: (value: unknown) => {
+    if (typeof value === 'string') {
+      const schema = new Validator(value).required().minLength(8);
+      return {
+        isValid: schema.validate(),
+        message: schema.validate() ? '' : schema.getErrors()[0],
+      };
+    }
+    return { isValid: false, message: '잘못된 형식의 입력입니다.' };
+  },
 };
 
-export { DEFAULT_PROFILE_VALIDATIONS, validate };
+export { DEFAULT_PROFILE_VALIDATIONS, DEFAULT_PASSWORD_VALIDATIONS, validate };

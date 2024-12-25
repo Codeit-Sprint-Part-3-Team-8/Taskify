@@ -23,7 +23,7 @@ export default function ProfileForm({
   const {
     data: profileData,
     excute: _createProfileImage,
-    clear: claerProfile,
+    clear: claerProfileImage,
   } = useAsync(createProfileImage);
   const { data: updateData, excute: _updateUser } = useAsync(updateUser);
 
@@ -49,7 +49,7 @@ export default function ProfileForm({
     if (value) {
       _createProfileImage({ image: value });
     } else {
-      claerProfile();
+      claerProfileImage();
     }
   };
 
