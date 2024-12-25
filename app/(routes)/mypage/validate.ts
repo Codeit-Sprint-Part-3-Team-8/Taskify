@@ -59,17 +59,27 @@ const validate: {
   },
 };
 
-function confirmPassword(changed: string, confirmed: string): ValidationType {
+function confirmPassword({
+  changed,
+  confirmed,
+  equal = true,
+  message,
+}: {
+  changed: string;
+  confirmed: string;
+  equal?: boolean;
+  message: string;
+}): ValidationType {
   const _changed = changed.trim();
   const _confirmed = confirmed.trim();
 
-  const isValid = _changed === _confirmed;
-  const message =
-    !isValid && _confirmed.length > 0 ? '비밀번호가 일치하지 않습니다.' : '';
+  const compared = _changed === _confirmed;
+  const isValid = equal ? compared : !compared;
+  const _message = !isValid && _confirmed.length > 0 ? message : '';
 
   return {
     isValid: isValid,
-    message: message,
+    message: _message,
   };
 }
 

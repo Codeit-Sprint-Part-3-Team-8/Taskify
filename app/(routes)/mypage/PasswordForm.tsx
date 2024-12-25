@@ -1,5 +1,5 @@
 import InputField from '@/_components/Auth/InputField';
-import { ChangeEvent, FocusEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FocusEvent, FormEvent, useEffect, useState } from 'react';
 import {
   confirmPassword,
   DEFAULT_PASSWORD_VALIDATIONS,
@@ -39,11 +39,20 @@ export default function PasswordForm() {
         return {
           ...prev,
           changed: validate.password(values.changed),
-          confirmed: confirmPassword(values.changed, values.confirmed),
+          confirmed: confirmPassword({
+            changed: values.changed,
+            confirmed: values.confirmed,
+            message: '비밀번호가 일치하지 않습니다.',
+          }),
         };
       }
       return prev;
     });
+  };
+
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    console.log('submit!!');
   };
 
   useEffect(() => {
@@ -55,7 +64,10 @@ export default function PasswordForm() {
   }, [validations]);
 
   return (
-    <form className="min-w-[18rem] rounded-lg bg-white p-4 tablet:w-[42rem] tablet:rounded-2xl tablet:p-6">
+    <form
+      className="min-w-[18rem] rounded-lg bg-white p-4 tablet:w-[42rem] tablet:rounded-2xl tablet:p-6"
+      onSubmit={handleSubmit}
+    >
       <h2 className="mb-10 text-2lg font-bold text-black-333236 tablet:mb-6 tablet:text-2xl">
         비밀번호 변경
       </h2>
