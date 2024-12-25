@@ -53,6 +53,9 @@ export default function ProfileForm({
     }
   };
 
+  /**
+   * 닉네임 변경 시 유효성 검사
+   */
   useEffect(() => {
     setValidations((prev) => ({
       ...prev,
@@ -60,6 +63,9 @@ export default function ProfileForm({
     }));
   }, [values.nickname]);
 
+  /**
+   * 프로필 URL 변경 시 유효성 검사
+   */
   useEffect(() => {
     setValidations((prev) => ({
       ...prev,
@@ -95,7 +101,6 @@ export default function ProfileForm({
   /**
    * 프로필 이미지 생성 요청 성공 시
    * - 프로필 URL 상태 관리
-   * - 프로필 URL 유효성 검사
    */
   useEffect(() => {
     const next = profileDate?.profileImageUrl as string;
