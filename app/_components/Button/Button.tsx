@@ -6,7 +6,7 @@ interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
 }
 
 const BUTTON_STYLES = {
-  base: 'rounded-lg text-base font-medium transition-opacity',
+  base: 'rounded-xl text-base font-medium transition-opacity',
   variant: {
     purple: 'bg-violet-5534DA text-white',
     white: 'bg-white text-gray-787486 border border-gray-D9D9D9',
@@ -26,12 +26,7 @@ const Button = ({
 }: ButtonProps) => {
   return (
     <button
-      className={`
-         ${BUTTON_STYLES.variant[backgroundColor]}
-         ${BUTTON_STYLES.base}
-         ${disabled ? BUTTON_STYLES.state.disabled : BUTTON_STYLES.state.enabled}
-         ${className}`
-        }
+      className={` ${BUTTON_STYLES.variant[backgroundColor]} ${BUTTON_STYLES.base} ${disabled ? BUTTON_STYLES.state.disabled : BUTTON_STYLES.state.enabled} ${className}`}
       disabled={disabled}
       {...props}
     >
