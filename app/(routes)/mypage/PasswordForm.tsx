@@ -14,7 +14,7 @@ const DEFAUTL_VALUES = {
   confirmed: '',
 };
 
-export default function PasswordForm() {
+export default function PasswordForm({ update }: { update: () => void }) {
   const [values, setValues] = useState(DEFAUTL_VALUES);
   const [validations, setValidations] = useState(DEFAULT_PASSWORD_VALIDATIONS);
   const [isFormValid, setIsFormValid] = useState(false);
@@ -69,8 +69,8 @@ export default function PasswordForm() {
   }, [validations]);
 
   useEffect(() => {
-    console.log(updateData);
-  }, [updateData]);
+    update();
+  }, [updateData, update]);
 
   return (
     <form

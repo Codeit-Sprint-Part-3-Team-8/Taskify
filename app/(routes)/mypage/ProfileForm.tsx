@@ -3,10 +3,10 @@ import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 import ImageInputField from './ImageInputField';
 import useAsync from '@/_hooks/useAsync';
 import { createProfileImage, updateUser } from '@/api/users.api';
-import { ProfileFormProps } from './types';
+import { ProfileFormProps, ProfileValuesType } from './types';
 import { DEFAULT_PROFILE_VALIDATIONS, validate } from './validate';
 
-const DEFAULT_VALUES: ProfileFormProps = {
+const DEFAULT_VALUES: ProfileValuesType = {
   email: '',
   nickname: '',
   profileImageUrl: null,
@@ -16,6 +16,7 @@ export default function ProfileForm({
   email,
   nickname,
   profileImageUrl,
+  update,
 }: ProfileFormProps) {
   const [values, setValues] = useState(DEFAULT_VALUES);
   const [validations, setValidations] = useState(DEFAULT_PROFILE_VALIDATIONS);
@@ -114,11 +115,8 @@ export default function ProfileForm({
    * 프로필 정보 업데이트 시 반영
    */
   useEffect(() => {
-    /**
-     * @todo useAuth에 프로필 업데이트 메서드 구현 후 적용
-     */
-    console.log(updateData);
-  }, [updateData]);
+    update();
+  }, [updateData, update]);
 
   /**
    * 프로필 정보 업데이트 시 반영
