@@ -1,17 +1,8 @@
 'use client';
 
+import { DashboardType } from '@/_types/dashboards.type';
 import Image from 'next/image';
 import Link from 'next/link';
-
-interface DashboardType {
-  id: number;
-  title: string;
-  color: string;
-  userId: number;
-  createdAt: string;
-  updatedAt: string;
-  createdByMe: boolean;
-}
 
 interface DashboardListProps {
   dashboardList: DashboardType[];

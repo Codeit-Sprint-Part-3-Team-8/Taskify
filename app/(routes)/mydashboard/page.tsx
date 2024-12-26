@@ -8,16 +8,7 @@ import InvitationsDashboard from './InvitationsDashboard';
 import useAsync from '@/_hooks/useAsync';
 import { getDashboardList } from '@/api/dashboards.api';
 import CreateDashboardModal from './CreateDashboardModal';
-
-interface DashboardType {
-  id: number;
-  title: string;
-  color: string;
-  userId: number;
-  createdAt: string;
-  updatedAt: string;
-  createdByMe: boolean;
-}
+import { DashboardType } from '@/_types/dashboards.type';
 
 export default function MyDashboardPage() {
   const [dashboardList, setDashboardList] = useState<DashboardType[]>([]);
