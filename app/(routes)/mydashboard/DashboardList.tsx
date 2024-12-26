@@ -55,7 +55,7 @@ export default function DashboardList({
             >
               <div className="flex w-11/12 items-center gap-3 pc:gap-4">
                 <div
-                  className="h-2 w-2 rounded-full"
+                  className="h-2 w-2 shrink-0 rounded-full"
                   style={{ backgroundColor: dashboard.color }}
                 ></div>
                 <p className="truncate font-pretendard text-md font-semibold text-black-333236 tablet:text-base">
