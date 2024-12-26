@@ -15,7 +15,7 @@ export default function MyPage() {
     <>
       <SideBar />
       <MyDashboardNavBar />
-      <div className="ml-16 bg-gray-F5F5F5 tablet:ml-40">
+      <div className="ml-16 mt-[4.5rem] bg-gray-F5F5F5 tablet:ml-40 pc:ml-72">
         <div className="flex flex-col gap-6 p-6">
           <Link
             href="/mydashboard"
