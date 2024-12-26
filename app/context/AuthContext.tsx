@@ -5,7 +5,7 @@ import { LoginUserParams } from '@/_types/auth.type';
 import { UserType } from '@/_types/users.type';
 import { loginUser } from '@/api/auth.api';
 import { getUser } from '@/api/users.api';
-import { createContext, useContext, useEffect } from 'react';
+import { createContext, useCallback, useContext, useEffect } from 'react';
 
 /**
  * @todo 회원정보 수정 만들어야함
@@ -14,36 +14,41 @@ import { createContext, useContext, useEffect } from 'react';
 const AuthContext = createContext<{
   user: UserType | null;
   loadingLogin: boolean;
-  loadingUser: boolean;
+  loadingUpdate: boolean;
   login: ({ email, password }: LoginUserParams) => void;
   logout: () => void;
   loginErrorMessage: string | null;
+  updateErrorMessage: string | null;
+  update: () => void;
 }>({
   user: null,
   loadingLogin: false,
-  loadingUser: false,
+  loadingUpdate: false,
   login: () => {},
   logout: () => {},
   loginErrorMessage: null,
+  updateErrorMessage: null,
+  update: () => {},
 });
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
   const key = process.env.NEXT_PUBLIC_ACCESS_TOKEN_KEY || null;
   const {
-    excute: getUserAsync,
+    excute: _getUser,
     data: userData,
-    loading: loadingUser,
+    loading: loadingUpdate,
+    errorMessage: updateErrorMessage,
     clear: clearUser,
   } = useAsync(getUser);
   const {
-    excute: loginUserAsync,
+    excute: _loginUser,
     data: loginData,
     loading: loadingLogin,
     errorMessage: loginErrorMessage,
   } = useAsync(loginUser);
 
   async function login({ email, password }: LoginUserParams) {
-    await loginUserAsync({ email, password });
+    await _loginUser({ email, password });
   }
 
   function logout() {
@@ -52,25 +57,31 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     clearUser();
   }
 
+  const update = useCallback(() => {
+    _getUser(undefined);
+  }, [_getUser]);
+
   useEffect(() => {
     if (!key) return;
     if (loginData) {
       localStorage.setItem(key, loginData.accessToken);
     }
     if (localStorage.getItem(key)) {
-      getUserAsync(undefined);
+      _getUser(undefined);
     }
-  }, [getUserAsync, loginData, key]);
+  }, [_getUser, loginData, key]);
 
   return (
     <AuthContext.Provider
       value={{
         user: userData,
-        loadingUser,
+        loadingUpdate,
         loadingLogin,
         login,
         logout,
         loginErrorMessage,
+        updateErrorMessage,
+        update,
       }}
     >
       {children}
@@ -87,10 +98,10 @@ function useAuth() {
   }
 
   // useEffect(() => {
-  //   if (required && !context.user && !context.loadingUser) {
+  //   if (required && !context.user && !context.loadingUpdate) {
   //     router.push('/login');
   //   }
-  // }, [required, context.user, context.loadingUser, router]);
+  // }, [required, context.user, context.loadingUpdate, router]);
 
   return context;
 }
