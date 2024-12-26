@@ -114,7 +114,6 @@ export default function ProfileForm({
    * 프로필 정보 업데이트 시 반영
    */
   useEffect(() => {
-<<<<<<< HEAD
     /**
      * @todo useAuth에 프로필 업데이트 메서드 구현 후 적용
      */
@@ -125,8 +124,6 @@ export default function ProfileForm({
    * 프로필 정보 업데이트 시 반영
    */
   useEffect(() => {
-=======
->>>>>>> origin/feat/88--mypage
     setValues({ email, nickname, profileImageUrl });
   }, [email, nickname, profileImageUrl]);
 
