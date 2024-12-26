@@ -10,7 +10,13 @@ import SearchBar from './SearchBar';
 
 const INVITATION_SIZE = 10;
 
-export default function InvitationsDashboard() {
+interface InvitationsDashboardProps {
+  onAcceptInvitation: () => void;
+}
+
+export default function InvitationsDashboard({
+  onAcceptInvitation,
+}: InvitationsDashboardProps) {
   const [offset, setOffset] = useState(0);
   const [invitations, setInvitations] = useState<InvitationType[]>([]);
   const [hasMore, setHasMore] = useState(true);
@@ -100,6 +106,7 @@ export default function InvitationsDashboard() {
     setInvitations((prev) =>
       prev.filter((invitation) => invitation.id !== invitationId),
     );
+    onAcceptInvitation();
   };
 
   const handleClickReject = async (invitationId: number) => {
