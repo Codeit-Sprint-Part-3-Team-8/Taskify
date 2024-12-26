@@ -5,13 +5,10 @@ import { LoginUserParams } from '@/_types/auth.type';
 import { UserType } from '@/_types/users.type';
 import { loginUser } from '@/api/auth.api';
 import { getUser } from '@/api/users.api';
+import { useRouter } from 'next/navigation';
 import { createContext, useCallback, useContext, useEffect } from 'react';
 
-/**
- * @todo 회원정보 수정 만들어야함
- */
-
-const AuthContext = createContext<{
+interface AuthContextType {
   user: UserType | null;
   loadingLogin: boolean;
   loadingUpdate: boolean;
@@ -20,7 +17,9 @@ const AuthContext = createContext<{
   loginErrorMessage: string | null;
   updateErrorMessage: string | null;
   update: () => void;
-}>({
+}
+
+const AuthContext = createContext<AuthContextType | undefined>({
   user: null,
   loadingLogin: false,
   loadingUpdate: false,
@@ -89,19 +88,20 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-function useAuth() {
+function useAuth(required = true) {
   const context = useContext(AuthContext);
-  // const router = useRouter();
+  const router = useRouter();
 
   if (!context) {
     throw new Error('must useAuth in AuthProvider');
   }
 
-  // useEffect(() => {
-  //   if (required && !context.user && !context.loadingUpdate) {
-  //     router.push('/login');
-  //   }
-  // }, [required, context.user, context.loadingUpdate, router]);
+  useEffect(() => {
+    console.log(location.href, context.user, context.loadingUpdate);
+    if (required && !context.user && !context.loadingUpdate) {
+      router.push('/login');
+    }
+  }, [required, context, router]);
 
   return context;
 }
