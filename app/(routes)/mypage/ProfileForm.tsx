@@ -1,5 +1,15 @@
 import InputField from '@/_components/Auth/InputField';
+<<<<<<< HEAD
 import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+=======
+import {
+  ChangeEvent,
+  FormEvent,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
+>>>>>>> origin/feat/88--mypage
 import ImageInputField from './ImageInputField';
 import useAsync from '@/_hooks/useAsync';
 import { createProfileImage, updateUser } from '@/api/users.api';
@@ -23,7 +33,11 @@ export default function ProfileForm({
   const {
     data: profileData,
     excute: _createProfileImage,
+<<<<<<< HEAD
     clear: claerProfileImage,
+=======
+    clear: claerProfile,
+>>>>>>> origin/feat/88--mypage
   } = useAsync(createProfileImage);
   const { data: updateData, excute: _updateUser } = useAsync(updateUser);
 
@@ -31,6 +45,7 @@ export default function ProfileForm({
    * 프로필 폼 입력 필드 값 변경 핸들러
    * - 입력값 상태 관리
    */
+<<<<<<< HEAD
   const handleChangeValue = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
     setValues((prev) => {
@@ -40,11 +55,26 @@ export default function ProfileForm({
       };
     });
   };
+=======
+  const handleChangeValue = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = event.target;
+      setValues((prev) => {
+        return {
+          ...prev,
+          [name]: value,
+        };
+      });
+    },
+    [],
+  );
+>>>>>>> origin/feat/88--mypage
 
   /**
    * 프로필 이미지 URL 생성 요청 혹은 제거 핸들러
    * @param value
    */
+<<<<<<< HEAD
   const handleChangeProfile = (value: FormData | null) => {
     if (value) {
       _createProfileImage({ image: value });
@@ -52,11 +82,84 @@ export default function ProfileForm({
       claerProfileImage();
     }
   };
+=======
+  const handleChangeProfile = useCallback(
+    (value: FormData | null) => {
+      if (value) {
+        _createProfileImage({ image: value });
+      } else {
+        claerProfile();
+      }
+    },
+    [_createProfileImage, claerProfile],
+  );
 
   /**
    * 닉네임 변경 시 유효성 검사
    */
   useEffect(() => {
+    setValidations((prev) => ({
+      ...prev,
+      nickname: validate.nickname(values.nickname),
+    }));
+  }, [values.nickname]);
+
+  /**
+   * 프로필 URL 변경 시 유효성 검사
+   */
+  useEffect(() => {
+    setValidations((prev) => ({
+      ...prev,
+      profileImageUrl: validate.profileImageUrl(values.profileImageUrl),
+    }));
+  }, [values.profileImageUrl]);
+
+  /**
+   * 유저 프로필 변경 요청
+   */
+  const handleSubmit = useCallback(
+    (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      _updateUser({
+        nickname: values.nickname,
+        profileImageUrl: values.profileImageUrl,
+      });
+    },
+    [_updateUser, values],
+  );
+
+  /**
+   * 폼 유효성 검사. 아래 조건을 모두 만족시키면 유효함
+   * - 프로필 URL, 닉네임 유효함
+   * - 프로필 URL과 닉네임 중 하나 이상 변경
+   */
+  useEffect(() => {
+    const isValid =
+      validations.nickname.isValid && validations.profileImageUrl.isValid;
+    const isChanged =
+      profileImageUrl !== values.profileImageUrl ||
+      nickname !== values.nickname;
+    setIsFormValid(isValid && isChanged);
+  }, [validations, nickname, profileImageUrl, values]);
+
+  /**
+   * 프로필 이미지 생성 요청 성공 시
+   * - 프로필 URL 상태 관리
+   */
+  useEffect(() => {
+    const next = profileData?.profileImageUrl as string;
+    setValues((prev) => ({
+      ...prev,
+      profileImageUrl: next,
+    }));
+  }, [profileData]);
+>>>>>>> origin/feat/88--mypage
+
+  /**
+   * 닉네임 변경 시 유효성 검사
+   */
+  useEffect(() => {
+<<<<<<< HEAD
     setValidations((prev) => ({
       ...prev,
       nickname: validate.nickname(values.nickname),
@@ -109,8 +212,19 @@ export default function ProfileForm({
       profileImageUrl: next,
     }));
   }, [profileData]);
+=======
+    /**
+     * @todo useAuth에 프로필 업데이트 메서드 구현 후 적용
+     */
+    console.log(updateData);
+  }, [updateData]);
+>>>>>>> origin/feat/88--mypage
 
+  /**
+   * 프로필 정보 업데이트 시 반영
+   */
   useEffect(() => {
+<<<<<<< HEAD
     /**
      * @todo useAuth에 프로필 업데이트 메서드 구현 후 적용
      */
@@ -121,6 +235,8 @@ export default function ProfileForm({
    * 프로필 정보 업데이트 시 반영
    */
   useEffect(() => {
+=======
+>>>>>>> origin/feat/88--mypage
     setValues({ email, nickname, profileImageUrl });
   }, [email, nickname, profileImageUrl]);
 
