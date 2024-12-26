@@ -204,7 +204,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
         onDragOver={handleDragOver}
         onDragEnd={handleDragEnd}
       >
-        <div className="mt-[70px] flex w-fit justify-center rounded border border-gray-400">
+        <div className="mt-[70px] flex w-full mobile:flex-col pc:flex-row pc:justify-between">
           {Object.keys(itemGroups).map((itemGroup) => (
             <Droppable
               key={itemGroup}
