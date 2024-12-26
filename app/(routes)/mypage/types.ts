@@ -3,9 +3,15 @@ interface ValidationType {
   message: string;
 }
 
-interface ValidationsType {
+interface ProfileValidationsType {
   nickname: ValidationType;
   profileImageUrl: ValidationType;
+}
+
+interface PasswordValidationsType {
+  current: ValidationType;
+  changed: ValidationType;
+  confirmed: ValidationType;
 }
 
 interface ProfileFormProps {
@@ -13,4 +19,9 @@ interface ProfileFormProps {
   nickname: string;
   profileImageUrl: string | null;
 }
-export type { ValidationsType, ProfileFormProps, ValidationType };
+export type {
+  ProfileValidationsType,
+  PasswordValidationsType,
+  ProfileFormProps,
+  ValidationType,
+};
