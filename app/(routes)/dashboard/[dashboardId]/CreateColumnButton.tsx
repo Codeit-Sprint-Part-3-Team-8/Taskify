@@ -7,12 +7,14 @@ export default function CreateColumnButton() {
         <p className="text-nowrap text-lg font-bold tablet:text-2lg">
           새로운 컬럼 추가하기
         </p>
-        <Image
-          src="/images/icon/ic-plusbtn-purple.svg"
-          alt="카드 생성 버튼"
-          width={22}
-          height={24}
-        />
+        <div className="relative h-5 w-5 tablet:h-[22px] tablet:w-[22px]">
+          <Image
+            src="/images/icon/ic-plusbtn-purple.svg"
+            alt="카드 생성 버튼"
+            layout="fill"
+            objectFit="contain"
+          />
+        </div>
       </div>
     </div>
   );
