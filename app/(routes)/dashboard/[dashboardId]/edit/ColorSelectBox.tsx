@@ -1,13 +1,18 @@
 'use client';
 import Image from 'next/image';
 import React, { useEffect, useState } from 'react';
-import iconCheck from '@images/icon/icon_check.svg';
-const COLORS = [
-  'bg-green-7AC555',
-  'bg-purple-760DDE',
-  'bg-orange-FFA500',
-  'bg-blue-76A5EA',
-  'bg-pink-E876EA',
+import CheckIcon from '@images/icon/icon_check.svg';
+interface ColorOption {
+  label: string;
+  value: string;
+}
+
+const COLOR_OPTIONS: ColorOption[] = [
+  { label: 'green', value: '#7ac555' },
+  { label: 'purple', value: '#760dde' },
+  { label: 'orange', value: '#ffa500' },
+  { label: 'lightblue', value: '#76a5ea' },
+  { label: 'pink', value: '#e876ea' },
 ];
 interface ColorSelectBoxProps {
   onChangeColor: (color: string) => void;
@@ -19,12 +24,7 @@ export default function ColorSelectBox({
   usedColor,
 }: ColorSelectBoxProps) {
   const [selectedColor, setSelectedColor] = useState<string>(usedColor);
-
-  const handleColorChange = (
-    e: React.MouseEvent<HTMLDivElement, MouseEvent>,
-  ) => {
-    const clickedColor = e.currentTarget.classList[0].split('-')[2];
-    const color = `#${clickedColor}`;
+  const handleColorChange = (color: string) => {
     setSelectedColor(color);
     onChangeColor(color);
   };
@@ -35,24 +35,20 @@ export default function ColorSelectBox({
 
   return (
     <div className="flex gap-2">
-      {COLORS.map((data, index) => {
-        const clickedColor = `#${data.split('-')[2]}`;
+      {COLOR_OPTIONS.map((color, index) => {
         return (
-          <div
-            onClick={handleColorChange}
-            className={`${data} relative h-[1.8rem] w-[1.8rem] gap-2 rounded-2xl`}
+          <button
             key={index}
+            type="button"
+            className="focus:ring-primary flex h-8 w-8 items-center justify-center rounded-full transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2"
+            onClick={() => handleColorChange(color.value)}
+            style={{ backgroundColor: color.value }}
+            aria-label={`${color.label} 색상 선택`}
           >
-            {selectedColor === clickedColor && (
-              <Image
-                src={iconCheck}
-                className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 transform"
-                width={28}
-                height={28}
-                alt="체크"
-              />
+            {selectedColor === color.value && (
+              <Image src={CheckIcon} alt="선택된 색상" width={20} height={20} />
             )}
-          </div>
+          </button>
         );
       })}
     </div>

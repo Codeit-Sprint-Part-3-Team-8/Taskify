@@ -12,11 +12,6 @@ interface InviteModalProps {
   dashboardId: number;
 }
 
-/*
-해당 컴포넌트를 사용하는 수정 대시보드 페이지 경로로 inviteModal.tsx 파일 
-옮겨 주시면 됩니다.
-*/
-
 const InviteModal = ({ onClose, dashboardId }: InviteModalProps) => {
   const [invitationEmail, setInvitationEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
