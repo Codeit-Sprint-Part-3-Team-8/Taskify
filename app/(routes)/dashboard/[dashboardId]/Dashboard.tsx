@@ -215,9 +215,8 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
               items={itemGroups[itemGroup].cardData.cards || []}
             />
           ))}
-          <div className="px-3 pt-[58px]">
-            <CreateColumnButton />
-          </div>
+
+          <CreateColumnButton />
         </div>
         <DragOverlay>
           {activeId ? <Item id={activeId} dragOverlay /> : null}
