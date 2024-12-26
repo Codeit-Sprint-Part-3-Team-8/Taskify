@@ -6,7 +6,6 @@ import { InvitationType } from '@/_types/invitations.type';
 import { getInvitationList, updateInvitation } from '@/api/invitations.api';
 import InvitationsTable from './InvitationTable';
 import { useEffect, useRef, useState } from 'react';
-import { useSearchParams, useRouter } from 'next/navigation';
 import SearchBar from './SearchBar';
 
 const INVITATION_SIZE = 10;
@@ -15,11 +14,8 @@ export default function InvitationsDashboard() {
   const [offset, setOffset] = useState(0);
   const [invitations, setInvitations] = useState<InvitationType[]>([]);
   const [hasMore, setHasMore] = useState(true);
+  const [searchKeyword, setSearchKeyword] = useState('');
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
-  const searchParams = useSearchParams();
-  const router = useRouter();
-
-  const searchKeyword = searchParams.get('q') || '';
 
   const {
     data,
@@ -94,14 +90,8 @@ export default function InvitationsDashboard() {
     };
   }, [hasMore, loading]);
 
-  const handleSearch = (searchKeyword: string) => {
-    const params = new URLSearchParams(searchParams.toString());
-    if (searchKeyword.trim()) {
-      params.set('q', searchKeyword);
-    } else {
-      params.delete('q');
-    }
-    router.replace(`?${params.toString()}`);
+  const handleSearch = (keyword: string) => {
+    setSearchKeyword(keyword);
   };
 
   const handleClickAccept = async (invitationId: number) => {
