@@ -1,18 +1,17 @@
+// 폼 데이터의 기본 구조
 export interface TodoFormData {
-  columnId?: number;
-  columnTitle?: string;
+  columnId: number;
+  columnTitle: string;
   assigneeId: number;
   title: string;
   description: string;
-  deadline?: string;
+  dueDate?: string;
   tags: string[];
   imageUrl?: string;
 }
 
+// 폼 필드의 키 타입
 export type FormDataField = keyof TodoFormData;
 
-export type FormDataValue =
-  | number // columnId, assigneeId
-  | string // columnTitle, title, description, deadline, imageUrl
-  | string[] // tags
-  | undefined; // deadline, imageUrl
+// 각 필드의 가능한 값 타입
+export type FormDataValue = TodoFormData[FormDataField];

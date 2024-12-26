@@ -14,17 +14,17 @@ import { FormDataValue } from '@/_types/todo-prop.type';
 
 interface TodoFormContentProps {
   formData: {
-    columnId: number;
-    columnTitle: string;
-    assigneeId: number;
+    columnId?: number;
+    columnTitle?: string;
+    assigneeUserId?: number;
     title: string;
     description: string;
-    deadline?: string;
+    dueDate?: string;
     tags: string[];
     imageUrl?: string;
   };
   onChange: (field: string, value: FormDataValue) => void;
-  columns: Array<{ columnId: number; columnTitle: string }>;
+  columns?: Array<{ columnId: number; columnTitle: string }>;
   members: Member[];
   isLoading: boolean;
 }
@@ -109,8 +109,9 @@ export function TodoFormContent({
             trigger={
               <>
                 <span className="text-[0.9375rem] text-gray-9FA6B2">
-                  {members.find((member) => member.id === formData.assigneeId)
-                    ?.nickname || '담당자를 선택해 주세요'}
+                  {members.find(
+                    (member) => member.id === formData.assigneeUserId,
+                  )?.nickname || '담당자를 선택해 주세요'}
                 </span>
                 <Image
                   src={icDropdownArrow}
@@ -166,8 +167,8 @@ export function TodoFormContent({
             <>
               <CalendarIcon className="h-5 w-5 text-gray-9FA6B2" />
               <span className="text-[0.9375rem] text-gray-9FA6B2">
-                {formData.deadline
-                  ? format(formData.deadline, 'yyyy. MM. dd', {
+                {formData.dueDate
+                  ? format(formData.dueDate, 'yyyy. MM. dd', {
                       locale: ko,
                     })
                   : '날짜를 선택해 주세요'}
@@ -177,11 +178,9 @@ export function TodoFormContent({
         >
           <Calendar
             mode="single"
-            selected={
-              formData.deadline ? new Date(formData.deadline) : undefined
-            }
+            selected={formData.dueDate ? new Date(formData.dueDate) : undefined}
             onSelect={(date) =>
-              onChange('deadline', date ? date.toISOString() : undefined)
+              onChange('dueDate', date ? date.toISOString() : undefined)
             }
             className="rounded-lg border"
           />

@@ -42,12 +42,12 @@ interface GetCardListParams {
 interface UpdateCardParams {
   cardId: number;
   columnId: number;
-  assigneeUserId: number | null;
+  assigneeUserId?: number;
   title: string;
   description: string;
-  dueDate: string | null;
-  tags: string[];
-  imageUrl: string | null;
+  dueDate?: string;
+  tags?: string[];
+  imageUrl?: string;
 }
 
 interface GetCardParams {
