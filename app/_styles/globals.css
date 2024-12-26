@@ -31,7 +31,7 @@
 
 @layer components {
   .sidebar-right-content {
-    @apply ml-16 h-full min-h-screen bg-gray-FAFAFA tablet:ml-40 pc:ml-[18rem];
+    @apply ml-16 mt-[3.75rem] h-full min-h-screen bg-gray-FAFAFA tablet:ml-40 tablet:mt-[4.375rem] pc:ml-[18rem];
   }
 }
 
