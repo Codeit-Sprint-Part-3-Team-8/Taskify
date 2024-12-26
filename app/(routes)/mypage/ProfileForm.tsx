@@ -1,5 +1,11 @@
 import InputField from '@/_components/Auth/InputField';
-import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
+import {
+  ChangeEvent,
+  FormEvent,
+  useCallback,
+  useEffect,
+  useState,
+} from 'react';
 import ImageInputField from './ImageInputField';
 import useAsync from '@/_hooks/useAsync';
 import { createProfileImage, updateUser } from '@/api/users.api';
@@ -31,27 +37,33 @@ export default function ProfileForm({
    * 프로필 폼 입력 필드 값 변경 핸들러
    * - 입력값 상태 관리
    */
-  const handleChangeValue = (event: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = event.target;
-    setValues((prev) => {
-      return {
-        ...prev,
-        [name]: value,
-      };
-    });
-  };
+  const handleChangeValue = useCallback(
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const { name, value } = event.target;
+      setValues((prev) => {
+        return {
+          ...prev,
+          [name]: value,
+        };
+      });
+    },
+    [],
+  );
 
   /**
    * 프로필 이미지 URL 생성 요청 혹은 제거 핸들러
    * @param value
    */
-  const handleChangeProfile = (value: FormData | null) => {
-    if (value) {
-      _createProfileImage({ image: value });
-    } else {
-      claerProfile();
-    }
-  };
+  const handleChangeProfile = useCallback(
+    (value: FormData | null) => {
+      if (value) {
+        _createProfileImage({ image: value });
+      } else {
+        claerProfile();
+      }
+    },
+    [_createProfileImage, claerProfile],
+  );
 
   /**
    * 닉네임 변경 시 유효성 검사
@@ -76,13 +88,16 @@ export default function ProfileForm({
   /**
    * 유저 프로필 변경 요청
    */
-  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    _updateUser({
-      nickname: values.nickname,
-      profileImageUrl: values.profileImageUrl,
-    });
-  };
+  const handleSubmit = useCallback(
+    (event: FormEvent<HTMLFormElement>) => {
+      event.preventDefault();
+      _updateUser({
+        nickname: values.nickname,
+        profileImageUrl: values.profileImageUrl,
+      });
+    },
+    [_updateUser, values],
+  );
 
   /**
    * 폼 유효성 검사. 아래 조건을 모두 만족시키면 유효함
