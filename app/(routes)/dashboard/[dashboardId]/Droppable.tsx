@@ -21,7 +21,7 @@ export default function Droppable({
 
   return (
     <SortableContext id={id} items={items} strategy={rectSortingStrategy}>
-      <div className="px-3 py-4">
+      <div className="max-w-[384px] px-3 py-4">
         <div className="border-b-2 pb-2 tablet:pb-6 pc:border-none">
           <div className="flex items-center gap-2">
             <span
@@ -29,7 +29,9 @@ export default function Droppable({
               style={{ backgroundColor: dashBoardColor }}
             />
             <div className="flex items-center gap-4">
-              <p className="text-lg font-bold tablet:text-2lg">{title}</p>
+              <p className="text-nowrap text-lg font-bold tablet:text-2lg">
+                {title}
+              </p>
               <p className="flex h-5 w-5 items-center justify-center rounded-md bg-gray-EEEEEE px-1.5 py-1 text-xs text-gray-787486">
                 {items.length}
               </p>
