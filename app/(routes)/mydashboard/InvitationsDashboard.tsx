@@ -7,6 +7,7 @@ import { getInvitationList, updateInvitation } from '@/api/invitations.api';
 import InvitationsTable from './InvitationTable';
 import { useEffect, useRef, useState } from 'react';
 import SearchBar from './SearchBar';
+import { useRouter } from 'next/navigation';
 
 const INVITATION_SIZE = 10;
 
@@ -22,6 +23,7 @@ export default function InvitationsDashboard({
   const [hasMore, setHasMore] = useState(true);
   const [searchKeyword, setSearchKeyword] = useState('');
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
+  const router = useRouter();
 
   const {
     data,
@@ -100,13 +102,17 @@ export default function InvitationsDashboard({
     setSearchKeyword(keyword);
   };
 
-  const handleClickAccept = async (invitationId: number) => {
+  const handleClickAccept = async (
+    invitationId: number,
+    invitationDashboardId: number,
+  ) => {
     await handleInvitationResponse({ invitationId, inviteAccepted: true });
     alert('초대를 수락했습니다.');
     setInvitations((prev) =>
       prev.filter((invitation) => invitation.id !== invitationId),
     );
     onAcceptInvitation();
+    router.push(`/dashboard/${invitationDashboardId}`);
   };
 
   const handleClickReject = async (invitationId: number) => {
