@@ -22,7 +22,7 @@
   /* 부드러운 렌더링을 위한 속성 */
   body {
     font-family: 'Pretendard Variable', sans-serif;
-    
+
     @apply min-h-screen bg-white text-gray-900;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -35,3 +35,11 @@
   }
 }
 
+@layer utilities {
+  .scrollbar-hidden {
+    scrollbar-width: none; /* Firefox */
+  }
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none; /* Webkit */
+  }
+}
