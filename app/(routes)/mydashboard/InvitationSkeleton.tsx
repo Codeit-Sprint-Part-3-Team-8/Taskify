@@ -40,11 +40,11 @@ export default function InvitationSkeleton() {
           </tbody>
         </table>
       </div>
-      <div className="flex flex-col gap-3.5 px-3.5 py-3.5 tablet:hidden">
+      <div className="flex animate-pulse flex-col gap-3.5 px-3.5 py-3.5 tablet:hidden">
         {[...Array(5)].map((_, index) => (
           <div
             key={index}
-            className="flex flex-col gap-3.5 border-b border-gray-EEEEEE bg-white p-4"
+            className="flex animate-pulse flex-col gap-3.5 border-b border-gray-EEEEEE bg-white p-4"
           >
             <div className="flex flex-col gap-3">
               <div className="flex items-center gap-6">
