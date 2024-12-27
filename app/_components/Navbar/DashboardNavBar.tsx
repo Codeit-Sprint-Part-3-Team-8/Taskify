@@ -75,7 +75,7 @@ export default function DashboardNavBar() {
   const members = membersData?.members || []; //옵셔널 체이닝과 기본값(|| [])을 활용해 에러 방지
 
   return (
-    <div className="fixed top-0 z-10 flex h-[3.75rem] w-full items-center justify-end border-b border-gray-D9D9D9 pl-[5.25rem] pr-2 tablet:h-[4.375rem] tablet:pl-[12.5rem] tablet:pr-8 pc:justify-between pc:pl-80 pc:pr-20">
+    <div className="fixed top-0 z-10 flex h-[3.75rem] w-full items-center justify-end border-b border-gray-D9D9D9 bg-white pl-[5.25rem] pr-2 tablet:h-[4.375rem] tablet:pl-[12.5rem] tablet:pr-8 pc:justify-between pc:pl-80 pc:pr-20">
       <div className="hidden w-1/3 gap-2 font-pretendard text-lg font-bold text-black-333236 pc:flex pc:text-xl">
         <div className="truncate">{dashboardsData?.title}</div>
         {dashboardsData?.createdByMe && (
