@@ -1,3 +1,9 @@
+interface ProfileValuesType {
+  email: string;
+  nickname: string;
+  profileImageUrl: string | null;
+}
+
 interface ValidationType {
   isValid: boolean;
   message: string;
@@ -18,8 +24,10 @@ interface ProfileFormProps {
   email: string;
   nickname: string;
   profileImageUrl: string | null;
+  update: () => void;
 }
 export type {
+  ProfileValuesType,
   ProfileValidationsType,
   PasswordValidationsType,
   ProfileFormProps,

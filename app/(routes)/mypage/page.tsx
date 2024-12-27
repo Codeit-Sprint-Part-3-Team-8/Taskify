@@ -9,7 +9,7 @@ import MyDashboardNavBar from '@/_components/Navbar/MyDashboardNavBar';
 import SideBar from '@/_components/Sidebar/SideBar';
 
 export default function MyPage() {
-  const { user } = useAuth();
+  const { user, update } = useAuth();
 
   return (
     <>
@@ -30,8 +30,9 @@ export default function MyPage() {
             email={user?.email as string}
             nickname={user?.nickname as string}
             profileImageUrl={user?.profileImageUrl as string | null}
+            update={update}
           />
-          <PasswordForm />
+          <PasswordForm update={update} />
         </div>
       </div>
     </>
