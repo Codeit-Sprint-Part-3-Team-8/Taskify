@@ -64,8 +64,6 @@ export default function DashboardNavBar() {
 
   const handleOpenInviteModal = () => {
     setIsModalOpen(true);
-    console.log(id);
-    console.log('open');
   };
 
   const handleCloseInviteModal = () => {
