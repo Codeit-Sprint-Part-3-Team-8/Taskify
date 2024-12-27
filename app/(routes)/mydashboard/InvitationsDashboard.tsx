@@ -158,7 +158,16 @@ export default function InvitationsDashboard({
             )
           )}
           {loading && offset > 0 && (
-            <div className="flex justify-center">더 불러오는 중...</div>
+            <div className="flex justify-center gap-4">
+              <Image
+                width={20}
+                height={20}
+                src="/images/icon/ic-spin.svg"
+                alt="spin"
+                className="animate-spin"
+              />
+              <div>더 불러오는 중...</div>
+            </div>
           )}
           <div ref={loadMoreRef} className="h-10" />
         </div>
