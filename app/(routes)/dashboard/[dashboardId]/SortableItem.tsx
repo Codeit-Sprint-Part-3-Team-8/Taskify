@@ -9,7 +9,7 @@ export default function SortableItem({ id }: { id: UniqueIdentifier }) {
 
   return (
     <li
-      className={`transform transition-all ${isDragging ? 'opacity-50' : 'opacity-100'}`}
+      className={`w-full transform transition-all ${isDragging ? 'opacity-50' : 'opacity-100'}`}
       style={{
         transform: transform ? CSS.Transform.toString(transform) : undefined,
       }}
