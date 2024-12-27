@@ -30,8 +30,6 @@ export type ItemGroupsType = {
 export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
   const [itemGroups, setItemGroups] = useState<ItemGroupsType>({});
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
-  const [activeContainerId, setActiveContainerId] =
-    useState<UniqueIdentifier | null>(null);
 
   const sensors = useSensors(
     useSensor(MouseSensor),
@@ -83,12 +81,10 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
 
   const handleDragStart = ({ active }: DragStartEvent) => {
     setActiveId(active.id);
-    setActiveContainerId(active.data.current?.sortable.containerId);
   };
 
   const handleDragCancel = () => {
     setActiveId(null);
-    setActiveContainerId(null);
   };
 
   const throttledHandleDragOver = useMemo(
@@ -127,7 +123,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
               item: active.id,
             });
 
-            console.log('after move itemGroups: ', itemGroups);
+            // console.log('after move itemGroups: ', itemGroups);
             return data;
           });
         },
@@ -163,12 +159,6 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
       activeIndex == null ||
       overIndex == null
     ) {
-      return;
-    }
-
-    if (activeContainerId === overContainer) {
-      setActiveId(null);
-      setActiveContainerId(null);
       return;
     }
 
@@ -219,6 +209,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
         tags: tags,
         imageUrl: imageUrl,
       });
+      console.log('updateCard');
     } catch {
       setItemGroups(prevItemGroups);
     }
