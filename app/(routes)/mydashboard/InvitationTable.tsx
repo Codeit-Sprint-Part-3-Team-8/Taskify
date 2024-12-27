@@ -3,7 +3,7 @@ import { InvitationType } from '@/_types/invitations.type';
 
 interface InvitationsTableProps {
   invitations: InvitationType[];
-  onAccept: (invitationId: number) => void;
+  onAccept: (invitationId: number, invitationDashboardId: number) => void;
   onReject: (invitationId: number) => void;
 }
 
@@ -36,7 +36,9 @@ const InvitationsTable: React.FC<InvitationsTableProps> = ({
                 <td className="px-1.5 py-4 text-end">
                   <button
                     className="rounded bg-violet-5534DA text-white tablet:px-6 tablet:py-1.5 pc:px-7 pc:py-2"
-                    onClick={() => onAccept(invitation.id)}
+                    onClick={() =>
+                      onAccept(invitation.id, invitation.dashboard.id)
+                    }
                   >
                     수락
                   </button>
@@ -81,7 +83,7 @@ const InvitationsTable: React.FC<InvitationsTableProps> = ({
             <div className="flex justify-between">
               <button
                 className="w-1/2 rounded bg-violet-5534DA px-4 py-2 text-sm text-white"
-                onClick={() => onAccept(invitation.id)}
+                onClick={() => onAccept(invitation.id, invitation.dashboard.id)}
               >
                 수락
               </button>
