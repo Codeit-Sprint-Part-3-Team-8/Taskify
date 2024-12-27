@@ -11,6 +11,7 @@ import Profile from './Profile';
 import useAsync from '@/_hooks/useAsync';
 import { useParams } from 'next/navigation';
 import { getMemberList } from '@/api/member.api';
+import InviteModal from '@/(routes)/dashboard/[dashboardId]/edit/InviteModal';
 
 enum ScreenSize {
   LARGE = 1280,
@@ -20,6 +21,7 @@ enum ScreenSize {
 
 export default function DashboardNavBar() {
   const [visibleMembers, setVisibleMembers] = useState(2);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { user } = useAuth();
   const params = useParams();
   const id = Number(params.dashboardId);
@@ -60,6 +62,16 @@ export default function DashboardNavBar() {
     };
   }, []);
 
+  const handleOpenInviteModal = () => {
+    setIsModalOpen(true);
+    console.log(id);
+    console.log('open');
+  };
+
+  const handleCloseInviteModal = () => {
+    setIsModalOpen(false);
+  };
+
   const members = membersData?.members || []; //옵셔널 체이닝과 기본값(|| [])을 활용해 에러 방지
 
   return (
@@ -91,7 +103,10 @@ export default function DashboardNavBar() {
             />
             관리
           </Link>
-          <button className="flex items-center justify-center rounded-md border border-gray-D9D9D9 px-3 py-1.5 font-pretendard text-md font-medium tablet:gap-2 tablet:rounded-lg tablet:py-2 pc:px-4 pc:py-2.5 pc:text-lg">
+          <button
+            onClick={handleOpenInviteModal}
+            className="flex items-center justify-center rounded-md border border-gray-D9D9D9 px-3 py-1.5 font-pretendard text-md font-medium tablet:gap-2 tablet:rounded-lg tablet:py-2 pc:px-4 pc:py-2.5 pc:text-lg"
+          >
             <Image
               width={20}
               height={20}
@@ -135,6 +150,9 @@ export default function DashboardNavBar() {
           </DropdownMenu>
         </div>
       </div>
+      {isModalOpen && (
+        <InviteModal dashboardId={id} onClose={handleCloseInviteModal} />
+      )}
     </div>
   );
 }
