@@ -6,31 +6,45 @@ import { UserType } from '@/_types/users.type';
 import { loginUser } from '@/api/auth.api';
 import { getUser } from '@/api/users.api';
 import { useRouter } from 'next/navigation';
-import { createContext, useCallback, useContext, useEffect } from 'react';
+import { createContext, useCallback, useContext, useEffect, useState } from 'react';
 
 interface AuthContextType {
   user: UserType | null;
-  loadingLogin: boolean;
-  loadingUpdate: boolean;
+  loading : {
+    auth : boolean;
+    login : boolean;
+    update : boolean;
+  }
+  errorMessage : {
+    login : string | null;
+    update : string | null;
+  }
   login: ({ email, password }: LoginUserParams) => void;
   logout: () => void;
-  loginErrorMessage: string | null;
-  updateErrorMessage: string | null;
   update: () => void;
 }
 
-const AuthContext = createContext<AuthContextType | undefined>({
-  user: null,
-  loadingLogin: false,
-  loadingUpdate: false,
-  login: () => {},
-  logout: () => {},
-  loginErrorMessage: null,
-  updateErrorMessage: null,
-  update: () => {},
-});
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+// {
+//   user: null,
+//   loading : {
+//     auth : true,
+//     login : false,
+//     update : false,
+//   },
+//   errorMessage: {
+//     login : null,
+//     update : null,
+//   },
+//   login: () => {},
+//   logout: () => {},
+//   update: () => {},
+// }
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [accessToken, setAccessToken] = useState<string | null>(null)
+  const [loadingAuth, setLoadingAuth] = useState(true);
   const key = process.env.NEXT_PUBLIC_ACCESS_TOKEN_KEY || null;
   const {
     excute: _getUser,
@@ -46,40 +60,64 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
     errorMessage: loginErrorMessage,
   } = useAsync(loginUser);
 
-  async function login({ email, password }: LoginUserParams) {
+  const login = useCallback(async ({ email, password }: LoginUserParams) => {
     await _loginUser({ email, password });
-  }
+  }, [_loginUser])
 
-  function logout() {
+  const logout = useCallback(() => {
     if (!key) return;
     localStorage.removeItem(key);
+    setAccessToken(null);
     clearUser();
-  }
+  },[key, clearUser]);
 
   const update = useCallback(() => {
     _getUser(undefined);
   }, [_getUser]);
 
-  useEffect(() => {
-    if (!key) return;
-    if (loginData) {
-      localStorage.setItem(key, loginData.accessToken);
+  useEffect(()=>{
+    if(!key) {
+      setAccessToken(null);
+      throw new Error(`Can't load Key`);
     }
-    if (localStorage.getItem(key)) {
+    setAccessToken(localStorage.getItem(key) || null);
+  }, [key])
+
+  useEffect(()=>{
+    if (key && loginData) {
+      const next = loginData.accessToken || null;
+      setAccessToken(next)
+      localStorage.setItem(key, next);
+    }
+  }, [key, loginData])
+
+  useEffect(() => {
+    if (accessToken) {
       _getUser(undefined);
     }
-  }, [_getUser, loginData, key]);
+  }, [_getUser, accessToken]);
+
+  useEffect(()=>{
+    if(userData || updateErrorMessage){
+      setLoadingAuth(false);
+    }
+  },[userData, updateErrorMessage])
 
   return (
     <AuthContext.Provider
       value={{
         user: userData,
-        loadingUpdate,
-        loadingLogin,
+        loading : {
+          auth : loadingAuth,
+          login : loadingLogin,
+          update : loadingUpdate,
+        },
+        errorMessage : {
+          login : loginErrorMessage,
+          update : updateErrorMessage
+        },
         login,
         logout,
-        loginErrorMessage,
-        updateErrorMessage,
         update,
       }}
     >
@@ -88,7 +126,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-function useAuth(required = true) {
+function useAuth(required : boolean = false) {
   const context = useContext(AuthContext);
   const router = useRouter();
 
@@ -97,11 +135,10 @@ function useAuth(required = true) {
   }
 
   useEffect(() => {
-    console.log(location.href, context.user, context.loadingUpdate);
-    if (required && !context.user && !context.loadingUpdate) {
+    if (required && !context.user && !context.loading.auth && !context.loading.login) {
       router.push('/login');
     }
-  }, [required, context, router]);
+  }, [required, context.user, context.loading.auth, context.loading.login,router]);
 
   return context;
 }

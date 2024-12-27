@@ -11,8 +11,6 @@ import SideBar from '@/_components/Sidebar/SideBar';
 export default function MyPage() {
   const { user, update } = useAuth();
 
-  console.log('mypage');
-
   return (
     <>
       <SideBar />

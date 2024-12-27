@@ -27,8 +27,8 @@ export default function LoginPage() {
   const {
     user,
     login,
-    loadingLogin: loading,
-    loginErrorMessage: errorMessage,
+    loading,
+    errorMessage,
   } = useAuth();
   const router = useRouter();
 
@@ -60,12 +60,12 @@ export default function LoginPage() {
   };
 
   useEffect(() => {
-    if (errorMessage) {
+    if (errorMessage.login) {
       setShowModal(true);
     } else {
       setShowModal(false);
     }
-  }, [errorMessage]);
+  }, [errorMessage.login]);
 
   useEffect(() => {
     validateForm();
@@ -81,7 +81,7 @@ export default function LoginPage() {
   return (
     <>
       {showModal && (
-        <Modal text={errorMessage as string} onClick={handleCloseModal} />
+        <Modal text={errorMessage.login as string} onClick={handleCloseModal} />
       )}
       <div className="mx-auto w-full max-w-xs pb-8 pt-20 tablet:max-w-lg tablet:pt-52">
         <AuthHeader text="오늘도 만나서 반가워요!" />
@@ -104,7 +104,7 @@ export default function LoginPage() {
           <button
             className="w-full select-none rounded-lg border bg-violet-5534DA py-3.5 text-lg font-medium text-white disabled:bg-gray-9FA6B2"
             type="submit"
-            disabled={!isFormValid || loading}
+            disabled={!isFormValid || loading.login}
           >
             로그인
           </button>
