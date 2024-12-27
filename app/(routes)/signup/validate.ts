@@ -23,7 +23,7 @@ function validateSchema(name: string, values: ValuesType) {
       const nicknameSchema = new Validator(values.nickname)
         .required('닉네임을 입력해주세요')
         .minLength(2, '닉네임을 2자 이상 입력해주세요')
-        .maxLength(10, '이메일을 10자 이하로 입력해주세요');
+        .maxLength(10, '닉네임을 10자 이하로 입력해주세요');
       const nickname = {
         isValid: nicknameSchema.validate(),
         message: nicknameSchema.validate() ? '' : nicknameSchema.getErrors()[0],

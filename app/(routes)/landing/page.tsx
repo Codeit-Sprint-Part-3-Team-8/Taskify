@@ -6,7 +6,7 @@ import landing2 from '@images/contents/landing2.png';
 import landing3 from '@images/contents/landing3.png';
 import landing4 from '@images/contents/landing4.png';
 import landing5 from '@images/contents/landing5.png';
-import { montserrat } from '@/fonts';
+import { montserrat } from '@/_styles/fonts';
 import Link from 'next/link';
 import Header from './Header';
 import Footer from './Footer';

@@ -1,9 +1,10 @@
 'use client';
 
 import useAsync from '@/_hooks/useAsync';
-import { loginUser, LoginUserParams } from '@/api/auth';
-import { getUser, UserType } from '@/api/users';
-import { useRouter } from 'next/navigation';
+import { LoginUserParams } from '@/_types/auth.type';
+import { UserType } from '@/_types/users.type';
+import { loginUser } from '@/api/auth.api';
+import { getUser } from '@/api/users.api';
 import { createContext, useContext, useEffect } from 'react';
 
 /**
@@ -77,19 +78,19 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-function useAuth(required: boolean = false) {
+function useAuth() {
   const context = useContext(AuthContext);
-  const router = useRouter();
+  // const router = useRouter();
 
   if (!context) {
     throw new Error('must useAuth in AuthProvider');
   }
 
-  useEffect(() => {
-    if (required && !context.user && !context.loadingUser) {
-      router.push('/login');
-    }
-  }, [required, context.user, context.loadingUser, router]);
+  // useEffect(() => {
+  //   if (required && !context.user && !context.loadingUser) {
+  //     router.push('/login');
+  //   }
+  // }, [required, context.user, context.loadingUser, router]);
 
   return context;
 }

@@ -1,8 +1,9 @@
 interface GenericModalProps {
   title?: string;
-  onClose?: () => void;
+  onClose: () => Promise<void> | void;
   mainContent: React.ReactNode;
   footerContent: React.ReactNode;
+  className?: string;
 }
 
 const GenericModal = ({
@@ -10,25 +11,26 @@ const GenericModal = ({
   onClose,
   mainContent,
   footerContent,
+  className = '',
 }: GenericModalProps) => {
   const handleClose = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
-      onClose?.();
+      onClose();
     }
   };
 
   return (
     <div
-      className="fixed inset-0 flex items-center justify-center bg-black-000000/30"
+      className="z-1 fixed inset-0 flex items-center justify-center bg-black-000000/30"
       onClick={handleClose}
     >
-      <div className="rounded-lg bg-white p-4">
+      <div className={`rounded-lg bg-white p-6 shadow-lg ${className}`}>
         {title && (
-          <header>
-            <div>{title}</div>
+          <header className="mb-4">
+            <h1 className="text-xl font-semibold">{title}</h1>
           </header>
         )}
-        <main>{mainContent}</main>
+        <main className="mb-4">{mainContent}</main>
         <footer>{footerContent}</footer>
       </div>
     </div>

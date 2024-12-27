@@ -1,7 +1,5 @@
-const FIELD_STYLE = 'w-full flex flex-col gap-2';
-const FIEDL_LABEL_STYLE = 'text-black-333236 select-none';
-const FIELD_INPUT_STYLE =
-  'rounded-lg border border-gray-D9D9D9 px-4 py-3.5 placeholder:select-none placeholder:text-gray-9FA6B2';
+import Image from 'next/image';
+import { useEffect, useRef, useState } from 'react';
 
 const INPUT_FIELD_TEXT: {
   [key: string]: {
@@ -29,35 +27,77 @@ const INPUT_FIELD_TEXT: {
 
 interface InputFieldProps {
   name: string;
+  type?: 'text' | 'password';
   value: string;
   validation: { isValid: boolean; message: string };
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onBlur: (event: React.FocusEvent<HTMLInputElement>) => void;
 }
 
 export default function InputField({
   name,
+  type = 'text',
   value,
   validation,
   onChange,
+  onBlur,
 }: InputFieldProps) {
+  const [isVisible, setIsVisible] = useState(type !== 'password');
   const { isValid, message } = validation;
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  const handleToggleType = () => {
+    setIsVisible((prev) => !prev);
+    inputRef.current?.focus();
+  };
+
+  useEffect(() => {
+    const INVALID_STYLES = ['outline', 'outline-1', 'outline-red-D6173A'];
+    INVALID_STYLES.forEach((style) => {
+      inputRef.current?.classList.toggle(style, !isValid && !!message);
+    });
+    /**
+     * @todo focus 되었을 때 유효하지 않아고 보라색 아웃라인을 보여줄지 여부
+     */
+    inputRef.current?.classList.toggle(
+      'focus-visible:outline-violet-5534DA',
+      isValid || !message,
+    );
+  }, [isValid, message]);
 
   return (
-    <fieldset className={FIELD_STYLE}>
-      <label className={FIEDL_LABEL_STYLE} htmlFor={name}>
+    <fieldset className="relative flex w-full flex-col gap-2">
+      <label className="select-none text-black-333236" htmlFor={name}>
         {INPUT_FIELD_TEXT[name].label}
       </label>
       <input
-        className={FIELD_INPUT_STYLE}
+        ref={inputRef}
+        className="rounded-lg border border-gray-D9D9D9 px-4 py-3.5 placeholder:select-none placeholder:text-gray-9FA6B2 focus-visible:outline-1 focus-visible:outline-violet-5534DA"
         id={name}
         name={name}
-        type="text"
+        type={isVisible ? 'text' : 'password'}
         value={value}
         placeholder={INPUT_FIELD_TEXT[name].placeholder}
         onChange={onChange}
+        onBlur={onBlur}
         required
       />
-      {!isValid && <p>{message}</p>}
+      {type === 'password' && (
+        <Image
+          className="absolute right-3 top-12"
+          width={24}
+          height={24}
+          priority={true}
+          src={
+            isVisible
+              ? '/images/icon/icon-visibility-on.svg'
+              : '/images/icon/icon-visibility-off.svg'
+          }
+          alt={type === 'password' ? '비밀번호 숨기기' : '비밀번호 표기'}
+          onClick={handleToggleType}
+        />
+      )}
+      <div className="h-4 text-sm text-red-D6173A">{message}</div>
     </fieldset>
   );
 }
