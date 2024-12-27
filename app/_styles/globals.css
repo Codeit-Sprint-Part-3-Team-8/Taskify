@@ -36,8 +36,10 @@
 }
 
 @layer utilities {
-  /* 스크롤바 안정성을 위한 유틸리티 클래스 */
-  .scrollbar-stable {
-    scrollbar-gutter: stable;
+  .scrollbar-hidden {
+    scrollbar-width: none; /* Firefox */
+  }
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none; /* Webkit */
   }
 }
