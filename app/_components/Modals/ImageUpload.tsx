@@ -26,7 +26,6 @@ export default function ImageUpload({
 
   return (
     <div className="flex flex-col gap-2">
-      <label className="select-none text-black-333236">이미지</label>
       <div className="relative h-[100px] w-[100px]">
         {imageUrl ? (
           <>
