@@ -5,26 +5,19 @@ import { TodoFormContent } from '@/_components/Modals/Dashboard/TodoFormContent'
 import { FormDataValue } from '@/_types/todo-prop.type';
 import { TodoFormFooter } from '@/_components/Modals/Dashboard/TodoFormFooter';
 import { Member } from '@/api/types';
+import { UpdateCardParams } from '@/_types/cards.type';
 
 interface EditTodoModalProps {
   cardId: number;
-  defaultValues: {
-    columnId: number;
-    columnTitle: string;
-    title: string;
-    description: string;
-    assigneeUserId?: number;
-    dueDate?: string;
-    tags?: string[];
-    imageUrl?: string;
-  };
+  columnTitle: string;
+  defaultValues: UpdateCardParams;
   columns: Array<{ columnId: number; columnTitle: string }>;
   members: Member[];
   onClose: () => void;
 }
 
 export default function EditTodoModal({
-  cardId,
+  columnTitle,
   defaultValues,
   columns,
   members,
@@ -32,7 +25,7 @@ export default function EditTodoModal({
 }: EditTodoModalProps) {
   const [formData, setFormData] = useState({
     columnId: defaultValues.columnId,
-    columnTitle: defaultValues.columnTitle,
+    columnTitle: columnTitle,
     title: defaultValues.title || '',
     description: defaultValues.description || '',
     assigneeUserId: defaultValues.assigneeUserId || 0,
@@ -56,7 +49,7 @@ export default function EditTodoModal({
     setIsLoading(true);
     try {
       await updateCard({
-        cardId,
+        cardId: defaultValues.cardId,
         ...formData,
       });
       onClose();
