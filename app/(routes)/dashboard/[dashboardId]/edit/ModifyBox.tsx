@@ -1,23 +1,32 @@
 'use client';
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import ColorSelectBox from './ColorSelectBox';
 import Button from '@/_components/Button/Button';
 import useAsync from '@/_hooks/useAsync';
 import { DashboardType } from '@/_types/dashboards.type';
-import { updateDashboard } from '@/api/dashboards.api';
+import { getDashboard, updateDashboard } from '@/api/dashboards.api';
 
 interface ModifyBoxProps {
-  modifyData: DashboardType | null;
+  dashboardId: number;
 }
 
-export default function ModifyBox({ modifyData }: ModifyBoxProps) {
+export default function ModifyBox({ dashboardId }: ModifyBoxProps) {
+  const {
+    data: dashboardData,
+    excute: getDashboardData,
+    // loading: dashboardLoading,
+    // error: dashboardError,
+  } = useAsync(getDashboard);
+
+  const { excute: updateDashBoardAsync } = useAsync(updateDashboard);
+
   const inputRef = useRef<HTMLInputElement>(null);
-  const [colorData, setColorData] = useState<string>(modifyData?.color || '');
-  const [dashboardData, setDashboardData] = useState<DashboardType | null>(
-    modifyData,
-  );
-  const { data: asyncData, excute: updateDashBoardAsync } =
-    useAsync(updateDashboard);
+  const [dashboardDataState, setDashboardDataState] =
+    useState<DashboardType | null>(dashboardData);
+
+  const fetchDashboardData = useCallback(async () => {
+    await getDashboardData({ dashboardId });
+  }, [dashboardId, getDashboardData]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,32 +34,28 @@ export default function ModifyBox({ modifyData }: ModifyBoxProps) {
       return;
     }
     const param = {
-      dashboardId: modifyData?.id || 0,
+      dashboardId: dashboardDataState?.id || 0,
       title: inputRef.current!.value,
-      color: colorData,
+      color: dashboardDataState?.color || '',
     };
     await updateDashBoardAsync(param);
+    fetchDashboardData();
   };
 
   const handleChangeColor = (color: string) => {
-    if (color !== colorData) {
-      setColorData(color);
-    }
+    setDashboardDataState({
+      ...dashboardDataState!,
+      color,
+    });
   };
 
   useEffect(() => {
-    if (modifyData) {
-      setDashboardData(modifyData);
-      setColorData(modifyData.color);
-    }
-  }, [modifyData]);
+    setDashboardDataState(dashboardData);
+  }, [dashboardData]);
 
   useEffect(() => {
-    if (asyncData) {
-      setDashboardData(asyncData);
-      setColorData(asyncData.color);
-    }
-  }, [asyncData]);
+    fetchDashboardData();
+  }, [fetchDashboardData]);
 
   return (
     <div className="mx-3 rounded-2xl bg-white px-4 py-5 tablet:w-[34rem] tablet:py-8 pc:w-[38rem]">
