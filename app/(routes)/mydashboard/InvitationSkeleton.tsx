@@ -9,12 +9,15 @@ export default function InvitationSkeleton() {
         <table className="w-full border-collapse">
           <thead>
             <tr className="bg-gray-F7F8FA text-left text-sm font-medium text-gray-787486 tablet:text-md">
-              <th className="bg-gray-300 px-6 py-3"></th>
-              <th className="bg-gray-300 px-6 py-3"></th>
-              <th
-                className="bg-gray-300 px-6 py-3 text-center"
-                colSpan={2}
-              ></th>
+              <th className="px-6 py-3">
+                <div className="h-4 w-16 rounded bg-gray-300"></div>
+              </th>
+              <th className="px-6 py-3">
+                <div className="h-4 w-24 rounded bg-gray-300"></div>
+              </th>
+              <th className="px-6 py-3 text-center" colSpan={2}>
+                <div className="mx-auto h-4 w-20 rounded bg-gray-300"></div>
+              </th>
             </tr>
           </thead>
           <tbody>

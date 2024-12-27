@@ -23,6 +23,7 @@ export default function InvitationsDashboard({
   const [invitations, setInvitations] = useState<InvitationType[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [showSkeleton, setShowSkeleton] = useState(true);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
 
@@ -56,6 +57,7 @@ export default function InvitationsDashboard({
     setOffset(0);
     setInvitations([]);
     setHasMore(true);
+    setShowSkeleton(true);
   }, [searchKeyword]);
 
   useEffect(() => {
@@ -68,6 +70,7 @@ export default function InvitationsDashboard({
         return offset === 0 ? newInvitations : [...prev, ...newInvitations];
       });
       setHasMore(data.invitations.length === INVITATION_SIZE);
+      setShowSkeleton(false);
     }
   }, [data]);
 
@@ -134,7 +137,7 @@ export default function InvitationsDashboard({
             </h1>
             <SearchBar onSearch={handleSearch} placeholder="검색" />
           </div>
-          {loading && offset === 0 ? (
+          {showSkeleton ? (
             <InvitationSkeleton />
           ) : invitations.length > 0 ? (
             <InvitationsTable
@@ -157,7 +160,7 @@ export default function InvitationsDashboard({
               </div>
             )
           )}
-          {loading && offset > 0 && (
+          {hasMore && offset > 0 && (
             <div className="flex justify-center gap-4">
               <Image
                 width={20}

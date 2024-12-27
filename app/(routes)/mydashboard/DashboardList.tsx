@@ -3,6 +3,7 @@
 import { DashboardType } from '@/_types/dashboards.type';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 interface DashboardListProps {
   dashboardList: DashboardType[];
@@ -21,6 +22,14 @@ export default function DashboardList({
   onOpenCreateModal,
   isLoading,
 }: DashboardListProps) {
+  const [showSkeleton, setShowSkeleton] = useState(true);
+
+  useEffect(() => {
+    if (!isLoading) {
+      setShowSkeleton(false);
+    }
+  }, [isLoading]);
+
   const handleNextPage = () => {
     if (currentPage < totalPages) onPageChange(currentPage + 1);
   };
@@ -48,7 +57,7 @@ export default function DashboardList({
               height={22}
             />
           </button>
-          {isLoading &&
+          {showSkeleton &&
             Array.from({ length: 5 }).map((_, index) => (
               <div
                 key={index}
@@ -61,7 +70,7 @@ export default function DashboardList({
               </div>
             ))}
 
-          {!isLoading &&
+          {!showSkeleton &&
             dashboardList.map((dashboard) => (
               <Link
                 href={`/dashboard/${dashboard.id}`}
