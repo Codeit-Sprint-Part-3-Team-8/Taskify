@@ -8,6 +8,7 @@ import InvitationsTable from './InvitationTable';
 import { useEffect, useRef, useState } from 'react';
 import SearchBar from './SearchBar';
 import { useRouter } from 'next/navigation';
+import InvitationSkeleton from './InvitationSkeleton';
 
 const INVITATION_SIZE = 10;
 
@@ -134,7 +135,7 @@ export default function InvitationsDashboard({
             <SearchBar onSearch={handleSearch} placeholder="검색" />
           </div>
           {loading && offset === 0 ? (
-            <div className="flex justify-center">로딩 중...</div>
+            <InvitationSkeleton />
           ) : invitations.length > 0 ? (
             <InvitationsTable
               invitations={invitations}
