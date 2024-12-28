@@ -3,7 +3,7 @@ import Button from '@/_components/Button/Button';
 import ModalInput from '@/_components/Modals/ModalInput';
 import { createColumn } from '@/api/columns.api';
 import { useState } from 'react';
-import { OnColumnCreatedType } from './[dashboardId]/Dashboard';
+import { OnColumnHandlerType } from './[dashboardId]/Dashboard';
 
 const BUTTON_SIZE =
   'tablet:w-[16rem] tablet:h-[3.375rem] mobile:w-[9rem] mobile:h-[3.375rem]';
@@ -15,7 +15,7 @@ const CreateColumnModal = ({
 }: {
   onClose: () => Promise<void> | void;
   dashboardId: number;
-  onColumnCreated: OnColumnCreatedType;
+  onColumnCreated: OnColumnHandlerType;
 }) => {
   const [newColumnName, setNewColumnName] = useState('');
   const [isLoading, setIsLoading] = useState(false);

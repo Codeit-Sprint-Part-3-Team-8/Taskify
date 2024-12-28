@@ -4,15 +4,15 @@ import ModalInput from '@/_components/Modals/ModalInput';
 import { useState } from 'react';
 import { updateColumn } from '@/api/columns.api';
 import { deleteColumn } from '@/api/columns.api';
-import { OnColumnCreatedType } from './[dashboardId]/Dashboard';
+import { OnColumnHandlerType } from './[dashboardId]/Dashboard';
 
 const BUTTON_SIZE =
   'tablet:w-[16rem] tablet:h-[3.375rem] mobile:w-[9rem] mobile:h-[3.375rem]';
 
 interface EditColumnModalProps {
   onClose: () => Promise<void> | void;
-  onColumnUpdated: OnColumnCreatedType;
-  onColumnDeleted: ({ id }: { id: number }) => void;
+  onColumnUpdated: OnColumnHandlerType;
+  onColumnDeleted: OnColumnHandlerType;
   columnId: number;
   initialTitle?: string;
 }

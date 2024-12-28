@@ -7,15 +7,15 @@ import CreateCardButton from './CreateCardButton';
 import Image from 'next/image';
 import { useState } from 'react';
 import EditColumnModal from '../EditColumnModal';
-import { OnColumnCreatedType } from './Dashboard';
+import { OnColumnHandlerType } from './Dashboard';
 
 interface DroppableProps {
   id: string;
   dashBoardColor: string;
   title: string;
   items: CardType[];
-  onColumnUpdated: OnColumnCreatedType;
-  onColumnDeleted: ({ id }: { id: number }) => void;
+  onColumnUpdated: OnColumnHandlerType;
+  onColumnDeleted: OnColumnHandlerType;
 }
 
 export default function Droppable({

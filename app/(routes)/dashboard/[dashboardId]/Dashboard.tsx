@@ -27,13 +27,15 @@ export type ItemGroupsType = {
   [columnId: string]: { title: string; cardData: CardListType };
 };
 
-export type OnColumnCreatedType = ({
+export type OnColumnHandlerParams = {
+  id: number;
+  title?: string;
+};
+
+export type OnColumnHandlerType = ({
   id,
   title,
-}: {
-  id: number;
-  title: string;
-}) => void;
+}: OnColumnHandlerParams) => void;
 
 export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
   const [itemGroups, setItemGroups] = useState<ItemGroupsType>({});
@@ -223,13 +225,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
     }
   };
 
-  const handleColumnCreated = ({
-    id,
-    title,
-  }: {
-    id: number;
-    title: string;
-  }) => {
+  const handleColumnCreated = ({ id, title }: OnColumnHandlerParams) => {
     setItemGroups((prevItemGroups) => ({
       ...prevItemGroups,
       [id]: {
@@ -239,13 +235,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
     }));
   };
 
-  const handleColumnUpdated = ({
-    id,
-    title,
-  }: {
-    id: number;
-    title: string;
-  }) => {
+  const handleColumnUpdated = ({ id, title }: OnColumnHandlerParams) => {
     setItemGroups((prevItemGroups) => ({
       ...prevItemGroups,
       [id]: {

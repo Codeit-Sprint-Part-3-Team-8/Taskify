@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import CreateColumnModal from '../CreateColumnModal';
 import Image from 'next/image';
-import { OnColumnCreatedType } from './Dashboard';
+import { OnColumnHandlerType } from './Dashboard';
 
 export default function CreateColumnButton({
   dashboardId,
   onColumnCreated,
 }: {
   dashboardId: number;
-  onColumnCreated: OnColumnCreatedType;
+  onColumnCreated: OnColumnHandlerType;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
