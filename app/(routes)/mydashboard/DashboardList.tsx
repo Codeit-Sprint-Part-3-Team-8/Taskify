@@ -3,6 +3,7 @@
 import { DashboardType } from '@/_types/dashboards.type';
 import Image from 'next/image';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 interface DashboardListProps {
   dashboardList: DashboardType[];
@@ -10,6 +11,7 @@ interface DashboardListProps {
   currentPage: number;
   onPageChange: (page: number) => void;
   onOpenCreateModal: () => void;
+  isLoading: boolean;
 }
 
 export default function DashboardList({
@@ -18,6 +20,7 @@ export default function DashboardList({
   currentPage,
   onPageChange,
   onOpenCreateModal,
+  isLoading,
 }: DashboardListProps) {
   const handleNextPage = () => {
     if (currentPage < totalPages) onPageChange(currentPage + 1);
@@ -46,38 +49,51 @@ export default function DashboardList({
               height={22}
             />
           </button>
-
-          {dashboardList.map((dashboard) => (
-            <Link
-              href={`/dashboard/${dashboard.id}`}
-              key={dashboard.id}
-              className="flex w-full items-center justify-between gap-3 rounded-lg border border-gray-D9D9D9 px-5 py-5"
-            >
-              <div className="flex w-11/12 items-center gap-3 pc:gap-4">
-                <div
-                  className="h-2 w-2 shrink-0 rounded-full"
-                  style={{ backgroundColor: dashboard.color }}
-                ></div>
-                <p className="truncate font-pretendard text-md font-semibold text-black-333236 tablet:text-base">
-                  {dashboard.title}
-                </p>
-                {dashboard.createdByMe && (
-                  <Image
-                    width={18}
-                    height={18}
-                    src="/images/icon/ic-crown.svg"
-                    alt="crown"
-                  />
-                )}
+          {isLoading &&
+            Array.from({ length: 5 }).map((_, index) => (
+              <div
+                key={index}
+                className="flex w-full animate-pulse items-center gap-3 rounded-lg border border-gray-D9D9D9 px-5 py-5"
+              >
+                <div className="h-2 w-2 rounded-full bg-gray-300"></div>
+                <div className="flex w-full flex-col gap-3 pc:gap-4">
+                  <div className="h-2 w-3/4 rounded bg-gray-300"></div>
+                </div>
               </div>
-              <Image
-                width={18}
-                height={18}
-                src="/images/icon/ic-blackarrow.svg"
-                alt="arrow"
-              />
-            </Link>
-          ))}
+            ))}
+
+          {!isLoading &&
+            dashboardList.map((dashboard) => (
+              <Link
+                href={`/dashboard/${dashboard.id}`}
+                key={dashboard.id}
+                className="flex w-full items-center justify-between gap-3 rounded-lg border border-gray-D9D9D9 px-5 py-5"
+              >
+                <div className="flex w-11/12 items-center gap-3 pc:gap-4">
+                  <div
+                    className="h-2 w-2 shrink-0 rounded-full"
+                    style={{ backgroundColor: dashboard.color }}
+                  ></div>
+                  <p className="truncate font-pretendard text-md font-semibold text-black-333236 tablet:text-base">
+                    {dashboard.title}
+                  </p>
+                  {dashboard.createdByMe && (
+                    <Image
+                      width={18}
+                      height={18}
+                      src="/images/icon/ic-crown.svg"
+                      alt="crown"
+                    />
+                  )}
+                </div>
+                <Image
+                  width={18}
+                  height={18}
+                  src="/images/icon/ic-blackarrow.svg"
+                  alt="arrow"
+                />
+              </Link>
+            ))}
         </div>
         <div className="mt-4 flex items-center justify-end gap-4 pc:mt-3">
           <div className="font-pretendard text-xs font-normal text-black-333236 tablet:text-md">

@@ -8,6 +8,7 @@ import InvitationsTable from './InvitationTable';
 import { useEffect, useRef, useState } from 'react';
 import SearchBar from './SearchBar';
 import { useRouter } from 'next/navigation';
+import InvitationSkeleton from './InvitationSkeleton';
 
 const INVITATION_SIZE = 10;
 
@@ -22,6 +23,7 @@ export default function InvitationsDashboard({
   const [invitations, setInvitations] = useState<InvitationType[]>([]);
   const [hasMore, setHasMore] = useState(true);
   const [searchKeyword, setSearchKeyword] = useState('');
+  const [showSkeleton, setShowSkeleton] = useState(true);
   const loadMoreRef = useRef<HTMLDivElement | null>(null);
   const router = useRouter();
 
@@ -55,6 +57,7 @@ export default function InvitationsDashboard({
     setOffset(0);
     setInvitations([]);
     setHasMore(true);
+    setShowSkeleton(true);
   }, [searchKeyword]);
 
   useEffect(() => {
@@ -67,6 +70,7 @@ export default function InvitationsDashboard({
         return offset === 0 ? newInvitations : [...prev, ...newInvitations];
       });
       setHasMore(data.invitations.length === INVITATION_SIZE);
+      setShowSkeleton(false);
     }
   }, [data]);
 
@@ -133,8 +137,8 @@ export default function InvitationsDashboard({
             </h1>
             <SearchBar onSearch={handleSearch} placeholder="검색" />
           </div>
-          {loading && offset === 0 ? (
-            <div className="flex justify-center">로딩 중...</div>
+          {showSkeleton ? (
+            <InvitationSkeleton />
           ) : invitations.length > 0 ? (
             <InvitationsTable
               invitations={invitations}
@@ -156,8 +160,17 @@ export default function InvitationsDashboard({
               </div>
             )
           )}
-          {loading && offset > 0 && (
-            <div className="flex justify-center">더 불러오는 중...</div>
+          {hasMore && offset > 0 && (
+            <div className="flex justify-center gap-4">
+              <Image
+                width={20}
+                height={20}
+                src="/images/icon/ic-spin.svg"
+                alt="spin"
+                className="animate-spin"
+              />
+              <div>더 불러오는 중...</div>
+            </div>
           )}
           <div ref={loadMoreRef} className="h-10" />
         </div>
