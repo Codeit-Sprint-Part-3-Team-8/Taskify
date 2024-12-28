@@ -1,11 +1,14 @@
 import { useState } from 'react';
 import CreateColumnModal from '../CreateColumnModal';
 import Image from 'next/image';
+import { OnColumnCreatedType } from './Dashboard';
 
 export default function CreateColumnButton({
   dashboardId,
+  onColumnCreated,
 }: {
   dashboardId: number;
+  onColumnCreated: OnColumnCreatedType;
 }) {
   const [isModalOpen, setIsModalOpen] = useState(false);
 
@@ -39,7 +42,11 @@ export default function CreateColumnButton({
       </div>
 
       {isModalOpen && (
-        <CreateColumnModal onClose={closeModal} dashboardId={dashboardId} />
+        <CreateColumnModal
+          onClose={closeModal}
+          dashboardId={dashboardId}
+          onColumnCreated={onColumnCreated}
+        />
       )}
     </>
   );

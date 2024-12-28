@@ -27,6 +27,14 @@ export type ItemGroupsType = {
   [columnId: string]: { title: string; cardData: CardListType };
 };
 
+export type OnColumnCreatedType = ({
+  id,
+  title,
+}: {
+  id: number;
+  title: string;
+}) => void;
+
 export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
   const [itemGroups, setItemGroups] = useState<ItemGroupsType>({});
   const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
@@ -215,6 +223,22 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
     }
   };
 
+  const handleColumnCreated = ({
+    id,
+    title,
+  }: {
+    id: number;
+    title: string;
+  }) => {
+    setItemGroups((prevItemGroups) => ({
+      ...prevItemGroups,
+      [id]: {
+        title: title,
+        cardData: { cursorId: 1, totalCount: 1, cards: [] },
+      },
+    }));
+  };
+
   return (
     <div className="sidebar-right-content">
       <DndContext
@@ -232,10 +256,14 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
               dashBoardColor={dashBoard.color}
               title={itemGroups[itemGroup].title}
               items={itemGroups[itemGroup].cardData.cards || []}
+              onColumnCreated={handleColumnCreated}
             />
           ))}
 
-          <CreateColumnButton dashboardId={dashBoard.id} />
+          <CreateColumnButton
+            dashboardId={dashBoard.id}
+            onColumnCreated={handleColumnCreated}
+          />
         </div>
         <DragOverlay>
           {activeId ? <Item id={activeId} dragOverlay /> : null}

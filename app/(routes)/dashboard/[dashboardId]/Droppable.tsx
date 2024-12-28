@@ -5,12 +5,16 @@ import SortableItem from './SortableItem';
 import { CardType } from '@/_types/cards.type';
 import CreateCardButton from './CreateCardButton';
 import Image from 'next/image';
+import { Dispatch, SetStateAction, useState } from 'react';
+import EditColumnModal from '../EditColumnModal';
+import { ItemGroupsType, OnColumnCreatedType } from './Dashboard';
 
 interface DroppableProps {
   id: string;
   dashBoardColor: string;
   title: string;
   items: CardType[];
+  onColumnCreated: OnColumnCreatedType;
 }
 
 export default function Droppable({
@@ -18,8 +22,27 @@ export default function Droppable({
   dashBoardColor,
   items,
   title,
+  onColumnCreated,
 }: DroppableProps) {
   const { setNodeRef } = useDroppable({ id });
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+
+  const handleOpenEditModal = () => {
+    setIsEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+  };
+
+  const handleOpenCreateModal = () => {
+    setIsCreateModalOpen(true);
+  };
+
+  const handleCloseCreateModal = () => {
+    setIsCreateModalOpen(false);
+  };
 
   return (
     <SortableContext id={id} items={items} strategy={rectSortingStrategy}>
@@ -45,11 +68,12 @@ export default function Droppable({
                 src="/images/icon/ic-setting.svg"
                 alt="컬럼 수정 버튼"
                 fill
-                style={{ objectFit: 'contain' }}
+                style={{ objectFit: 'contain', cursor: 'pointer' }}
+                onClick={handleOpenEditModal}
               />
             </div>
           </div>
-          <CreateCardButton />
+          <CreateCardButton onColumnCreated={onColumnCreated} />
           <ul
             ref={setNodeRef}
             className="scrollbar-hidden grid w-full auto-cols-[90%] grid-flow-col rounded-lg px-3 py-4 mobile:gap-14 mobile:overflow-x-auto tablet:max-h-[200px] tablet:grid-flow-row tablet:gap-4 tablet:overflow-y-auto pc:h-full pc:max-h-full"
@@ -59,6 +83,13 @@ export default function Droppable({
             ))}
           </ul>
         </div>
+        {isEditModalOpen && (
+          <EditColumnModal
+            columnId={Number(id)}
+            initialTitle={title}
+            onClose={handleCloseEditModal}
+          />
+        )}
       </div>
     </SortableContext>
   );
