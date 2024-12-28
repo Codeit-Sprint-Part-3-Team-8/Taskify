@@ -16,15 +16,17 @@ export default function MyDashboardPage() {
   const [currentPage, setCurrentPage] = useState(1);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { excute: fetchDashboards } = useAsync(async (page: number) => {
-    const data = await getDashboardList({
-      navigationMethod: 'pagination',
-      page,
-      size: 5,
-    });
-    setDashboardList(data.dashboards);
-    setTotalPages(Math.ceil(data.totalCount / 5));
-  });
+  const { excute: fetchDashboards, loading } = useAsync(
+    async (page: number) => {
+      const data = await getDashboardList({
+        navigationMethod: 'pagination',
+        page,
+        size: 5,
+      });
+      setDashboardList(data.dashboards);
+      setTotalPages(Math.ceil(data.totalCount / 5));
+    },
+  );
 
   useEffect(() => {
     fetchDashboards(currentPage);
@@ -56,6 +58,7 @@ export default function MyDashboardPage() {
         currentPage={currentPage}
         onPageChange={handlePageChange}
         onOpenCreateModal={handleOpenCreateModal}
+        isLoading={loading}
       />
       <InvitationsDashboard onAcceptInvitation={handleAcceptInvitation} />
       {isModalOpen && <CreateDashboardModal onClose={handleCloseCreateModal} />}
