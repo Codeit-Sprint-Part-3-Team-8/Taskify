@@ -35,8 +35,10 @@ async function updateUser({
 async function createProfileImage({
   image,
 }: CreateProfileImageParams): Promise<ProfileImageType> {
-  const response = await axios.post('user/me/image', {
-    image,
+  const response = await axios.post('users/me/image', image, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
   });
   return response.data;
 }

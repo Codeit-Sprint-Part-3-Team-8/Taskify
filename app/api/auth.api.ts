@@ -11,7 +11,7 @@ async function updatePassword({ password, newPassword }: UpdatePasswordParams) {
     password,
     newPassword,
   });
-  return response.data;
+  return !!response;
 }
 
 export { loginUser, updatePassword };
