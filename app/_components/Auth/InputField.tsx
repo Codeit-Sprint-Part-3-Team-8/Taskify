@@ -30,8 +30,11 @@ interface InputFieldProps {
   type?: 'text' | 'password';
   value: string;
   validation: { isValid: boolean; message: string };
+  label?: string;
+  placeholder?: string;
+  readonly?: boolean;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  onBlur: (event: React.FocusEvent<HTMLInputElement>) => void;
+  onBlur?: (event: React.FocusEvent<HTMLInputElement>) => void;
 }
 
 export default function InputField({
@@ -39,6 +42,9 @@ export default function InputField({
   type = 'text',
   value,
   validation,
+  label,
+  placeholder,
+  readonly = false,
   onChange,
   onBlur,
 }: InputFieldProps) {
@@ -67,8 +73,11 @@ export default function InputField({
 
   return (
     <fieldset className="relative flex w-full flex-col gap-2">
-      <label className="select-none text-black-333236" htmlFor={name}>
-        {INPUT_FIELD_TEXT[name].label}
+      <label
+        className="select-none text-sm text-black-333236 tablet:text-lg"
+        htmlFor={name}
+      >
+        {label || INPUT_FIELD_TEXT[name].label}
       </label>
       <input
         ref={inputRef}
@@ -76,10 +85,11 @@ export default function InputField({
         id={name}
         name={name}
         type={isVisible ? 'text' : 'password'}
-        value={value}
-        placeholder={INPUT_FIELD_TEXT[name].placeholder}
+        value={value || ''}
+        placeholder={placeholder || INPUT_FIELD_TEXT[name].placeholder}
         onChange={onChange}
         onBlur={onBlur}
+        readOnly={readonly}
         required
       />
       {type === 'password' && (
@@ -97,7 +107,9 @@ export default function InputField({
           onClick={handleToggleType}
         />
       )}
-      <div className="h-4 text-sm text-red-D6173A">{message}</div>
+      <div className="h-4 text-sm text-red-D6173A tablet:text-lg">
+        {message}
+      </div>
     </fieldset>
   );
 }

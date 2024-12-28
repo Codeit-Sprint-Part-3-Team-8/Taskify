@@ -1,49 +1,48 @@
 import Button from '@/_components/Button/Button';
-import Profile from '@/_components/Navbar/Profile';
 import Pagenation from './Pagenation';
 import { MemberListType, MemberType } from '@/_types/members.type';
 import useAsync from '@/_hooks/useAsync';
-import { deleteMember } from '@/api/member.api';
-import { useEffect, useState } from 'react';
+import { deleteMember, getMemberList } from '@/api/member.api';
+import { useCallback, useEffect, useState } from 'react';
+import Image from 'next/image';
 
-interface ModifyListProps {
-  memberData: MemberListType | null;
-  onClickPage: (page: number) => void;
-}
+const MEMBER_PAGE_SIZE = 4;
 
-export default function ModifyList({
-  memberData,
-  onClickPage,
-}: ModifyListProps) {
+export default function ModifyList({ dashboardId }: { dashboardId: number }) {
+  const {
+    data: memberData,
+    excute: getMemberData,
+    // loading: memberLoading,
+    // error: memberError,
+  } = useAsync(getMemberList);
+
   const { excute: deleteMemberAsync } = useAsync(deleteMember);
-
   const [memberDataState, setMemberDataState] = useState<MemberListType | null>(
     memberData,
   );
 
+  const fetchMemberData = useCallback(async () => {
+    await getMemberData({ dashboardId, size: MEMBER_PAGE_SIZE });
+  }, [dashboardId, getMemberData]);
+
+  const handleClickPage = async (page: number) => {
+    await getMemberData({ dashboardId, page, size: MEMBER_PAGE_SIZE });
+  };
+
   const handleRemoveMember = async (memberId: number) => {
     await deleteMemberAsync({ memberId });
-
-    if (memberDataState && memberDataState.members) {
-      const updatedMembers = memberDataState.members.filter(
-        (member) => member.userId !== memberId,
-      );
-
-      setMemberDataState((prevState) => ({
-        ...prevState,
-        members: updatedMembers,
-        totalCount: prevState?.totalCount ?? 0,
-      }));
-    }
+    fetchMemberData();
   };
 
   useEffect(() => {
-    if (memberData) {
-      setMemberDataState(memberData);
-    }
+    setMemberDataState(memberData);
   }, [memberData]);
 
-  if (!memberDataState || !memberDataState.members) {
+  useEffect(() => {
+    fetchMemberData();
+  }, [fetchMemberData]);
+
+  if (!memberDataState?.members) {
     return (
       <div className="mx-3 h-80 bg-white px-4 py-5 tablet:h-96 tablet:w-[34rem] tablet:py-8 pc:w-[38rem]">
         <div className="text-center text-lg text-gray-600">
@@ -64,33 +63,48 @@ export default function ModifyList({
   }
 
   return (
-    <div className="mx-3 h-80 rounded-2xl bg-white px-4 py-5 tablet:h-96 tablet:w-[34rem] tablet:py-8 pc:w-[38rem]">
+    <div className="mx-3 h-[27rem] rounded-2xl bg-white px-4 py-5 tablet:w-[34rem] tablet:py-8 pc:w-[38rem]">
       <div className="flex items-center justify-between">
         <div className="text-xl font-bold">구성원</div>
         <Pagenation
-          onClickPage={onClickPage}
+          onClickPage={handleClickPage}
           totalCount={memberData?.totalCount}
           pageSize={4}
         />
       </div>
       <div className="pb-3 pt-6 text-md font-normal text-gray-9FA6B2">이름</div>
-      {memberDataState.members.map((member: MemberType) => (
+      {memberDataState.members.map((member: MemberType, index: number) => (
         <div className="pb-4" key={member.id}>
           <div className="flex justify-between pb-4">
-            <Profile
-              profileImageUrl={member.profileImageUrl!}
-              nickname={member.nickname}
-            />
+            <div className="flex items-center gap-2 rounded-full p-1 tablet:gap-3">
+              <Image
+                width={32}
+                height={32}
+                src={
+                  member.profileImageUrl! ||
+                  '/images/contents/default-profile.svg'
+                }
+                alt={member.nickname || '사용자'}
+                className="rounded-full"
+              />
+              <div
+                className={`block font-pretendard text-lg font-medium text-black-333236`}
+              >
+                {member.nickname || '사용자'}
+              </div>
+            </div>
             <Button
               backgroundColor="white"
-              className="px-7 text-purple-760DDE"
+              className="px-4 py-2 text-purple-760DDE"
               type="submit"
-              onClick={() => handleRemoveMember(member.userId)}
+              onClick={() => handleRemoveMember(member.id)}
             >
               삭제
             </Button>
           </div>
-          <hr className="bg-gray-EEEEEE"></hr>
+          {index !== memberDataState.members.length - 1 && (
+            <hr className="bg-gray-EEEEEE" />
+          )}
         </div>
       ))}
     </div>
