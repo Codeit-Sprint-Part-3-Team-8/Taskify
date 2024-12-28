@@ -9,7 +9,7 @@ import MyDashboardNavBar from '@/_components/Navbar/MyDashboardNavBar';
 import SideBar from '@/_components/Sidebar/SideBar';
 
 export default function MyPage() {
-  const { user, update } = useAuth();
+  const { user, update } = useAuth(true);
 
   return (
     <>
