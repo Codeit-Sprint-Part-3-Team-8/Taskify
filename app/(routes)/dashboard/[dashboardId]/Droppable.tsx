@@ -5,16 +5,17 @@ import SortableItem from './SortableItem';
 import { CardType } from '@/_types/cards.type';
 import CreateCardButton from './CreateCardButton';
 import Image from 'next/image';
-import { Dispatch, SetStateAction, useState } from 'react';
+import { useState } from 'react';
 import EditColumnModal from '../EditColumnModal';
-import { ItemGroupsType, OnColumnCreatedType } from './Dashboard';
+import { OnColumnCreatedType } from './Dashboard';
 
 interface DroppableProps {
   id: string;
   dashBoardColor: string;
   title: string;
   items: CardType[];
-  onColumnCreated: OnColumnCreatedType;
+  onColumnUpdated: OnColumnCreatedType;
+  onColumnDeleted: ({ id }: { id: number }) => void;
 }
 
 export default function Droppable({
@@ -22,11 +23,11 @@ export default function Droppable({
   dashBoardColor,
   items,
   title,
-  onColumnCreated,
+  onColumnUpdated,
+  onColumnDeleted: onColumnDelete,
 }: DroppableProps) {
   const { setNodeRef } = useDroppable({ id });
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
 
   const handleOpenEditModal = () => {
     setIsEditModalOpen(true);
@@ -34,14 +35,6 @@ export default function Droppable({
 
   const handleCloseEditModal = () => {
     setIsEditModalOpen(false);
-  };
-
-  const handleOpenCreateModal = () => {
-    setIsCreateModalOpen(true);
-  };
-
-  const handleCloseCreateModal = () => {
-    setIsCreateModalOpen(false);
   };
 
   return (
@@ -73,7 +66,7 @@ export default function Droppable({
               />
             </div>
           </div>
-          <CreateCardButton onColumnCreated={onColumnCreated} />
+          <CreateCardButton />
           <ul
             ref={setNodeRef}
             className="scrollbar-hidden grid w-full auto-cols-[90%] grid-flow-col rounded-lg px-3 py-4 mobile:gap-14 mobile:overflow-x-auto tablet:max-h-[200px] tablet:grid-flow-row tablet:gap-4 tablet:overflow-y-auto pc:h-full pc:max-h-full"
@@ -88,6 +81,8 @@ export default function Droppable({
             columnId={Number(id)}
             initialTitle={title}
             onClose={handleCloseEditModal}
+            onColumnUpdated={onColumnUpdated}
+            onColumnDeleted={onColumnDelete}
           />
         )}
       </div>

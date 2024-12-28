@@ -234,9 +234,34 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
       ...prevItemGroups,
       [id]: {
         title: title,
-        cardData: { cursorId: 1, totalCount: 1, cards: [] },
+        cardData: { cursorId: null, totalCount: 1, cards: [] },
       },
     }));
+  };
+
+  const handleColumnUpdated = ({
+    id,
+    title,
+  }: {
+    id: number;
+    title: string;
+  }) => {
+    setItemGroups((prevItemGroups) => ({
+      ...prevItemGroups,
+      [id]: {
+        ...prevItemGroups[id],
+        title: title,
+      },
+    }));
+  };
+
+  const handleColumnDeleted = ({ id }: { id: number }) => {
+    setItemGroups((prevItemGroups) => {
+      const newItemGroups = { ...prevItemGroups };
+      delete newItemGroups[id];
+
+      return newItemGroups;
+    });
   };
 
   return (
@@ -256,7 +281,8 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
               dashBoardColor={dashBoard.color}
               title={itemGroups[itemGroup].title}
               items={itemGroups[itemGroup].cardData.cards || []}
-              onColumnCreated={handleColumnCreated}
+              onColumnUpdated={handleColumnUpdated}
+              onColumnDeleted={handleColumnDeleted}
             />
           ))}
 
