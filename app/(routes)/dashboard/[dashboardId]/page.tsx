@@ -26,7 +26,6 @@ export default function DashBoardPage() {
     const fetchDashBoard = async () => {
       const numericDashboardId = Number(dashboardId);
       try {
-        console.log(dashboardId);
         const data = await getDashboard({ dashboardId: numericDashboardId });
 
         setDashBoard(data);

@@ -11,8 +11,8 @@ export default function CreateColumnButton() {
           <Image
             src="/images/icon/ic-plusbtn-purple.svg"
             alt="카드 생성 버튼"
-            layout="fill"
-            objectFit="contain"
+            fill
+            style={{ objectFit: 'contain' }}
           />
         </div>
       </div>

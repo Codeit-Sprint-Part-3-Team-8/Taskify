@@ -20,7 +20,7 @@ import moveBetweenContainers from './MoveBetweenContainers';
 import { CardListType } from '@/_types/cards.type';
 import { DashboardType } from '@/_types/dashboards.type';
 import { getColumnList } from '@/api/columns.api';
-import { getCardList } from '@/api/cards.api';
+import { getCardList, updateCard } from '@/api/cards.api';
 import CreateColumnButton from './CreateColumnButton';
 
 export type ItemGroupsType = {
@@ -45,7 +45,6 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
     const fetchColumnsAndCards = async (dashboardId: number) => {
       try {
         const columnsData = await getColumnList({ dashboardId: dashboardId });
-        console.log(columnsData);
         const newItemGroups = (
           await Promise.all(
             columnsData.data.map(async (column) => {
@@ -80,10 +79,13 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
     fetchColumnsAndCards(dashBoard.id);
   }, [dashBoard.id]);
 
-  const handleDragStart = ({ active }: DragStartEvent) =>
+  const handleDragStart = ({ active }: DragStartEvent) => {
     setActiveId(active.id);
+  };
 
-  const handleDragCancel = () => setActiveId(null);
+  const handleDragCancel = () => {
+    setActiveId(null);
+  };
 
   const throttledHandleDragOver = useMemo(
     () =>
@@ -91,7 +93,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
         (active: DragOverEvent['active'], over: DragOverEvent['over']) => {
           const overId = over?.id;
 
-          if (!overId) return;
+          if (!overId || active.id === over.id) return;
 
           const activeContainer = active.data.current?.sortable.containerId;
           const overContainer =
@@ -121,7 +123,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
               item: active.id,
             });
 
-            console.log('after move itemGroups: ', itemGroups);
+            // console.log('after move itemGroups: ', itemGroups);
             return data;
           });
         },
@@ -137,63 +139,80 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
     [throttledHandleDragOver],
   );
 
-  const handleDragEnd = ({ active, over }: DragEndEvent) => {
+  const handleDragEnd = async ({ active, over }: DragEndEvent) => {
     if (!over) {
       setActiveId(null);
       return;
     }
 
-    if (active.id !== over.id) {
-      const activeContainer = active.data.current?.sortable.containerId;
-      const overContainer = over.data.current?.sortable.containerId || over.id;
-      const activeIndex = active.data.current?.sortable.index;
-      const overIndex =
-        over.id in itemGroups
-          ? itemGroups[overContainer].cardData.cards.length + 1
-          : over.data.current?.sortable.index;
+    const activeContainer = active.data.current?.sortable.containerId;
+    const overContainer = over.data.current?.sortable.containerId || over.id;
+    const activeIndex = active.data.current?.sortable.index;
+    const overIndex =
+      over.id in itemGroups
+        ? itemGroups[overContainer].cardData.cards.length + 1
+        : over.data.current?.sortable.index;
 
-      if (
-        !activeContainer ||
-        !overContainer ||
-        activeIndex == null ||
-        overIndex == null
-      ) {
-        return;
-      }
-
-      setItemGroups((itemGroups) => {
-        let newItems;
-        if (activeContainer === overContainer) {
-          newItems = {
-            ...itemGroups,
-            [overContainer]: {
-              ...itemGroups[overContainer],
-              cardData: {
-                ...itemGroups[overContainer].cardData,
-                cards: arrayMove(
-                  itemGroups[overContainer].cardData.cards,
-                  activeIndex,
-                  overIndex,
-                ),
-              },
-            },
-          };
-        } else {
-          newItems = moveBetweenContainers({
-            items: itemGroups,
-            activeContainer,
-            activeIndex,
-            overContainer,
-            overIndex,
-            item: active.id,
-          });
-        }
-
-        return newItems;
-      });
+    if (
+      !activeContainer ||
+      !overContainer ||
+      activeIndex == null ||
+      overIndex == null
+    ) {
+      return;
     }
 
-    setActiveId(null);
+    const prevItemGroups = structuredClone(itemGroups);
+
+    setItemGroups((itemGroups) => {
+      let newItems;
+      if (activeContainer === overContainer) {
+        newItems = {
+          ...itemGroups,
+          [overContainer]: {
+            ...itemGroups[overContainer],
+            cardData: {
+              ...itemGroups[overContainer].cardData,
+              cards: arrayMove(
+                itemGroups[overContainer].cardData.cards,
+                activeIndex,
+                overIndex,
+              ),
+            },
+          },
+        };
+      } else {
+        newItems = moveBetweenContainers({
+          items: itemGroups,
+          activeContainer,
+          activeIndex,
+          overContainer,
+          overIndex,
+          item: active.id,
+        });
+      }
+
+      return newItems;
+    });
+
+    try {
+      const { id, assignee, title, description, dueDate, tags, imageUrl } =
+        itemGroups[overContainer].cardData.cards[activeIndex];
+
+      await updateCard({
+        cardId: id,
+        columnId: Number(activeContainer),
+        assigneeUserId: assignee.id,
+        title: title,
+        description: description,
+        dueDate: dueDate,
+        tags: tags,
+        imageUrl: imageUrl,
+      });
+      console.log('updateCard');
+    } catch {
+      setItemGroups(prevItemGroups);
+    }
   };
 
   return (

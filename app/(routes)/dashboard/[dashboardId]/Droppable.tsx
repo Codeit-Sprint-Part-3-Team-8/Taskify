@@ -44,8 +44,8 @@ export default function Droppable({
               <Image
                 src="/images/icon/ic-setting.svg"
                 alt="컬럼 수정 버튼"
-                layout="fill"
-                objectFit="contain"
+                fill
+                style={{ objectFit: 'contain' }}
               />
             </div>
           </div>
