@@ -32,7 +32,7 @@ export default function DashboardList({
   return (
     <div className="p-4 pl-[5.5rem] pt-[5.25rem] tablet:pl-[12.5rem] tablet:pt-[6.875rem] pc:pl-[21.25rem] pc:pt-28">
       <div className="max-w-5xl">
-        <div className="pc:rows-2 grid grid-cols-1 grid-rows-6 gap-4 tablet:grid-cols-2 tablet:grid-rows-3 pc:grid-cols-3">
+        <div className="grid grid-cols-1 grid-rows-6 gap-4 tablet:grid-cols-2 tablet:grid-rows-3 pc:grid-cols-3 pc:grid-rows-2">
           <button
             type="button"
             onClick={onOpenCreateModal}
