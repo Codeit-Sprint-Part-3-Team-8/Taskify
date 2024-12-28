@@ -15,6 +15,14 @@ export default class Validator {
     return this;
   }
 
+  isUrl(message = 'Error form isUrl'): this {
+    const regex = /^http[s]?:\/\/([\S]{3,})/i;
+    if (!regex.test(this.value)) {
+      this.errors.push(message);
+    }
+    return this;
+  }
+
   minLength(min: number, message = 'Error from minLength'): this {
     if (this.value.length < min) {
       this.errors.push(message);
