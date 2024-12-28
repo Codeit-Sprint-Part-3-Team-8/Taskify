@@ -3,7 +3,6 @@
 import { DashboardType } from '@/_types/dashboards.type';
 import Image from 'next/image';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
 
 interface DashboardListProps {
   dashboardList: DashboardType[];
