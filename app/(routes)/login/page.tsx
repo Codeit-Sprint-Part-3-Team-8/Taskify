@@ -8,7 +8,7 @@ import { ValuesType } from './loginType';
 import { DEFAULT_VALIDATIONS, validateSchema } from './validate';
 import { useAuth } from '@/context/AuthContext';
 import Modal from '@/_components/Auth/Modal';
-import { useRouter, useSearchParams } from 'next/navigation';
+import Navigate from '@/_components/Auth/Navigate';
 const DEFAULT_VALUES: ValuesType = {
   email: '',
   password: '',
@@ -60,8 +60,12 @@ export default function LoginPage() {
     validateForm();
   }, [validateForm]);
 
+  if (loading.auth) {
+    return null;
+  }
+
   return (
-    <Suspense fallback={<div>loading</div>}>
+    <Suspense fallback={null}>
       {user ? (
         <Navigate />
       ) : (
@@ -104,17 +108,4 @@ export default function LoginPage() {
       )}
     </Suspense>
   );
-}
-
-function Navigate() {
-  const router = useRouter();
-  const searchParams = useSearchParams();
-  const goto = searchParams.get('goto') || 'mydashboard';
-
-  useEffect(() => {
-    if (typeof window !== undefined && searchParams) {
-      router.push(goto);
-    }
-  });
-  return null;
 }
