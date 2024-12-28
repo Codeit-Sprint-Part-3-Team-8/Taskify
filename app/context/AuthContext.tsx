@@ -87,6 +87,8 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (accessToken) {
       _getUser(undefined);
+    } else {
+      setLoadingAuth(false);
     }
   }, [_getUser, accessToken]);
 
