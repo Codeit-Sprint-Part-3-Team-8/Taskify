@@ -73,6 +73,15 @@ module.exports = {
         '6xl': ['4.75rem', { lineHeight: '6.25rem' }], // 76px
       },
     },
+    animation: {
+      'dot-bounce': 'dot-bounce 1.5s infinite',
+    },
+    keyframes: {
+      'dot-bounce': {
+        '0%, 80%, 100%': { transform: 'scale(0)' },
+        '40%': { transform: 'scale(1)' },
+      },
+    },
   },
   plugins: [],
 };
