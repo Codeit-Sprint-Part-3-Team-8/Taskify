@@ -8,29 +8,21 @@ import { ValuesType } from './loginType';
 import { DEFAULT_VALIDATIONS, validateSchema } from './validate';
 import { useAuth } from '@/context/AuthContext';
 import Modal from '@/_components/Auth/Modal';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 const DEFAULT_VALUES: ValuesType = {
   email: '',
   password: '',
 };
 
-/**
- * @todo
- * loadingUser 사용해서 JWT 변조 에러처리
- */
 export default function LoginPage() {
   const [values, setValues] = useState(DEFAULT_VALUES);
   const [validations, setValidations] = useState(DEFAULT_VALIDATIONS);
   const [isFormValid, setIsFormValid] = useState(false);
   const [showModal, setShowModal] = useState(false);
-  const {
-    user,
-    login,
-    loading,
-    errorMessage,
-  } = useAuth();
+  const { user, login, loading, errorMessage } = useAuth();
   const router = useRouter();
+  const goto = useSearchParams().get('goto') || 'mydashboard';
 
   const handleCloseModal = () => setShowModal(false);
 
@@ -71,12 +63,10 @@ export default function LoginPage() {
     validateForm();
   }, [validateForm]);
 
-  useEffect(() => {
-    if (user) {
-      setValues(DEFAULT_VALUES);
-      router.push('/mydashboard');
-    }
-  }, [user, router]);
+  if (user) {
+    router.push(goto);
+    return null;
+  }
 
   return (
     <>

@@ -6,11 +6,12 @@ import { DEFAULT_VALIDATIONS, validateSchema } from './validate';
 import { ValuesType } from './signupType';
 import { createUser } from '@/api/users.api';
 import useAsync from '@/_hooks/useAsync';
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 import InputField from '@/_components/Auth/InputField';
 import Modal from '@/_components/Auth/Modal';
 import AuthHeader from '@/_components/Auth/AuthHeader';
 import AuthFooter from '@/_components/Auth/AuthFooter';
+import { useAuth } from '@/context/AuthContext';
 
 const DEFAULT_VALUES: ValuesType = {
   email: '',
@@ -32,7 +33,9 @@ export default function SignUp() {
     error,
     errorMessage,
   } = useAsync(createUser);
+  const { user } = useAuth();
   const router = useRouter();
+  const goto = useSearchParams().get('goto') || 'mydashboard';
 
   const handleClickClose = () => setShowError(false);
   const handleClickSuccess = () => router.push('/login');
@@ -82,6 +85,11 @@ export default function SignUp() {
   useEffect(() => {
     validateForm();
   }, [validateForm]);
+
+  if (user) {
+    router.push(goto);
+    return null;
+  }
 
   return (
     <>
