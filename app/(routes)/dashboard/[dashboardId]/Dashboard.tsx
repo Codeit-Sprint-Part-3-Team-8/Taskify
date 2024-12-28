@@ -235,7 +235,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
             />
           ))}
 
-          <CreateColumnButton />
+          <CreateColumnButton dashboardId={dashBoard.id} />
         </div>
         <DragOverlay>
           {activeId ? <Item id={activeId} dragOverlay /> : null}
