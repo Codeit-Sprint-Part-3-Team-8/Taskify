@@ -8,16 +8,6 @@ import useAsync from '@/_hooks/useAsync';
 import { getDashboardList } from '@/api/dashboards.api';
 import { useParams } from 'next/navigation';
 
-interface DashBoard {
-  id: number;
-  title: string;
-  color: string;
-  userId: number;
-  createdAt: string;
-  updatedAt: string;
-  createdByMe: boolean;
-}
-
 const SIZE = 10;
 
 export default function SideBar() {
@@ -26,22 +16,15 @@ export default function SideBar() {
   const params = useParams();
   const selectedDashboardId = Number(params.dashboardId);
 
-  const {
-    data,
-    excute: fetchDashboards,
-    loading,
-  } = useAsync(
-    async ({ page }: { page: number }) =>
-      await getDashboardList({
-        navigationMethod: 'pagination',
-        page,
-        size: SIZE,
-      }),
-  );
+  const { data, excute: fetchDashboards, loading } = useAsync(getDashboardList);
 
   useEffect(() => {
-    fetchDashboards({ page });
-  }, [page]);
+    fetchDashboards({
+      navigationMethod: 'pagination',
+      page,
+      size: SIZE,
+    });
+  }, [page, fetchDashboards]);
 
   const handleOpenCreateModal = () => {
     setIsModalOpen(true);
@@ -103,7 +86,7 @@ export default function SideBar() {
           </button>
           <div className="flex h-[30rem] w-full flex-col gap-3.5 tablet:gap-0.5 pc:gap-2">
             {!loading && data?.dashboards?.length ? (
-              data.dashboards.map((dashboard: DashBoard) => (
+              data.dashboards.map((dashboard) => (
                 <Link
                   href={`/dashboard/${dashboard.id}`}
                   key={dashboard.id}
