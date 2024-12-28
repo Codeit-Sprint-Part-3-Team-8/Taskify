@@ -98,7 +98,7 @@ export default function SideBar() {
               alt="Plusbtn"
             />
           </button>
-          <div className="flex h-[30rem] w-full flex-col gap-3.5 tablet:gap-0.5 pc:gap-2">
+          <div className="flex w-full flex-col gap-3.5 tablet:gap-0.5 pc:gap-2">
             {!loading && data?.dashboards?.length ? (
               data.dashboards.map((dashboard: DashBoard) => (
                 <Link
@@ -113,7 +113,7 @@ export default function SideBar() {
                   }}
                 >
                   <span
-                    className="sh h-2 w-2 shrink-0 rounded-full"
+                    className="h-2 w-2 shrink-0 rounded-full"
                     style={{ backgroundColor: dashboard.color }}
                   />
                   <div className="hidden w-full text-gray-787486 tablet:flex tablet:gap-1 tablet:text-base pc:gap-1.5">
