@@ -22,14 +22,6 @@ export default function DashboardList({
   onOpenCreateModal,
   isLoading,
 }: DashboardListProps) {
-  const [showSkeleton, setShowSkeleton] = useState(true);
-
-  useEffect(() => {
-    if (!isLoading) {
-      setShowSkeleton(false);
-    }
-  }, [isLoading]);
-
   const handleNextPage = () => {
     if (currentPage < totalPages) onPageChange(currentPage + 1);
   };
@@ -57,7 +49,7 @@ export default function DashboardList({
               height={22}
             />
           </button>
-          {showSkeleton &&
+          {isLoading &&
             Array.from({ length: 5 }).map((_, index) => (
               <div
                 key={index}
@@ -70,7 +62,7 @@ export default function DashboardList({
               </div>
             ))}
 
-          {!showSkeleton &&
+          {!isLoading &&
             dashboardList.map((dashboard) => (
               <Link
                 href={`/dashboard/${dashboard.id}`}
