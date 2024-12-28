@@ -55,7 +55,7 @@ export default function Droppable({
             className="scrollbar-hidden grid w-full auto-cols-[90%] grid-flow-col rounded-lg px-3 py-4 mobile:gap-14 mobile:overflow-x-auto tablet:max-h-[200px] tablet:grid-flow-row tablet:gap-4 tablet:overflow-y-auto pc:h-full pc:max-h-full"
           >
             {items.map((item) => (
-              <SortableItem key={item.id} id={item.id} />
+              <SortableItem key={item.id} item={item} />
             ))}
           </ul>
         </div>

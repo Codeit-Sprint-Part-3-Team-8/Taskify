@@ -1,11 +1,11 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Item } from './Item';
-import { UniqueIdentifier } from '@dnd-kit/core';
+import { CardType } from '@/_types/cards.type';
 
-export default function SortableItem({ id }: { id: UniqueIdentifier }) {
+export default function SortableItem({ item }: { item: CardType }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useSortable({ id });
+    useSortable({ id: item.id });
 
   return (
     <li
@@ -17,7 +17,7 @@ export default function SortableItem({ id }: { id: UniqueIdentifier }) {
       {...attributes}
       {...listeners}
     >
-      <Item id={id} />
+      <Item item={item} />
     </li>
   );
 }
