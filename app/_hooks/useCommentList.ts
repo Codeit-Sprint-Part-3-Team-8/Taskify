@@ -25,16 +25,17 @@ export default function useCommentList(
 
     setIsSubmitting(true);
     try {
-      await createComment({
+      const newComment = await createComment({
         content,
         cardId,
         columnId,
         dashboardId,
       });
-      // setCommentsResponse((prev) => ({
-      //   ...prev,
-      //   comments: [addedComment, ...(prev?.comments || [])],
-      // }));
+      setCommentsResponse((prev) => ({
+        ...prev,
+        comments: [newComment, ...(prev?.comments || [])],
+        cursorId: prev?.cursorId ?? null,
+      }));
     } catch (error) {
       console.error('댓글 추가 에러:', error);
     } finally {
@@ -62,11 +63,16 @@ export default function useCommentList(
   const removeComment = async (commentId: number) => {
     try {
       await deleteComment({ commentId });
-      // setCommentsResponse((prev) => ({
-      //   ...prev,
-      //   comments:
-      //     prev?.comments.filter((comment) => comment.id !== commentId) || [],
-      // }));
+      setCommentsResponse((prev) =>
+        prev
+          ? {
+              comments: prev.comments.filter(
+                (comment) => comment.id !== commentId,
+              ),
+              cursorId: prev.cursorId,
+            }
+          : null,
+      );
     } catch (error) {
       console.error('댓글 삭제 에러:', error);
     }
@@ -83,12 +89,12 @@ export default function useCommentList(
       setCommentsResponse((prev) =>
         prev
           ? {
-              ...prev,
               comments: prev.comments.map((comment) =>
                 comment.id === commentId
                   ? { ...comment, content: updatedComment.content }
                   : comment,
               ),
+              cursorId: prev.cursorId,
             }
           : null,
       );
