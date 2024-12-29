@@ -21,6 +21,7 @@ import { DashboardType } from '@/_types/dashboards.type';
 import { getColumnList } from '@/api/columns.api';
 import { getCardList, updateCard } from '@/api/cards.api';
 import CreateColumnButton from './CreateColumnButton';
+import KanbanLoading from './DashboardLoading';
 
 export type ItemGroupsType = {
   [columnId: string]: { title: string; cardData: CardListType };
@@ -38,6 +39,7 @@ export type OnColumnHandlerType = ({
 
 export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
   const [itemGroups, setItemGroups] = useState<ItemGroupsType>({});
+  const [isLoading, setIsLoading] = useState(true);
   const [activeCard, setActiveCard] = useState<CardType | null | undefined>(
     null,
   );
@@ -82,6 +84,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
           )
         ).reduce((acc: ItemGroupsType, group) => ({ ...acc, ...group }), {});
         setItemGroups(newItemGroups);
+        setIsLoading(false);
       } catch (error) {
         console.error('Error fetching columns or cards:', error);
       }
@@ -269,24 +272,30 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
         onDragOver={handleDragOver}
         onDragEnd={handleDragEnd}
       >
-        <div className="mt-[60px] flex w-full mobile:flex-col tablet:mt-[70px] pc:flex-row pc:justify-between pc:divide-x pc:divide-gray-200 pc:pr-[184px]">
-          {Object.keys(itemGroups).map((itemGroup) => (
-            <Droppable
-              key={itemGroup}
-              id={itemGroup}
-              dashBoardColor={dashBoard.color}
-              title={itemGroups[itemGroup].title}
-              items={itemGroups[itemGroup].cardData.cards || []}
-              onColumnUpdated={handleColumnUpdated}
-              onColumnDeleted={handleColumnDeleted}
-            />
-          ))}
+        {isLoading ? (
+          <div className="flex h-[400px] w-full items-center justify-center bg-gray-50">
+            <KanbanLoading />
+          </div>
+        ) : (
+          <div className="mt-[60px] flex w-full mobile:flex-col tablet:mt-[70px] pc:flex-row pc:justify-between pc:divide-x pc:divide-gray-200 pc:pr-[184px]">
+            {Object.keys(itemGroups).map((itemGroup) => (
+              <Droppable
+                key={itemGroup}
+                id={itemGroup}
+                dashBoardColor={dashBoard.color}
+                title={itemGroups[itemGroup].title}
+                items={itemGroups[itemGroup].cardData.cards || []}
+                onColumnUpdated={handleColumnUpdated}
+                onColumnDeleted={handleColumnDeleted}
+              />
+            ))}
 
-          <CreateColumnButton
-            dashboardId={dashBoard.id}
-            onColumnCreated={handleColumnCreated}
-          />
-        </div>
+            <CreateColumnButton
+              dashboardId={dashBoard.id}
+              onColumnCreated={handleColumnCreated}
+            />
+          </div>
+        )}
         <DragOverlay>
           {activeCard ? <Item item={activeCard} dragOverlay /> : null}
         </DragOverlay>
