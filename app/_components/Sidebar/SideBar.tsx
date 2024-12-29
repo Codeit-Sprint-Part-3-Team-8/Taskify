@@ -16,7 +16,6 @@ export default function SideBar() {
   const [page, setPage] = useState(1);
   const params = useParams();
   const selectedDashboardId = Number(params.dashboardId);
-  const [showSkeleton, setShowSkeleton] = useState<boolean>(true);
 
   const { data, excute: fetchDashboards, loading } = useAsync(getDashboardList);
 
@@ -27,12 +26,6 @@ export default function SideBar() {
       size: SIZE,
     });
   }, [page, fetchDashboards]);
-
-  useEffect(() => {
-    if (!loading) {
-      setShowSkeleton(false);
-    }
-  }, [loading]);
 
   const handleOpenCreateModal = () => {
     setIsModalOpen(true);
@@ -47,14 +40,12 @@ export default function SideBar() {
   const handleNextPage = () => {
     if (page < totalPages) {
       setPage((prevPage) => prevPage + 1);
-      setShowSkeleton(true);
     }
   };
 
   const handlePreviousPage = () => {
     if (page > 1) {
       setPage((prevPage) => prevPage - 1);
-      setShowSkeleton(true);
     }
   };
 
@@ -128,7 +119,7 @@ export default function SideBar() {
             ) : (
               <div></div>
             )}
-            {showSkeleton && <SidebarSkeleton />}
+            {loading && <SidebarSkeleton />}
           </div>
         </div>
         <div className="hidden tablet:block">

@@ -10,8 +10,8 @@ export default function SidebarSkeleton() {
         >
           <span className="h-2 w-2 shrink-0 rounded-full bg-gray-300" />
           <div className="hidden w-full tablet:flex tablet:gap-1 tablet:text-base pc:gap-1.5">
-            <div className="h-6 w-full flex-1 rounded bg-gray-300"></div>
-            <div className="h-6 w-4 rounded bg-gray-300"></div>
+            <div className="h-5 w-full flex-1 rounded bg-gray-300"></div>
+            <div className="h-5 w-4 rounded bg-gray-300"></div>
           </div>
         </div>
       ))}
