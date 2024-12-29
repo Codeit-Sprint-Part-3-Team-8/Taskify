@@ -11,6 +11,7 @@ import Profile from './Profile';
 import useAsync from '@/_hooks/useAsync';
 import { useParams } from 'next/navigation';
 import { getMemberList } from '@/api/member.api';
+import InviteModal from '@/(routes)/dashboard/[dashboardId]/edit/InviteModal';
 
 enum ScreenSize {
   LARGE = 1280,
@@ -20,23 +21,20 @@ enum ScreenSize {
 
 export default function DashboardNavBar() {
   const [visibleMembers, setVisibleMembers] = useState(2);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const { user } = useAuth();
   const params = useParams();
   const id = Number(params.dashboardId);
 
-  const { data: dashboardsData, excute: fetchDashboards } = useAsync(
-    async ({ id }: { id: number }) => await getDashboard(id),
-  );
+  const { data: dashboardsData, excute: fetchDashboards } =
+    useAsync(getDashboard);
 
-  const { data: membersData, excute: fetchMembers } = useAsync(
-    async ({ dashboardId }: { dashboardId: number }) =>
-      getMemberList({ dashboardId, page: 1, size: 20 }),
-  );
+  const { data: membersData, excute: fetchMembers } = useAsync(getMemberList);
 
   useEffect(() => {
-    fetchMembers({ dashboardId: id });
-    fetchDashboards({ id });
-  }, [id]);
+    fetchMembers({ dashboardId: id, page: 1, size: 20 });
+    fetchDashboards(id);
+  }, [id, fetchMembers, fetchDashboards]);
 
   useEffect(() => {
     const getVisibleMembers = (): number => {
@@ -60,10 +58,18 @@ export default function DashboardNavBar() {
     };
   }, []);
 
+  const handleOpenInviteModal = () => {
+    setIsModalOpen(true);
+  };
+
+  const handleCloseInviteModal = () => {
+    setIsModalOpen(false);
+  };
+
   const members = membersData?.members || []; //옵셔널 체이닝과 기본값(|| [])을 활용해 에러 방지
 
   return (
-    <div className="fixed top-0 z-10 flex h-[3.75rem] w-full items-center justify-end border-b border-gray-D9D9D9 pl-[5.25rem] pr-2 tablet:h-[4.375rem] tablet:pl-[12.5rem] tablet:pr-8 pc:justify-between pc:pl-80 pc:pr-20">
+    <div className="fixed top-0 z-10 flex h-[3.75rem] w-full items-center justify-end border-b border-gray-D9D9D9 bg-white pl-[5.25rem] pr-2 tablet:h-[4.375rem] tablet:pl-[12.5rem] tablet:pr-8 pc:justify-between pc:pl-80 pc:pr-20">
       <div className="hidden w-1/3 gap-2 font-pretendard text-lg font-bold text-black-333236 pc:flex pc:text-xl">
         <div className="truncate">{dashboardsData?.title}</div>
         {dashboardsData?.createdByMe && (
@@ -91,7 +97,10 @@ export default function DashboardNavBar() {
             />
             관리
           </Link>
-          <button className="flex items-center justify-center rounded-md border border-gray-D9D9D9 px-3 py-1.5 font-pretendard text-md font-medium tablet:gap-2 tablet:rounded-lg tablet:py-2 pc:px-4 pc:py-2.5 pc:text-lg">
+          <button
+            onClick={handleOpenInviteModal}
+            className="flex items-center justify-center rounded-md border border-gray-D9D9D9 px-3 py-1.5 font-pretendard text-md font-medium tablet:gap-2 tablet:rounded-lg tablet:py-2 pc:px-4 pc:py-2.5 pc:text-lg"
+          >
             <Image
               width={20}
               height={20}
@@ -135,6 +144,9 @@ export default function DashboardNavBar() {
           </DropdownMenu>
         </div>
       </div>
+      {isModalOpen && (
+        <InviteModal dashboardId={id} onClose={handleCloseInviteModal} />
+      )}
     </div>
   );
 }

@@ -5,72 +5,115 @@ import { LoginUserParams } from '@/_types/auth.type';
 import { UserType } from '@/_types/users.type';
 import { loginUser } from '@/api/auth.api';
 import { getUser } from '@/api/users.api';
-import { createContext, useContext, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import {
+  createContext,
+  useCallback,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
 
-/**
- * @todo 회원정보 수정 만들어야함
- */
-
-const AuthContext = createContext<{
+interface AuthContextType {
   user: UserType | null;
-  loadingLogin: boolean;
-  loadingUser: boolean;
+  loading: {
+    auth: boolean;
+    login: boolean;
+    update: boolean;
+  };
+  errorMessage: {
+    login: string | null;
+    update: string | null;
+  };
   login: ({ email, password }: LoginUserParams) => void;
   logout: () => void;
-  loginErrorMessage: string | null;
-}>({
-  user: null,
-  loadingLogin: false,
-  loadingUser: false,
-  login: () => {},
-  logout: () => {},
-  loginErrorMessage: null,
-});
+  update: () => void;
+}
+
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [accessToken, setAccessToken] = useState<string | null>(null);
+  const [loadingAuth, setLoadingAuth] = useState(true);
   const key = process.env.NEXT_PUBLIC_ACCESS_TOKEN_KEY || null;
   const {
-    excute: getUserAsync,
+    excute: _getUser,
     data: userData,
-    loading: loadingUser,
+    loading: loadingUpdate,
+    errorMessage: updateErrorMessage,
     clear: clearUser,
   } = useAsync(getUser);
   const {
-    excute: loginUserAsync,
+    excute: _loginUser,
     data: loginData,
     loading: loadingLogin,
     errorMessage: loginErrorMessage,
   } = useAsync(loginUser);
 
-  async function login({ email, password }: LoginUserParams) {
-    await loginUserAsync({ email, password });
-  }
+  const login = useCallback(
+    async ({ email, password }: LoginUserParams) => {
+      await _loginUser({ email, password });
+    },
+    [_loginUser],
+  );
 
-  function logout() {
+  const logout = useCallback(() => {
     if (!key) return;
     localStorage.removeItem(key);
+    setAccessToken(null);
     clearUser();
-  }
+  }, [key, clearUser]);
+
+  const update = useCallback(() => {
+    _getUser(undefined);
+  }, [_getUser]);
 
   useEffect(() => {
-    if (!key) return;
-    if (loginData) {
-      localStorage.setItem(key, loginData.accessToken);
+    if (!key) {
+      setAccessToken(null);
+      throw new Error(`Can't load Key`);
     }
-    if (localStorage.getItem(key)) {
-      getUserAsync(undefined);
+    setAccessToken(localStorage.getItem(key) || null);
+  }, [key]);
+
+  useEffect(() => {
+    if (key && loginData) {
+      const next = loginData.accessToken || null;
+      setAccessToken(next);
+      localStorage.setItem(key, next);
     }
-  }, [getUserAsync, loginData, key]);
+  }, [key, loginData]);
+
+  useEffect(() => {
+    if (accessToken) {
+      _getUser(undefined);
+    } else {
+      setLoadingAuth(false);
+    }
+  }, [_getUser, accessToken]);
+
+  useEffect(() => {
+    if (userData || updateErrorMessage) {
+      setLoadingAuth(false);
+    }
+  }, [userData, updateErrorMessage]);
 
   return (
     <AuthContext.Provider
       value={{
         user: userData,
-        loadingUser,
-        loadingLogin,
+        loading: {
+          auth: loadingAuth,
+          login: loadingLogin,
+          update: loadingUpdate,
+        },
+        errorMessage: {
+          login: loginErrorMessage,
+          update: updateErrorMessage,
+        },
         login,
         logout,
-        loginErrorMessage,
+        update,
       }}
     >
       {children}
@@ -78,19 +121,30 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
   );
 }
 
-function useAuth() {
+function useAuth(required: boolean = false) {
   const context = useContext(AuthContext);
-  // const router = useRouter();
+  const router = useRouter();
 
   if (!context) {
     throw new Error('must useAuth in AuthProvider');
   }
 
-  // useEffect(() => {
-  //   if (required && !context.user && !context.loadingUser) {
-  //     router.push('/login');
-  //   }
-  // }, [required, context.user, context.loadingUser, router]);
+  useEffect(() => {
+    if (
+      required &&
+      !context.user &&
+      !context.loading.auth &&
+      !context.loading.login
+    ) {
+      router.push(`/login?goto=${location.pathname}`);
+    }
+  }, [
+    required,
+    context.user,
+    context.loading.auth,
+    context.loading.login,
+    router,
+  ]);
 
   return context;
 }
