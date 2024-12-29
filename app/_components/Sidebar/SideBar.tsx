@@ -7,6 +7,7 @@ import CreateDashboardModal from '@/(routes)/mydashboard/CreateDashboardModal';
 import useAsync from '@/_hooks/useAsync';
 import { getDashboardList } from '@/api/dashboards.api';
 import { useParams } from 'next/navigation';
+import SidebarSkeleton from './SideBarSkeleton';
 
 const SIZE = 10;
 
@@ -72,7 +73,7 @@ export default function SideBar() {
         <div className='gap-4" flex w-full flex-col gap-4'>
           <button
             onClick={handleOpenCreateModal}
-            className="flex w-full items-center justify-center tablet:justify-between"
+            className="flex w-full cursor-pointer items-center justify-center tablet:justify-between"
           >
             <div className="hidden text-xs text-gray-787486 tablet:block">
               Dash Boards
@@ -118,14 +119,14 @@ export default function SideBar() {
             ) : (
               <div></div>
             )}
-            {loading && <div></div>}
+            {loading && <SidebarSkeleton />}
           </div>
         </div>
         <div className="hidden tablet:block">
           <button
             onClick={handlePreviousPage}
             disabled={page === 1}
-            className="rounded-md border border-gray-D9D9D9 px-2.5 py-2.5 tablet:px-3 tablet:py-3"
+            className="cursor-pointer rounded-md border border-gray-D9D9D9 px-2.5 py-2.5 transition-all duration-150 hover:bg-[#B599FF] active:scale-90 active:bg-violet-5534DA tablet:px-3 tablet:py-3"
           >
             <Image
               width={16}
@@ -137,7 +138,7 @@ export default function SideBar() {
           <button
             onClick={handleNextPage}
             disabled={data?.dashboards.length !== SIZE}
-            className="rounded-md border border-gray-D9D9D9 px-2.5 py-2.5 tablet:px-3 tablet:py-3"
+            className="cursor-pointer rounded-md border border-gray-D9D9D9 px-2.5 py-2.5 transition-all duration-150 hover:bg-[#B599FF] active:scale-90 active:bg-violet-5534DA tablet:px-3 tablet:py-3"
           >
             <Image
               width={16}
