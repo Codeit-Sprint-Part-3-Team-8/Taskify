@@ -3,16 +3,19 @@ import Button from '@/_components/Button/Button';
 import ModalInput from '@/_components/Modals/ModalInput';
 import { createColumn } from '@/api/columns.api';
 import { useState } from 'react';
+import { OnColumnHandlerType } from './[dashboardId]/Dashboard';
 
 const BUTTON_SIZE =
   'tablet:w-[16rem] tablet:h-[3.375rem] mobile:w-[9rem] mobile:h-[3.375rem]';
 
 const CreateColumnModal = ({
   onClose,
+  onColumnCreated,
   dashboardId,
 }: {
   onClose: () => Promise<void> | void;
   dashboardId: number;
+  onColumnCreated: OnColumnHandlerType;
 }) => {
   const [newColumnName, setNewColumnName] = useState('');
   const [isLoading, setIsLoading] = useState(false);
@@ -35,10 +38,12 @@ const CreateColumnModal = ({
     setIsLoading(true);
 
     try {
-      await createColumn({
+      const response = await createColumn({
         title: newColumnName,
         dashboardId: dashboardId,
       });
+
+      onColumnCreated({ id: response.id, title: response.title });
     } catch (error) {
       alert('컬럼 생성에 실패했습니다.');
       console.error(error);

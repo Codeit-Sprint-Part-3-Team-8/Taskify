@@ -5,12 +5,17 @@ import SortableItem from './SortableItem';
 import { CardType } from '@/_types/cards.type';
 import CreateCardButton from './CreateCardButton';
 import Image from 'next/image';
+import { useState } from 'react';
+import EditColumnModal from '../EditColumnModal';
+import { OnColumnHandlerType } from './Dashboard';
 
 interface DroppableProps {
   id: string;
   dashBoardColor: string;
   title: string;
   items: CardType[];
+  onColumnUpdated: OnColumnHandlerType;
+  onColumnDeleted: OnColumnHandlerType;
 }
 
 export default function Droppable({
@@ -18,8 +23,19 @@ export default function Droppable({
   dashBoardColor,
   items,
   title,
+  onColumnUpdated,
+  onColumnDeleted: onColumnDelete,
 }: DroppableProps) {
   const { setNodeRef } = useDroppable({ id });
+  const [isEditModalOpen, setIsEditModalOpen] = useState(false);
+
+  const handleOpenEditModal = () => {
+    setIsEditModalOpen(true);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalOpen(false);
+  };
 
   return (
     <SortableContext id={id} items={items} strategy={rectSortingStrategy}>
@@ -45,7 +61,8 @@ export default function Droppable({
                 src="/images/icon/ic-setting.svg"
                 alt="컬럼 수정 버튼"
                 fill
-                style={{ objectFit: 'contain' }}
+                style={{ objectFit: 'contain', cursor: 'pointer' }}
+                onClick={handleOpenEditModal}
               />
             </div>
           </div>
@@ -59,6 +76,15 @@ export default function Droppable({
             ))}
           </ul>
         </div>
+        {isEditModalOpen && (
+          <EditColumnModal
+            columnId={Number(id)}
+            initialTitle={title}
+            onClose={handleCloseEditModal}
+            onColumnUpdated={onColumnUpdated}
+            onColumnDeleted={onColumnDelete}
+          />
+        )}
       </div>
     </SortableContext>
   );
