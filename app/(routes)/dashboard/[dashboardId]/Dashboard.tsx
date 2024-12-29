@@ -68,11 +68,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
                 return {
                   [column.id]: { title: column.title, cardData: response },
                 };
-              } catch (error) {
-                console.error(
-                  `Error fetching cards for column: ${column.title}`,
-                  error,
-                );
+              } catch {
                 return {
                   [column.id]: {
                     title: column.title,
@@ -85,8 +81,8 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
         ).reduce((acc: ItemGroupsType, group) => ({ ...acc, ...group }), {});
         setItemGroups(newItemGroups);
         setIsLoading(false);
-      } catch (error) {
-        console.error('Error fetching columns or cards:', error);
+      } catch {
+        alert('대쉬보드 데이터를 불러오는 데 실패했습니다. 다시 시도해주세요.');
       }
     };
 
@@ -142,7 +138,6 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
               item: active.id,
             });
 
-            // console.log('after move itemGroups: ', itemGroups);
             return data;
           });
         },
@@ -228,7 +223,6 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
         tags: tags,
         imageUrl: imageUrl,
       });
-      console.log('updateCard');
     } catch {
       setItemGroups(prevItemGroups);
     }

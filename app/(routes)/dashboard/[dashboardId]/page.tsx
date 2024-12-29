@@ -29,8 +29,8 @@ export default function DashBoardPage() {
         const data = await getDashboard({ dashboardId: numericDashboardId });
 
         setDashBoard(data);
-      } catch (error) {
-        console.log('ERROR fetching DashBoard', error);
+      } catch {
+        alert('대쉬보드를 불러오는 데 실패했습니다. 다시 시도해주세요.');
       }
     };
 

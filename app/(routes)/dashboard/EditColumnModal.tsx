@@ -45,9 +45,8 @@ const EditColumnModal = ({
     try {
       await deleteColumn({ columnId });
       onColumnDeleted({ id: columnId });
-    } catch (error) {
+    } catch {
       alert('컬럼 삭제에 실패했습니다.');
-      console.error(error);
     } finally {
       onClose();
       setIsLoading(false);
@@ -70,9 +69,8 @@ const EditColumnModal = ({
 
       onColumnUpdated({ id: columnId, title: editedColumnName });
       onClose();
-    } catch (error) {
+    } catch {
       alert('컬럼 수정에 실패했습니다.');
-      console.error(error);
     } finally {
       setIsLoading(false);
     }

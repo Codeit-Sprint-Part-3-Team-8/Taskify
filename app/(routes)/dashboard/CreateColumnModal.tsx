@@ -44,9 +44,8 @@ const CreateColumnModal = ({
       });
 
       onColumnCreated({ id: response.id, title: response.title });
-    } catch (error) {
+    } catch {
       alert('컬럼 생성에 실패했습니다.');
-      console.error(error);
     } finally {
       handleClosingModal();
       setIsLoading(false);
