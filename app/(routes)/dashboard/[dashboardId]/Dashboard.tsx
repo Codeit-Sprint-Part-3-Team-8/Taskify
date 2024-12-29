@@ -26,6 +26,16 @@ export type ItemGroupsType = {
   [columnId: string]: { title: string; cardData: CardListType };
 };
 
+export type OnColumnHandlerParams = {
+  id: number;
+  title?: string;
+};
+
+export type OnColumnHandlerType = ({
+  id,
+  title,
+}: OnColumnHandlerParams) => void;
+
 export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
   const [itemGroups, setItemGroups] = useState<ItemGroupsType>({});
   const [activeCard, setActiveCard] = useState<CardType | null | undefined>(
@@ -221,6 +231,35 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
     }
   };
 
+  const handleColumnCreated = ({ id, title }: OnColumnHandlerParams) => {
+    setItemGroups((prevItemGroups) => ({
+      ...prevItemGroups,
+      [id]: {
+        title: title,
+        cardData: { cursorId: null, totalCount: 1, cards: [] },
+      },
+    }));
+  };
+
+  const handleColumnUpdated = ({ id, title }: OnColumnHandlerParams) => {
+    setItemGroups((prevItemGroups) => ({
+      ...prevItemGroups,
+      [id]: {
+        ...prevItemGroups[id],
+        title: title,
+      },
+    }));
+  };
+
+  const handleColumnDeleted = ({ id }: { id: number }) => {
+    setItemGroups((prevItemGroups) => {
+      const newItemGroups = { ...prevItemGroups };
+      delete newItemGroups[id];
+
+      return newItemGroups;
+    });
+  };
+
   return (
     <div className="sidebar-right-content">
       <DndContext
@@ -238,10 +277,15 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
               dashBoardColor={dashBoard.color}
               title={itemGroups[itemGroup].title}
               items={itemGroups[itemGroup].cardData.cards || []}
+              onColumnUpdated={handleColumnUpdated}
+              onColumnDeleted={handleColumnDeleted}
             />
           ))}
 
-          <CreateColumnButton />
+          <CreateColumnButton
+            dashboardId={dashBoard.id}
+            onColumnCreated={handleColumnCreated}
+          />
         </div>
         <DragOverlay>
           {activeCard ? <Item item={activeCard} dragOverlay /> : null}
