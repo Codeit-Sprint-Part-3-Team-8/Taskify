@@ -23,6 +23,7 @@ import { getCardList, updateCard } from '@/api/cards.api';
 import CreateColumnButton from './CreateColumnButton';
 import KanbanLoading from './DashboardLoading';
 import TodoCardModal from './TodoCardModal';
+import EditTodoModal from './EditTodoModal';
 
 export type ItemGroupsType = {
   [columnId: string]: { title: string; cardData: CardListType };
@@ -46,6 +47,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
   >(null);
   const [selectedCard, setSelecedCard] = useState<CardType | null>(null);
   const [isCardModalVisible, setIsCardModalVisible] = useState(false);
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
 
   const sensors = useSensors(
     useSensor(MouseSensor, {
@@ -275,9 +277,18 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
 
   const handleCloseCardModal = () => {
     setIsCardModalVisible(false);
-    setSelecedCard(null);
+    // setSelecedCard(null);
   };
 
+  const handleCloseEditModal = () => {
+    setIsEditModalVisible(false);
+  };
+
+  useEffect(() => {
+    console.log(111);
+    console.log('selected', selectedCard);
+    console.log('isEdit', isEditModalVisible);
+  }, [isEditModalVisible, selectedCard]);
   return (
     <div className="sidebar-right-content">
       <DndContext
@@ -325,8 +336,21 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
             columnTitle={selectedCard.title}
             dashboardId={dashBoard.id}
             onClose={handleCloseCardModal}
+            onEditClick={() => setIsEditModalVisible(true)}
           />
         </>
+      )}
+
+      {isEditModalVisible && selectedCard && (
+        <EditTodoModal
+          columnTitle={itemGroups[selectedCard.columnId].title}
+          card={selectedCard}
+          columns={Object.entries(itemGroups).map(([columnId, { title }]) => ({
+            columnId: Number(columnId),
+            columnTitle: title,
+          }))}
+          onClose={handleCloseEditModal}
+        />
       )}
     </div>
   );

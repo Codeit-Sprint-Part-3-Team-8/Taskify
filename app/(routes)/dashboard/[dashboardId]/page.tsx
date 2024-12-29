@@ -39,7 +39,7 @@ export default function DashBoardPage() {
 
   return (
     <main>
-      <NavBar type="mydashboard" />
+      <NavBar type="dashboard" />
       <SideBar />
       <DashBoard dashBoard={dashBoard} />
     </main>
