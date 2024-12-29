@@ -6,7 +6,7 @@ import Image from 'next/image';
 import { deleteCard, getCard } from '@/api/cards.api';
 import Dropdown from '@/_components/Dropdown/Dropdown';
 import useCommentList from '@/_hooks/useCommentList';
-import CommentList from '@/_components/Modals/Dashboard/TodoCardModal/CommentList';
+import CommentList from '@/_components/Modals/DashboardModal/CommentList';
 import useIntersectionObserver from '@/_hooks/useIntersectionObserver';
 import { CardType } from '@/_types/cards.type';
 import UserProfile from '@/_components/UserProfile/UserProfile';

@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { createCard } from '@/api/cards.api';
 import { Member } from '@/api/types';
-import { TodoFormContent } from '@/_components/Modals/Dashboard/TodoFormContent';
+import { TodoFormContent } from '@/_components/Modals/DashboardModal/TodoFormContent';
 import GenericModal from '@/_components/Modals/GenericModal';
-import { TodoFormFooter } from '@/_components/Modals/Dashboard/TodoFormFooter';
+import { TodoFormFooter } from '@/_components/Modals/DashboardModal/TodoFormFooter';
 import { FormDataValue } from '@/_types/todo-prop.type';
 
 interface CreateTodoModalProps {
