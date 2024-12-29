@@ -22,6 +22,7 @@ import { getColumnList } from '@/api/columns.api';
 import { getCardList, updateCard } from '@/api/cards.api';
 import CreateColumnButton from './CreateColumnButton';
 import KanbanLoading from './DashboardLoading';
+import TodoCardModal from './TodoCardModal';
 
 export type ItemGroupsType = {
   [columnId: string]: { title: string; cardData: CardListType };
@@ -40,9 +41,11 @@ export type OnColumnHandlerType = ({
 export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
   const [itemGroups, setItemGroups] = useState<ItemGroupsType>({});
   const [isLoading, setIsLoading] = useState(true);
-  const [activeCard, setActiveCard] = useState<CardType | null | undefined>(
-    null,
-  );
+  const [dragActiveCard, setDragActiveCard] = useState<
+    CardType | null | undefined
+  >(null);
+  const [selectedCard, setSelecedCard] = useState<CardType | null>(null);
+  const [isCardModalVisible, setIsCardModalVisible] = useState(false);
 
   const sensors = useSensors(
     useSensor(MouseSensor, {
@@ -103,11 +106,11 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
       (card) => card.id === active.id,
     );
 
-    setActiveCard(currentCard);
+    setDragActiveCard(currentCard);
   };
 
   const handleDragCancel = () => {
-    setActiveCard(null);
+    setDragActiveCard(null);
   };
 
   const throttledHandleDragOver = useMemo(
@@ -163,7 +166,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
 
   const handleDragEnd = async ({ active, over }: DragEndEvent) => {
     if (!over) {
-      setActiveCard(null);
+      setDragActiveCard(null);
       return;
     }
 
@@ -265,6 +268,16 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
     });
   };
 
+  const handleClickCard = (card: CardType) => {
+    setSelecedCard(card);
+    setIsCardModalVisible(true);
+  };
+
+  const handleCloseCardModal = () => {
+    setIsCardModalVisible(false);
+    setSelecedCard(null);
+  };
+
   return (
     <div className="sidebar-right-content">
       <DndContext
@@ -289,6 +302,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
                 items={itemGroups[itemGroup].cardData.cards || []}
                 onColumnUpdated={handleColumnUpdated}
                 onColumnDeleted={handleColumnDeleted}
+                onClickCard={handleClickCard}
               />
             ))}
 
@@ -299,9 +313,21 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
           </div>
         )}
         <DragOverlay>
-          {activeCard ? <Item item={activeCard} dragOverlay /> : null}
+          {dragActiveCard ? <Item item={dragActiveCard} dragOverlay /> : null}
         </DragOverlay>
       </DndContext>
+
+      {isCardModalVisible && selectedCard && (
+        <>
+          <TodoCardModal
+            userId={selectedCard.assignee.id}
+            cardId={selectedCard.id}
+            columnTitle={selectedCard.title}
+            dashboardId={dashBoard.id}
+            onClose={handleCloseCardModal}
+          />
+        </>
+      )}
     </div>
   );
 }

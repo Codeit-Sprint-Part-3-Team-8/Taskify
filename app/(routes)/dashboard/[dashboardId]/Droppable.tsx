@@ -16,6 +16,7 @@ interface DroppableProps {
   items: CardType[];
   onColumnUpdated: OnColumnHandlerType;
   onColumnDeleted: OnColumnHandlerType;
+  onClickCard: (card: CardType) => void;
 }
 
 export default function Droppable({
@@ -24,6 +25,7 @@ export default function Droppable({
   items,
   title,
   onColumnUpdated,
+  onClickCard,
   onColumnDeleted: onColumnDelete,
 }: DroppableProps) {
   const { setNodeRef } = useDroppable({ id });
@@ -72,7 +74,11 @@ export default function Droppable({
             className="tablet:scrollbar-hidden scrollbar-custom grid w-full grid-flow-col rounded-lg px-3 py-4 pb-8 mobile:gap-8 mobile:overflow-x-auto tablet:max-h-[220px] tablet:grid-flow-row tablet:gap-4 tablet:overflow-y-auto pc:h-full pc:max-h-full pc:gap-4"
           >
             {items.map((item) => (
-              <SortableItem key={item.id} item={item} />
+              <SortableItem
+                key={item.id}
+                item={item}
+                onClickCard={onClickCard}
+              />
             ))}
           </ul>
         </div>
