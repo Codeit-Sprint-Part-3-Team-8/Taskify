@@ -42,4 +42,22 @@
   .scrollbar-hidden::-webkit-scrollbar {
     display: none; /* Webkit */
   }
+
+  .scrollbar-custom::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-track {
+    background: #f0f0f0;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    background: #f4dffd;
+    border-radius: 4px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+    background: #eec9ff;
+  }
 }
