@@ -56,4 +56,3 @@ function validateSchema(name: string, values: ValuesType) {
 }
 
 export { validateSchema, DEFAULT_VALIDATIONS };
-export type { ValidationType };

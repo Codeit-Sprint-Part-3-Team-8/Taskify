@@ -15,11 +15,11 @@ interface UserType {
 
 interface UpdateUserParams {
   nickname: string;
-  profileImageUrl: string;
+  profileImageUrl: string | null;
 }
 
 interface CreateProfileImageParams {
-  image: File;
+  image: FormData;
 }
 
 interface ProfileImageType {
