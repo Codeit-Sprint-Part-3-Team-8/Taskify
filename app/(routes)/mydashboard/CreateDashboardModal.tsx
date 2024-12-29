@@ -64,7 +64,7 @@ const CreateDashboardModal = ({ onClose }: { onClose: () => void }) => {
   };
 
   const mainContent = (
-    <div className="flex flex-col gap-3">
+    <div className="flex w-full flex-col gap-3">
       <ModalInput
         name="dashboard"
         value={newDashboardName}
@@ -93,7 +93,7 @@ const CreateDashboardModal = ({ onClose }: { onClose: () => void }) => {
   );
 
   const footerContent = (
-    <div className="mt-6 flex gap-4">
+    <div className="mt-6 flex w-full gap-4">
       <Button
         backgroundColor="white"
         className={BUTTON_SIZE}
