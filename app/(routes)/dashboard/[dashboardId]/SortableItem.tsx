@@ -9,7 +9,7 @@ export default function SortableItem({ item }: { item: CardType }) {
 
   return (
     <li
-      className={`w-full transform transition-all ${isDragging ? 'opacity-50' : 'opacity-100'}`}
+      className={`h-full max-h-[260px] w-[280px] transform transition-all tablet:h-[94px] tablet:w-full pc:h-full ${isDragging ? 'opacity-50' : 'opacity-100'}`}
       style={{
         transform: transform ? CSS.Transform.toString(transform) : undefined,
       }}

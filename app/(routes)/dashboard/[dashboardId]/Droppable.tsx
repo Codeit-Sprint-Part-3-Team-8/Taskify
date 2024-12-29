@@ -52,7 +52,7 @@ export default function Droppable({
           <CreateCardButton />
           <ul
             ref={setNodeRef}
-            className="scrollbar-hidden grid w-full auto-cols-[90%] grid-flow-col rounded-lg px-3 py-4 mobile:gap-14 mobile:overflow-x-auto tablet:max-h-[200px] tablet:grid-flow-row tablet:gap-4 tablet:overflow-y-auto pc:h-full pc:max-h-full"
+            className="tablet:scrollbar-hidden grid w-full grid-flow-col rounded-lg px-3 py-4 pb-8 mobile:gap-8 mobile:overflow-x-auto tablet:max-h-[220px] tablet:grid-flow-row tablet:gap-4 tablet:overflow-y-auto pc:h-full pc:max-h-full pc:gap-16"
           >
             {items.map((item) => (
               <SortableItem key={item.id} item={item} />
