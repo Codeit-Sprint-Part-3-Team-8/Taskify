@@ -7,7 +7,6 @@ import {
   KeyboardSensor,
   MouseSensor,
   TouchSensor,
-  UniqueIdentifier,
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
@@ -17,7 +16,7 @@ import { throttle } from 'lodash';
 import Droppable from './Droppable';
 import { Item } from './Item';
 import moveBetweenContainers from './MoveBetweenContainers';
-import { CardListType } from '@/_types/cards.type';
+import { CardListType, CardType } from '@/_types/cards.type';
 import { DashboardType } from '@/_types/dashboards.type';
 import { getColumnList } from '@/api/columns.api';
 import { getCardList, updateCard } from '@/api/cards.api';
@@ -39,7 +38,9 @@ export type OnColumnHandlerType = ({
 
 export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
   const [itemGroups, setItemGroups] = useState<ItemGroupsType>({});
-  const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
+  const [activeCard, setActiveCard] = useState<CardType | null | undefined>(
+    null,
+  );
 
   const sensors = useSensors(
     useSensor(MouseSensor),
@@ -90,11 +91,16 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
   }, [dashBoard.id]);
 
   const handleDragStart = ({ active }: DragStartEvent) => {
-    setActiveId(active.id);
+    const containerId = active.data.current?.sortable.containerId;
+    const currentCard = itemGroups[containerId].cardData.cards.find(
+      (card) => card.id === active.id,
+    );
+
+    setActiveCard(currentCard);
   };
 
   const handleDragCancel = () => {
-    setActiveId(null);
+    setActiveCard(null);
   };
 
   const throttledHandleDragOver = useMemo(
@@ -151,7 +157,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
 
   const handleDragEnd = async ({ active, over }: DragEndEvent) => {
     if (!over) {
-      setActiveId(null);
+      setActiveCard(null);
       return;
     }
 
@@ -282,7 +288,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
           />
         </div>
         <DragOverlay>
-          {activeId ? <Item id={activeId} dragOverlay /> : null}
+          {activeCard ? <Item item={activeCard} dragOverlay /> : null}
         </DragOverlay>
       </DndContext>
     </div>
