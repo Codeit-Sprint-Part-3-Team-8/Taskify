@@ -29,7 +29,7 @@ const footerLinks = [
 
 export default function Footer() {
   return (
-    <footer className="flex h-24 flex-col items-center justify-between tablet:flex tablet:flex-row tablet:px-36">
+    <footer className="flex h-24 flex-col items-center justify-between bg-black-000000 tablet:flex tablet:flex-row tablet:gap-6 tablet:px-36">
       <div className="text-1 flex items-center font-normal text-gray-9FA6B2">
         @codeit - 2024
       </div>
