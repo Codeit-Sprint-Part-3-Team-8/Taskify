@@ -7,6 +7,7 @@ import CreateDashboardModal from '@/(routes)/mydashboard/CreateDashboardModal';
 import useAsync from '@/_hooks/useAsync';
 import { getDashboardList } from '@/api/dashboards.api';
 import { useParams } from 'next/navigation';
+import SidebarSkeleton from './SideBarSkeleton';
 
 const SIZE = 10;
 
@@ -15,6 +16,7 @@ export default function SideBar() {
   const [page, setPage] = useState(1);
   const params = useParams();
   const selectedDashboardId = Number(params.dashboardId);
+  const [showSkeleton, setShowSkeleton] = useState<boolean>(true);
 
   const { data, excute: fetchDashboards, loading } = useAsync(getDashboardList);
 
@@ -25,6 +27,12 @@ export default function SideBar() {
       size: SIZE,
     });
   }, [page, fetchDashboards]);
+
+  useEffect(() => {
+    if (!loading) {
+      setShowSkeleton(false);
+    }
+  }, [loading]);
 
   const handleOpenCreateModal = () => {
     setIsModalOpen(true);
@@ -118,7 +126,7 @@ export default function SideBar() {
             ) : (
               <div></div>
             )}
-            {loading && <div></div>}
+            {showSkeleton && <SidebarSkeleton />}
           </div>
         </div>
         <div className="hidden tablet:block">
