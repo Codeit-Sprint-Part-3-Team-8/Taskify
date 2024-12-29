@@ -1,5 +1,6 @@
 import { X } from 'lucide-react';
 import Image from 'next/image';
+import { useEffect } from 'react';
 
 interface ImageUploadProps {
   imageUrl?: string;
@@ -15,6 +16,9 @@ export default function ImageUpload({
   const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
+      if (imageUrl?.startsWith('blob:')) {
+        URL.revokeObjectURL(imageUrl);
+      }
       const newImageUrl = URL.createObjectURL(file);
       onImageChange(newImageUrl);
     }
@@ -23,6 +27,14 @@ export default function ImageUpload({
   const handleRemoveImage = () => {
     onImageChange(undefined);
   };
+
+  useEffect(() => {
+    return () => {
+      if (imageUrl?.startsWith('blob:')) {
+        URL.revokeObjectURL(imageUrl);
+      }
+    };
+  }, [imageUrl]);
 
   return (
     <div className="flex flex-col gap-2">
