@@ -3,7 +3,6 @@ import icDropdownArrow from '@images/icon/ic-dropdown-arrow.svg';
 import { Calendar } from '@/_components/Calendar/Calendar';
 import { Calendar as CalendarIcon, X } from 'lucide-react';
 import { format } from 'date-fns';
-import { ko } from 'date-fns/locale';
 import Image from 'next/image';
 import DropdownMenu from '@/_components/Dropdown/Dropdown';
 import ModalInput from '@/_components/Modals/ModalInput';
@@ -37,6 +36,7 @@ export function TodoFormContent({
   isLoading,
 }: TodoFormContentProps) {
   const [tagInput, setTagInput] = useState('');
+  const [assigneeNickname, setAssigneeNickname] = useState('');
 
   const handleTagKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && tagInput.trim()) {
@@ -109,9 +109,7 @@ export function TodoFormContent({
             trigger={
               <>
                 <span className="text-[0.9375rem] text-gray-9FA6B2">
-                  {members.find(
-                    (member) => member.id === formData.assigneeUserId,
-                  )?.nickname || '담당자를 선택해 주세요'}
+                  {assigneeNickname || '담당자를 선택해 주세요'}
                 </span>
                 <Image
                   src={icDropdownArrow}
@@ -128,7 +126,10 @@ export function TodoFormContent({
                 <button
                   key={member.id}
                   className="w-full px-4 py-2.5 text-left text-[0.9375rem] hover:bg-gray-50"
-                  onClick={() => onChange('assigneeId', member.id)}
+                  onClick={() => {
+                    onChange('assigneeId', member.id);
+                    setAssigneeNickname(member.nickname);
+                  }}
                 >
                   {member.nickname}
                 </button>
@@ -167,11 +168,7 @@ export function TodoFormContent({
             <>
               <CalendarIcon className="h-5 w-5 text-gray-9FA6B2" />
               <span className="text-[0.9375rem] text-gray-9FA6B2">
-                {formData.dueDate
-                  ? format(formData.dueDate, 'yyyy. MM. dd', {
-                      locale: ko,
-                    })
-                  : '날짜를 선택해 주세요'}
+                {formData.dueDate ? formData.dueDate : '날짜를 선택해 주세요'}
               </span>
             </>
           }
@@ -180,7 +177,10 @@ export function TodoFormContent({
             mode="single"
             selected={formData.dueDate ? new Date(formData.dueDate) : undefined}
             onSelect={(date) =>
-              onChange('dueDate', date ? date.toISOString() : undefined)
+              onChange(
+                'dueDate',
+                date ? format(new Date(date), 'yyyy-MM-dd HH:mm') : undefined,
+              )
             }
             className="rounded-lg border"
           />
