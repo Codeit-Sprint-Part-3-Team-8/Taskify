@@ -25,7 +25,7 @@ interface CreateCommentParams {
 
 interface GetCommentListParams {
   size?: number;
-  cursorId?: number;
+  cursorId?: number | null;
   cardId: number;
 }
 
