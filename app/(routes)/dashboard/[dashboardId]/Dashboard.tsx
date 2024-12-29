@@ -277,18 +277,12 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
 
   const handleCloseCardModal = () => {
     setIsCardModalVisible(false);
-    // setSelecedCard(null);
   };
 
   const handleCloseEditModal = () => {
     setIsEditModalVisible(false);
   };
 
-  useEffect(() => {
-    console.log(111);
-    console.log('selected', selectedCard);
-    console.log('isEdit', isEditModalVisible);
-  }, [isEditModalVisible, selectedCard]);
   return (
     <div className="sidebar-right-content">
       <DndContext

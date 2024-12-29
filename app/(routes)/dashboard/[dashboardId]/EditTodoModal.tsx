@@ -56,7 +56,7 @@ export default function EditTodoModal({
       setIsLoading(false);
     }
   };
-  console.log('edit');
+
   return (
     <GenericModal
       title="할 일 수정"

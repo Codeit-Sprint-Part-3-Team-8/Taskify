@@ -51,7 +51,6 @@ export default function TodoCardModal({
   const handleClickMenu = async (value: string) => {
     onClose();
     if (value === 'edit') {
-      console.log('clickEdit');
       onEditClick();
     } else if (value === 'delete') {
       await handleDeleteCard();
