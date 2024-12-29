@@ -26,19 +26,15 @@ export default function DashboardNavBar() {
   const params = useParams();
   const id = Number(params.dashboardId);
 
-  const { data: dashboardsData, excute: fetchDashboards } = useAsync(
-    async ({ id }: { id: number }) => await getDashboard(id),
-  );
+  const { data: dashboardsData, excute: fetchDashboards } =
+    useAsync(getDashboard);
 
-  const { data: membersData, excute: fetchMembers } = useAsync(
-    async ({ dashboardId }: { dashboardId: number }) =>
-      getMemberList({ dashboardId, page: 1, size: 20 }),
-  );
+  const { data: membersData, excute: fetchMembers } = useAsync(getMemberList);
 
   useEffect(() => {
-    fetchMembers({ dashboardId: id });
-    fetchDashboards({ id });
-  }, [id]);
+    fetchMembers({ dashboardId: id, page: 1, size: 20 });
+    fetchDashboards(id);
+  }, [id, fetchMembers, fetchDashboards]);
 
   useEffect(() => {
     const getVisibleMembers = (): number => {

@@ -25,7 +25,7 @@ async function updateInvitation({
   invitationId,
   inviteAccepted,
 }: UpdateInvitationParams): Promise<InvitationType> {
-  const response = await axios.put(`/invitation/${invitationId}`, {
+  const response = await axios.put(`/invitations/${invitationId}`, {
     inviteAccepted,
   });
   return response.data;
