@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useState } from 'react';
 import icDropdownArrow from '@images/icon/ic-dropdown-arrow.svg';
 import { Calendar } from '@/_components/Calendar/Calendar';
 import { Calendar as CalendarIcon, X } from 'lucide-react';
@@ -9,9 +9,7 @@ import ModalInput from '@/_components/Modals/ModalInput';
 import ImageUpload from '@/_components/Modals/ImageUpload';
 import { KeyboardEvent } from 'react';
 import { FormDataValue } from '@/_types/todo-prop.type';
-import { getMemberList } from '@/api/member.api';
-import useAsync from '@/_hooks/useAsync';
-import { useParams } from 'next/navigation';
+import { Member } from '@/api/types';
 
 interface TodoFormContentProps {
   formData: {
@@ -26,6 +24,7 @@ interface TodoFormContentProps {
   };
   onChange: (field: string, value: FormDataValue) => void;
   columns?: Array<{ columnId: number; columnTitle: string }>;
+  members: Member[];
   isLoading: boolean;
 }
 
@@ -33,23 +32,11 @@ export function TodoFormContent({
   formData,
   onChange,
   columns,
+  members,
   isLoading,
 }: TodoFormContentProps) {
   const [tagInput, setTagInput] = useState('');
   const [assigneeNickname, setAssigneeNickname] = useState('');
-  const params = useParams();
-  const id = Number(params.dashboardId);
-
-  const { data: members, excute: fetchMembers } = useAsync(
-    async ({ dashboardId }: { dashboardId: number }) =>
-      getMemberList({ dashboardId, page: 1, size: 20 }),
-  );
-
-  const fetchMembersRef = useRef(fetchMembers);
-
-  useEffect(() => {
-    fetchMembersRef.current({ dashboardId: id });
-  }, [id]);
 
   const handleTagKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && tagInput.trim()) {
@@ -136,7 +123,7 @@ export function TodoFormContent({
           >
             <div className="py-1">
               {members &&
-                members.members.map((member) => (
+                members.map((member) => (
                   <button
                     key={member.id}
                     className="w-full px-4 py-2.5 text-left text-[0.9375rem] hover:bg-gray-50"
