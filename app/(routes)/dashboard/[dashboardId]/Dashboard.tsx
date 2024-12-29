@@ -7,7 +7,6 @@ import {
   KeyboardSensor,
   MouseSensor,
   TouchSensor,
-  UniqueIdentifier,
   useSensor,
   useSensors,
 } from '@dnd-kit/core';
@@ -17,18 +16,33 @@ import { throttle } from 'lodash';
 import Droppable from './Droppable';
 import { Item } from './Item';
 import moveBetweenContainers from './MoveBetweenContainers';
-import { CardListType } from '@/_types/cards.type';
+import { CardListType, CardType } from '@/_types/cards.type';
 import { DashboardType } from '@/_types/dashboards.type';
 import { getColumnList } from '@/api/columns.api';
-import { getCardList } from '@/api/cards.api';
+import { getCardList, updateCard } from '@/api/cards.api';
+import CreateColumnButton from './CreateColumnButton';
+import KanbanLoading from './DashboardLoading';
 
 export type ItemGroupsType = {
   [columnId: string]: { title: string; cardData: CardListType };
 };
 
+export type OnColumnHandlerParams = {
+  id: number;
+  title?: string;
+};
+
+export type OnColumnHandlerType = ({
+  id,
+  title,
+}: OnColumnHandlerParams) => void;
+
 export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
   const [itemGroups, setItemGroups] = useState<ItemGroupsType>({});
-  const [activeId, setActiveId] = useState<UniqueIdentifier | null>(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [activeCard, setActiveCard] = useState<CardType | null | undefined>(
+    null,
+  );
 
   const sensors = useSensors(
     useSensor(MouseSensor),
@@ -44,7 +58,6 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
     const fetchColumnsAndCards = async (dashboardId: number) => {
       try {
         const columnsData = await getColumnList({ dashboardId: dashboardId });
-        console.log(columnsData);
         const newItemGroups = (
           await Promise.all(
             columnsData.data.map(async (column) => {
@@ -55,11 +68,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
                 return {
                   [column.id]: { title: column.title, cardData: response },
                 };
-              } catch (error) {
-                console.error(
-                  `Error fetching cards for column: ${column.title}`,
-                  error,
-                );
+              } catch {
                 return {
                   [column.id]: {
                     title: column.title,
@@ -71,18 +80,27 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
           )
         ).reduce((acc: ItemGroupsType, group) => ({ ...acc, ...group }), {});
         setItemGroups(newItemGroups);
-      } catch (error) {
-        console.error('Error fetching columns or cards:', error);
+        setIsLoading(false);
+      } catch {
+        alert('대쉬보드 데이터를 불러오는 데 실패했습니다. 다시 시도해주세요.');
       }
     };
 
     fetchColumnsAndCards(dashBoard.id);
   }, [dashBoard.id]);
 
-  const handleDragStart = ({ active }: DragStartEvent) =>
-    setActiveId(active.id);
+  const handleDragStart = ({ active }: DragStartEvent) => {
+    const containerId = active.data.current?.sortable.containerId;
+    const currentCard = itemGroups[containerId].cardData.cards.find(
+      (card) => card.id === active.id,
+    );
 
-  const handleDragCancel = () => setActiveId(null);
+    setActiveCard(currentCard);
+  };
+
+  const handleDragCancel = () => {
+    setActiveCard(null);
+  };
 
   const throttledHandleDragOver = useMemo(
     () =>
@@ -90,7 +108,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
         (active: DragOverEvent['active'], over: DragOverEvent['over']) => {
           const overId = over?.id;
 
-          if (!overId) return;
+          if (!overId || active.id === over.id) return;
 
           const activeContainer = active.data.current?.sortable.containerId;
           const overContainer =
@@ -120,7 +138,6 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
               item: active.id,
             });
 
-            console.log('after move itemGroups: ', itemGroups);
             return data;
           });
         },
@@ -136,86 +153,147 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
     [throttledHandleDragOver],
   );
 
-  const handleDragEnd = ({ active, over }: DragEndEvent) => {
+  const handleDragEnd = async ({ active, over }: DragEndEvent) => {
     if (!over) {
-      setActiveId(null);
+      setActiveCard(null);
       return;
     }
 
-    if (active.id !== over.id) {
-      const activeContainer = active.data.current?.sortable.containerId;
-      const overContainer = over.data.current?.sortable.containerId || over.id;
-      const activeIndex = active.data.current?.sortable.index;
-      const overIndex =
-        over.id in itemGroups
-          ? itemGroups[overContainer].cardData.cards.length + 1
-          : over.data.current?.sortable.index;
+    const activeContainer = active.data.current?.sortable.containerId;
+    const overContainer = over.data.current?.sortable.containerId || over.id;
+    const activeIndex = active.data.current?.sortable.index;
+    const overIndex =
+      over.id in itemGroups
+        ? itemGroups[overContainer].cardData.cards.length + 1
+        : over.data.current?.sortable.index;
 
-      if (
-        !activeContainer ||
-        !overContainer ||
-        activeIndex == null ||
-        overIndex == null
-      ) {
-        return;
-      }
-
-      setItemGroups((itemGroups) => {
-        let newItems;
-        if (activeContainer === overContainer) {
-          newItems = {
-            ...itemGroups,
-            [overContainer]: {
-              ...itemGroups[overContainer],
-              cardData: {
-                ...itemGroups[overContainer].cardData,
-                cards: arrayMove(
-                  itemGroups[overContainer].cardData.cards,
-                  activeIndex,
-                  overIndex,
-                ),
-              },
-            },
-          };
-        } else {
-          newItems = moveBetweenContainers({
-            items: itemGroups,
-            activeContainer,
-            activeIndex,
-            overContainer,
-            overIndex,
-            item: active.id,
-          });
-        }
-
-        return newItems;
-      });
+    if (
+      !activeContainer ||
+      !overContainer ||
+      activeIndex == null ||
+      overIndex == null
+    ) {
+      return;
     }
 
-    setActiveId(null);
+    const prevItemGroups = structuredClone(itemGroups);
+
+    setItemGroups((itemGroups) => {
+      let newItems;
+      if (activeContainer === overContainer) {
+        newItems = {
+          ...itemGroups,
+          [overContainer]: {
+            ...itemGroups[overContainer],
+            cardData: {
+              ...itemGroups[overContainer].cardData,
+              cards: arrayMove(
+                itemGroups[overContainer].cardData.cards,
+                activeIndex,
+                overIndex,
+              ),
+            },
+          },
+        };
+      } else {
+        newItems = moveBetweenContainers({
+          items: itemGroups,
+          activeContainer,
+          activeIndex,
+          overContainer,
+          overIndex,
+          item: active.id,
+        });
+      }
+
+      return newItems;
+    });
+
+    try {
+      const { id, assignee, title, description, dueDate, tags, imageUrl } =
+        itemGroups[overContainer].cardData.cards[activeIndex];
+
+      await updateCard({
+        cardId: id,
+        columnId: Number(activeContainer),
+        assigneeUserId: assignee.id,
+        title: title,
+        description: description,
+        dueDate: dueDate,
+        tags: tags,
+        imageUrl: imageUrl,
+      });
+    } catch {
+      setItemGroups(prevItemGroups);
+    }
+  };
+
+  const handleColumnCreated = ({ id, title }: OnColumnHandlerParams) => {
+    setItemGroups((prevItemGroups) => ({
+      ...prevItemGroups,
+      [id]: {
+        title: title,
+        cardData: { cursorId: null, totalCount: 1, cards: [] },
+      },
+    }));
+  };
+
+  const handleColumnUpdated = ({ id, title }: OnColumnHandlerParams) => {
+    setItemGroups((prevItemGroups) => ({
+      ...prevItemGroups,
+      [id]: {
+        ...prevItemGroups[id],
+        title: title,
+      },
+    }));
+  };
+
+  const handleColumnDeleted = ({ id }: { id: number }) => {
+    setItemGroups((prevItemGroups) => {
+      const newItemGroups = { ...prevItemGroups };
+      delete newItemGroups[id];
+
+      return newItemGroups;
+    });
   };
 
   return (
-    <DndContext
-      sensors={sensors}
-      onDragStart={handleDragStart}
-      onDragCancel={handleDragCancel}
-      onDragOver={handleDragOver}
-      onDragEnd={handleDragEnd}
-    >
-      <div className="m-4 flex w-fit justify-center rounded border border-gray-400 p-2">
-        {Object.keys(itemGroups).map((itemGroup) => (
-          <Droppable
-            key={itemGroup}
-            id={itemGroup}
-            title={itemGroups[itemGroup].title}
-            items={itemGroups[itemGroup].cardData.cards || []}
-          />
-        ))}
-      </div>
-      <DragOverlay>
-        {activeId ? <Item id={activeId} dragOverlay /> : null}
-      </DragOverlay>
-    </DndContext>
+    <div className="sidebar-right-content">
+      <DndContext
+        sensors={sensors}
+        onDragStart={handleDragStart}
+        onDragCancel={handleDragCancel}
+        onDragOver={handleDragOver}
+        onDragEnd={handleDragEnd}
+      >
+        {isLoading ? (
+          <div className="flex h-[400px] w-full items-center justify-center bg-gray-50">
+            <KanbanLoading />
+          </div>
+        ) : (
+          <div className="mt-[60px] flex w-full mobile:flex-col tablet:mt-[70px] pc:flex-row pc:justify-between pc:divide-x pc:divide-gray-200 pc:pr-[184px]">
+            {Object.keys(itemGroups).map((itemGroup) => (
+              <Droppable
+                key={itemGroup}
+                id={itemGroup}
+                dashBoardColor={dashBoard.color}
+                title={itemGroups[itemGroup].title}
+                items={itemGroups[itemGroup].cardData.cards || []}
+                onColumnUpdated={handleColumnUpdated}
+                onColumnDeleted={handleColumnDeleted}
+              />
+            ))}
+
+            <CreateColumnButton
+              dashboardId={dashBoard.id}
+              onColumnCreated={handleColumnCreated}
+            />
+          </div>
+        )}
+        <DragOverlay>
+          {activeCard ? <Item item={activeCard} dragOverlay /> : null}
+        </DragOverlay>
+      </DndContext>
+    </div>
   );
 }
