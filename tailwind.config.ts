@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
 module.exports = {
+  darkMode: ['class'],
   content: ['./app/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     /* 디바이스 분기점 정의 */
@@ -83,5 +84,5 @@ module.exports = {
       },
     },
   },
-  plugins: [],
+  plugins: [require('tailwindcss-animate')],
 };
