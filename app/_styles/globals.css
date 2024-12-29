@@ -22,7 +22,7 @@
   /* 부드러운 렌더링을 위한 속성 */
   body {
     font-family: 'Pretendard Variable', sans-serif;
-    
+
     @apply min-h-screen bg-white text-gray-900;
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
@@ -35,3 +35,29 @@
   }
 }
 
+@layer utilities {
+  .scrollbar-hidden {
+    scrollbar-width: none; /* Firefox */
+  }
+  .scrollbar-hidden::-webkit-scrollbar {
+    display: none; /* Webkit */
+  }
+
+  .scrollbar-custom::-webkit-scrollbar {
+    width: 8px;
+    height: 10px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-track {
+    background: #f0f0f0;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb {
+    background: #d3c7ff;
+    border-radius: 4px;
+  }
+
+  .scrollbar-custom::-webkit-scrollbar-thumb:hover {
+    background: #9e8ee7;
+  }
+}

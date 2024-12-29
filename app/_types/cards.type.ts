@@ -8,7 +8,7 @@ interface CardType {
     profileImageUrl: string | null;
     nickname: string;
     id: number;
-  } | null;
+  };
   imageUrl: string | null;
   teamId: string;
   columnId: number;

@@ -1,15 +1,15 @@
 import { useSortable } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
 import { Item } from './Item';
-import { UniqueIdentifier } from '@dnd-kit/core';
+import { CardType } from '@/_types/cards.type';
 
-export default function SortableItem({ id }: { id: UniqueIdentifier }) {
+export default function SortableItem({ item }: { item: CardType }) {
   const { attributes, listeners, setNodeRef, transform, isDragging } =
-    useSortable({ id });
+    useSortable({ id: item.id });
 
   return (
     <li
-      className={`transform transition-all ${isDragging ? 'opacity-50' : 'opacity-100'}`}
+      className={`h-full max-h-[260px] w-[280px] transform transition-all tablet:h-[94px] tablet:w-full pc:h-full ${isDragging ? 'opacity-50' : 'opacity-100'}`}
       style={{
         transform: transform ? CSS.Transform.toString(transform) : undefined,
       }}
@@ -17,7 +17,7 @@ export default function SortableItem({ id }: { id: UniqueIdentifier }) {
       {...attributes}
       {...listeners}
     >
-      <Item id={id} />
+      <Item item={item} />
     </li>
   );
 }
