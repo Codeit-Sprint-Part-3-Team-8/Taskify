@@ -5,9 +5,9 @@ import useCommentList from '@/_hooks/useCommentList';
 import CommentList from '@/_components/Modals/DashboardModal/CommentList';
 import useIntersectionObserver from '@/_hooks/useIntersectionObserver';
 import UserProfile from '@/_components/UserProfile/UserProfile';
-import { ColumnData } from './Dashboard';
+import { ColumnData } from '../Dashboard';
 import useAsync from '@/_hooks/useAsync';
-import ModalHeader from './TodoCardModal/ModalHeader';
+import ModalHeader from './ModalHeader';
 
 interface TodoCardModalProps {
   userId: number;

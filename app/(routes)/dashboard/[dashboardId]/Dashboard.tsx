@@ -22,12 +22,12 @@ import { getColumnList } from '@/api/columns.api';
 import { getCardList, updateCard } from '@/api/cards.api';
 import CreateColumnButton from './CreateColumnButton';
 import KanbanLoading from './DashboardLoading';
-import TodoCardModal from './TodoCardModal';
 import EditTodoModal from './EditTodoModal';
 import useAsync from '@/_hooks/useAsync';
 import { getMemberList } from '@/api/member.api';
 import CreateTodoModal from './CreateTodoModal';
 import { useAuth } from '@/context/AuthContext';
+import TodoCardModal from './TodoCardModal';
 
 export type ItemGroupsType = {
   [columnId: string]: { title: string; cardData: CardListType };
