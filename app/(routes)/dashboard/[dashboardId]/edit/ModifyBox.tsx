@@ -23,6 +23,7 @@ export default function ModifyBox({ dashboardId }: ModifyBoxProps) {
   const inputRef = useRef<HTMLInputElement>(null);
   const [dashboardDataState, setDashboardDataState] =
     useState<DashboardType | null>(dashboardData);
+  const [isModified, setIsModified] = useState(false);
 
   const fetchDashboardData = useCallback(async () => {
     await getDashboardData({ dashboardId });
@@ -47,6 +48,24 @@ export default function ModifyBox({ dashboardId }: ModifyBoxProps) {
       ...dashboardDataState!,
       color,
     });
+
+    handleInputChange(null, color);
+  };
+
+  const handleInputChange = (
+    event: React.ChangeEvent<HTMLInputElement> | null,
+    color?: string,
+  ) => {
+    const inputValue = inputRef.current?.value || '';
+    const currentColor = color || dashboardDataState?.color;
+    const colorChanged = currentColor !== dashboardData?.color;
+    const titleChanged = inputValue !== dashboardData?.title;
+
+    if (inputValue === '') {
+      setIsModified(false);
+    } else {
+      setIsModified(titleChanged || colorChanged);
+    }
   };
 
   useEffect(() => {
@@ -69,6 +88,7 @@ export default function ModifyBox({ dashboardId }: ModifyBoxProps) {
               ref={inputRef}
               className="border-D9D9D9 rounded-lg border border-solid border-gray-D9D9D9 p-4 focus-visible:outline-violet-5534DA"
               defaultValue={dashboardData?.title}
+              onChange={handleInputChange}
             />
           </div>
           <ColorSelectBox
@@ -76,7 +96,12 @@ export default function ModifyBox({ dashboardId }: ModifyBoxProps) {
             usedColor={dashboardData?.color || ''}
           />
         </div>
-        <Button backgroundColor="purple" className="w-full py-3" type="submit">
+        <Button
+          backgroundColor="purple"
+          className="w-full py-3"
+          type="submit"
+          disabled={!isModified}
+        >
           변경
         </Button>
       </form>

@@ -5,13 +5,14 @@ import { TodoFormContent } from '@/_components/Modals/DashboardModal/TodoFormCon
 import { FormDataValue } from '@/_types/todo-prop.type';
 import { TodoFormFooter } from '@/_components/Modals/DashboardModal/TodoFormFooter';
 import { CardType } from '@/_types/cards.type';
-import { Member } from '@/api/types';
+import { MemberType } from '@/_types/members.type';
 
 interface EditTodoModalProps {
   columnTitle: string;
   card: CardType;
   columns: Array<{ columnId: number; columnTitle: string }>;
-  members: Member[] | [];
+  onEditCard: (columnId: number, updatedCard: CardType) => void;
+  members: MemberType[];
   onClose: () => void;
 }
 
@@ -20,6 +21,7 @@ export default function EditTodoModal({
   card,
   columns,
   members,
+  onEditCard,
   onClose,
 }: EditTodoModalProps) {
   const [formData, setFormData] = useState({
@@ -27,10 +29,10 @@ export default function EditTodoModal({
     columnTitle: columnTitle,
     title: card.title || '',
     description: card.description || '',
-    assigneeUserId: card.assignee.id || 0,
-    dueDate: card.dueDate || '',
+    assigneeUserId: card.assignee.id || null,
+    dueDate: card.dueDate || null,
     tags: card.tags || [],
-    imageUrl: card.imageUrl || '',
+    imageUrl: card.imageUrl || null,
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -47,10 +49,11 @@ export default function EditTodoModal({
   const handleEditTodo = async () => {
     setIsLoading(true);
     try {
-      await updateCard({
+      const response = await updateCard({
         cardId: card.id,
         ...formData,
       });
+      onEditCard(formData.columnId, response);
       onClose();
     } catch (error) {
       alert('할 일 수정에 실패했습니다.');

@@ -9,23 +9,26 @@ import useIntersectionObserver from '@/_hooks/useIntersectionObserver';
 import { CardType } from '@/_types/cards.type';
 import UserProfile from '@/_components/UserProfile/UserProfile';
 import useResize from '@/utils/useResize';
+import { ColumnData } from './Dashboard';
 
 interface TodoCardModalProps {
   userId: number;
   cardId: number;
-  columnTitle: string;
+  column: ColumnData;
   dashboardId: number;
   onClose: () => void;
   onEditClick: () => void;
+  onDeleteCard: (columnId: number, cardId: number) => void;
 }
 
 export default function TodoCardModal({
   userId,
   cardId,
-  columnTitle,
+  column,
   dashboardId,
   onClose,
   onEditClick,
+  onDeleteCard,
 }: TodoCardModalProps) {
   const [cardInfo, setCardInfo] = useState<CardType | null>(null);
   const {
@@ -49,6 +52,7 @@ export default function TodoCardModal({
   const handleDeleteCard = async () => {
     try {
       await deleteCard({ cardId });
+      onDeleteCard(column.id, cardId);
       alert('카드가 삭제되었습니다.');
     } catch (error) {
       console.error('카드 삭제 오류:', error);
@@ -108,7 +112,7 @@ export default function TodoCardModal({
           <div className="absolute right-4 top-4 flex items-center gap-4">
             <Dropdown
               buttonClassName="rounded-full"
-              menuClassName="absolute flex flex-col items-center p-2 w-[93px] rounded-[6px] border border-gray-D9D9D9 bg-white"
+              menuClassName="absolute right-2 flex z-50 flex-col items-center p-2 w-[93px] rounded-[6px] border border-gray-D9D9D9 bg-white"
               trigger={<MoreVertical className="h-4 w-4" />}
             >
               <button
@@ -160,7 +164,7 @@ export default function TodoCardModal({
             <div className="flex h-full w-16 items-center gap-1 rounded-full bg-violet-8">
               <span className="ml-[6px] text-3xl text-violet-5534DA">•</span>
               <span className="mt-1 text-xs text-violet-5534DA">
-                {columnTitle}
+                {column.title}
               </span>
             </div>
             <div className="flex h-full gap-2">
@@ -254,7 +258,7 @@ export default function TodoCardModal({
           <div className="absolute right-4 top-4 flex items-center gap-4 tablet:right-8 tablet:top-6 tablet:gap-6 pc:right-[30px] pc:top-[30px]">
             <Dropdown
               buttonClassName="rounded-full"
-              menuClassName="absolute flex flex-col items-center p-2 w-[93px] rounded-[6px] border border-gray-D9D9D9 bg-white"
+              menuClassName="absolute z-50 flex flex-col items-center p-2 w-[93px] rounded-[6px] border border-gray-D9D9D9 bg-white"
               trigger={
                 <MoreVertical className="h-4 w-4 tablet:h-6 tablet:w-6" />
               }
@@ -312,7 +316,7 @@ export default function TodoCardModal({
                     •
                   </span>
                   <span className="mt-1 text-xs text-violet-5534DA">
-                    {columnTitle}
+                    {column.title}
                   </span>
                 </div>
                 <div className="flex gap-2">
