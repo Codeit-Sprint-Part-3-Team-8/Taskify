@@ -7,24 +7,24 @@ import Image from 'next/image';
 import DropdownMenu from '@/_components/Dropdown/Dropdown';
 import ModalInput from '@/_components/Modals/ModalInput';
 import ImageUpload from '@/_components/Modals/ImageUpload';
+import { MemberType } from '@/_types/members.type';
 import { KeyboardEvent } from 'react';
 import { FormDataValue } from '@/_types/todo-prop.type';
-import { Member } from '@/api/types';
 
 interface TodoFormContentProps {
   formData: {
     columnId?: number;
     columnTitle?: string;
-    assigneeUserId?: number;
+    assigneeUserId?: number | null;
     title: string;
     description: string;
-    dueDate?: string;
+    dueDate?: string | null;
     tags: string[];
-    imageUrl?: string;
+    imageUrl?: string | null;
   };
   onChange: (field: string, value: FormDataValue) => void;
   columns?: Array<{ columnId: number; columnTitle: string }>;
-  members: Member[];
+  members: MemberType[];
   isLoading: boolean;
 }
 
@@ -122,19 +122,18 @@ export function TodoFormContent({
             }
           >
             <div className="py-1">
-              {members &&
-                members.map((member) => (
-                  <button
-                    key={member.id}
-                    className="w-full px-4 py-2.5 text-left text-[0.9375rem] hover:bg-gray-50"
-                    onClick={() => {
-                      onChange('assigneeId', member.id);
-                      setAssigneeNickname(member.nickname);
-                    }}
-                  >
-                    {member.nickname}
-                  </button>
-                ))}
+              {members.map((member) => (
+                <button
+                  key={member.id}
+                  className="w-full px-4 py-2.5 text-left text-[0.9375rem] hover:bg-gray-50"
+                  onClick={() => {
+                    onChange('assigneeUserId', member.userId);
+                    setAssigneeNickname(member.nickname);
+                  }}
+                >
+                  {member.nickname}
+                </button>
+              ))}
             </div>
           </DropdownMenu>
         </div>

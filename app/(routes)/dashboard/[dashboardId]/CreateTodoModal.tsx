@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { createCard } from '@/api/cards.api';
-import { Member } from '@/api/types';
+import { MemberType } from '@/_types/members.type';
 import { TodoFormContent } from '@/_components/Modals/DashboardModal/TodoFormContent';
 import GenericModal from '@/_components/Modals/GenericModal';
 import { TodoFormFooter } from '@/_components/Modals/DashboardModal/TodoFormFooter';
@@ -13,7 +13,7 @@ interface CreateTodoModalProps {
     id: number;
     title: string;
   };
-  members: Member[];
+  members: MemberType[];
   onClose: () => void;
   onAddCard: (columnId: number, newCard: CardType) => void;
 }
@@ -27,7 +27,7 @@ export default function CreateTodoModal({
 }: CreateTodoModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
-    assigneeId: undefined,
+    assigneeUserId: undefined,
     title: '',
     description: '',
     dueDate: undefined,
@@ -53,7 +53,7 @@ export default function CreateTodoModal({
         columnId: columnData.id,
         title: formData.title,
         description: formData.description,
-        assigneeUserId: formData.assigneeId,
+        assigneeUserId: formData.assigneeUserId,
         dueDate: formData.dueDate,
         tags: formData.tags,
         imageUrl: formData.imageUrl,
