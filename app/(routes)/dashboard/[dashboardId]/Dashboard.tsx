@@ -43,7 +43,7 @@ export type OnColumnHandlerType = ({
   title,
 }: OnColumnHandlerParams) => void;
 
-export type columnData = {
+export type ColumnData = {
   id: number;
   title: string;
 };
@@ -58,7 +58,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
   const [selectedCard, setSelecedCard] = useState<CardType | null>(null);
   const [isCardModalVisible, setIsCardModalVisible] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
-  const [selectedColumn, setSelecedColumn] = useState<columnData | null>(null);
+  const [selectedColumn, setSelecedColumn] = useState<ColumnData | null>(null);
   const [isCreateCardModalVisible, setIsCreateCardModalVisible] =
     useState(false);
   const sensors = useSensors(
@@ -265,6 +265,43 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
     }
   };
 
+  const handleAddNewCard = (columnId: number, newCard: CardType) => {
+    setItemGroups((itemGroups) => {
+      const newItemGroups = {
+        ...itemGroups,
+        [columnId]: {
+          ...itemGroups[columnId],
+          cardData: {
+            cursorId: itemGroups[columnId].cardData.cursorId,
+            totalCount: itemGroups[columnId].cardData.totalCount + 1,
+            cards: [...itemGroups[columnId].cardData.cards, newCard],
+          },
+        },
+      };
+
+      return newItemGroups;
+    });
+  };
+
+  const handleUpdateCard = (columnId: number, updatedCard: CardType) => {
+    setItemGroups((itemGroups) => {
+      const updatedItemGroups = {
+        ...itemGroups,
+        [columnId]: {
+          ...itemGroups[columnId],
+          cardData: {
+            ...itemGroups[columnId].cardData,
+            cards: itemGroups[columnId].cardData.cards.map((card) =>
+              card.id === updatedCard.id ? { ...card, ...updatedCard } : card,
+            ),
+          },
+        },
+      };
+
+      return updatedItemGroups;
+    });
+  };
+
   const handleColumnCreated = ({ id, title }: OnColumnHandlerParams) => {
     setItemGroups((prevItemGroups) => ({
       ...prevItemGroups,
@@ -294,7 +331,11 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
     });
   };
 
-  const handleClickCreateCard = ({ id, title }: columnData) => {
+  const handleClickColumn = ({ id, title }: ColumnData) => {
+    setSelecedColumn({ id, title });
+  };
+
+  const handleClickCreateCard = ({ id, title }: ColumnData) => {
     setSelecedColumn({ id, title });
     setIsCreateCardModalVisible(true);
   };
@@ -302,6 +343,26 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
   const handleClickCard = (card: CardType) => {
     setSelecedCard(card);
     setIsCardModalVisible(true);
+  };
+
+  const handleDeleteCard = (columnId: number, cardId: number) => {
+    setItemGroups((itemGroups) => {
+      const updatedItemGroups = {
+        ...itemGroups,
+        [columnId]: {
+          ...itemGroups[columnId],
+          cardData: {
+            ...itemGroups[columnId].cardData,
+            totalCount: itemGroups[columnId].cardData.totalCount - 1,
+            cards: itemGroups[columnId].cardData.cards.filter(
+              (card) => card.id !== cardId,
+            ),
+          },
+        },
+      };
+
+      return updatedItemGroups;
+    });
   };
 
   const handleCloseCardModal = () => {
@@ -338,6 +399,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
                 onColumnDeleted={handleColumnDeleted}
                 onClickCard={handleClickCard}
                 onClickCreateCard={handleClickCreateCard}
+                onClickColumn={handleClickColumn}
               />
             ))}
 
@@ -358,18 +420,20 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
           columnData={selectedColumn}
           members={members?.members || []}
           onClose={() => setIsCreateCardModalVisible(false)}
+          onAddCard={handleAddNewCard}
         />
       )}
 
-      {isCardModalVisible && selectedCard && (
+      {isCardModalVisible && selectedCard && selectedColumn && (
         <>
           <TodoCardModal
             userId={selectedCard.assignee.id}
             cardId={selectedCard.id}
-            columnTitle={selectedCard.title}
+            column={selectedColumn}
             dashboardId={dashBoard.id}
             onClose={handleCloseCardModal}
             onEditClick={() => setIsEditModalVisible(true)}
+            onDeleteCard={handleDeleteCard}
           />
         </>
       )}
@@ -383,6 +447,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
             columnTitle: title,
           }))}
           members={members?.members || []}
+          onEditCard={handleUpdateCard}
           onClose={handleCloseEditModal}
         />
       )}
