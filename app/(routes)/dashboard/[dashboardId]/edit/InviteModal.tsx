@@ -10,9 +10,14 @@ const BUTTON_SIZE =
 interface InviteModalProps {
   onClose: () => Promise<void> | void;
   dashboardId: number;
+  onSubmitSuccess: () => void;
 }
 
-const InviteModal = ({ onClose, dashboardId }: InviteModalProps) => {
+const InviteModal = ({
+  onClose,
+  dashboardId,
+  onSubmitSuccess,
+}: InviteModalProps) => {
   const [invitationEmail, setInvitationEmail] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
@@ -35,6 +40,8 @@ const InviteModal = ({ onClose, dashboardId }: InviteModalProps) => {
     } finally {
       setIsLoading(false);
     }
+
+    onSubmitSuccess();
   };
 
   const mainContent = (
