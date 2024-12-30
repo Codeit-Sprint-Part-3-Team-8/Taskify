@@ -39,12 +39,6 @@ export default function TodoCardModal({
   const [newComment, setNewComment] = useState('');
   const { excute: _getCard, data: cardData } = useAsync(getCard);
 
-  const handleClose = (e: React.MouseEvent) => {
-    if (e.target === e.currentTarget) {
-      onClose();
-    }
-  };
-
   // 카드 삭제 함수
   const handleDeleteCard = async () => {
     try {
@@ -88,10 +82,7 @@ export default function TodoCardModal({
   const endPoint = useIntersectionObserver(handleObserver);
 
   return (
-    <div
-      className="fixed inset-0 z-50 flex items-center justify-center bg-black-000000/30"
-      onClick={handleClose}
-    >
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black-000000/30">
       <div className="h-[710px] w-[327px] rounded-lg bg-white p-4 shadow-lg">
         <ModalHeader
           title={cardData?.title || null}
