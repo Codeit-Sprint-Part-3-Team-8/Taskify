@@ -70,7 +70,10 @@ export default function PasswordForm({ update }: { update: () => void }) {
   const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault();
     if (!isFormValid) return;
-    _updatePassword({ password: values.current, newPassword: values.changed });
+    _updatePassword({
+      password: values.current.trim(),
+      newPassword: values.changed.trim(),
+    });
   };
 
   useEffect(() => {
