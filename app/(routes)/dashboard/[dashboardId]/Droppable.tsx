@@ -51,7 +51,7 @@ export default function Droppable({
     <SortableContext id={id} items={items} strategy={rectSortingStrategy}>
       <div
         onClick={() => handleClickColumn({ id: numericId, title })}
-        className="flex-shrink-0 px-3 py-4 mobile:w-full pc:w-[364px]"
+        className="flex-shrink-0 py-4 mobile:w-full mobile:px-6 tablet:px-10 pc:w-[364px] pc:px-4"
       >
         <div className="border-b-2 pb-2 tablet:pb-6 pc:border-none">
           <div className="flex justify-between pb-1">

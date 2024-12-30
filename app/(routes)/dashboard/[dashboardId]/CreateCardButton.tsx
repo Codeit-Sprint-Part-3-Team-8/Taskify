@@ -17,7 +17,7 @@ export default function CreateCardButton({
   return (
     <div
       onClick={handleClick}
-      className="flex h-8 w-full cursor-pointer items-center justify-center rounded-md border px-24 py-1.5 tablet:h-10 tablet:py-2"
+      className="flex h-8 w-full transform cursor-pointer items-center justify-center rounded-md border border-gray-300 px-20 py-1.5 transition-transform hover:scale-105 hover:bg-purple-100 tablet:h-10 tablet:py-2"
     >
       <div className="relative h-5 w-5 tablet:h-[22px] tablet:w-[22px]">
         <Image
