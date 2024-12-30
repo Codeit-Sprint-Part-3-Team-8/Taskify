@@ -16,7 +16,6 @@ import ModalTags from './ModalTags';
 import { useAuth } from '@/context/AuthContext';
 
 interface TodoCardModalProps {
-  userId: number;
   cardId: number;
   column: ColumnData;
   dashboardId: number;
