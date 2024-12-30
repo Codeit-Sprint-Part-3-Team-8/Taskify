@@ -87,7 +87,7 @@ export default function DashboardNavBar() {
           <div className="flex items-center gap-1.5 tablet:gap-3 pc:gap-4">
             <Link
               href={`/dashboard/${id}/edit`}
-              className="flex items-center justify-center rounded-md border border-gray-D9D9D9 px-3 py-1.5 font-pretendard text-md font-medium tablet:gap-2 tablet:rounded-lg tablet:py-2 pc:px-4 pc:py-2.5 pc:text-lg"
+              className="flex transform items-center justify-center rounded-md border border-gray-D9D9D9 px-3 py-1.5 font-pretendard text-md font-medium transition-transform hover:scale-105 hover:bg-blue-100 tablet:gap-2 tablet:rounded-lg tablet:py-2 pc:px-4 pc:py-2.5 pc:text-lg"
             >
               <Image
                 width={20}
@@ -100,7 +100,7 @@ export default function DashboardNavBar() {
             </Link>
             <button
               onClick={handleOpenInviteModal}
-              className="flex items-center justify-center rounded-md border border-gray-D9D9D9 px-3 py-1.5 font-pretendard text-md font-medium tablet:gap-2 tablet:rounded-lg tablet:py-2 pc:px-4 pc:py-2.5 pc:text-lg"
+              className="flex transform items-center justify-center rounded-md border border-gray-D9D9D9 px-3 py-1.5 font-pretendard text-md font-medium transition-transform hover:scale-105 hover:bg-blue-100 tablet:gap-2 tablet:rounded-lg tablet:py-2 pc:px-4 pc:py-2.5 pc:text-lg"
             >
               <Image
                 width={20}
