@@ -162,11 +162,11 @@ export function TodoFormContent({
         />
       </div>
 
-      <div className=":outline-violet-5534DA flex flex-col gap-2">
+      <div className="flex flex-col gap-2">
         <label className="text-lg font-medium text-black-333236">마감일</label>
         <DropdownMenu
           buttonClassName="flex h-12 w-full items-center gap-3 rounded-xl border border-gray-D9D9D9 px-4 text-left hover:border-gray-400 transition-colors"
-          menuClassName="w-[18rem] absolute left-0 z-10 mt-1 rounded-lg border border-gray-200 bg-whiteshadow-lg "
+          menuClassName="w-[18rem] absolute left-0 z-10 mt-1 rounded-lg border border-gray-200 bg-whiteshadow-lg"
           trigger={
             <>
               <CalendarIcon className="h-5 w-5 text-gray-9FA6B2" />
