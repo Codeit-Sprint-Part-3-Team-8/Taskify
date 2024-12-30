@@ -114,16 +114,20 @@ export default function DashboardNavBar() {
 
         <div className="flex items-center -space-x-3">
           {members.slice(0, visibleMembers).map((member) => (
-            <Image
+            <div
               key={member.id}
-              width={32}
-              height={32}
-              src={
-                member.profileImageUrl || '/images/contents/default-profile.svg'
-              }
-              alt={`${member.nickname} 프로필`}
-              className="rounded-full border-2 border-white"
-            />
+              className="relative h-8 w-8 overflow-hidden rounded-full"
+            >
+              <Image
+                fill
+                src={
+                  member.profileImageUrl ||
+                  '/images/contents/default-profile.svg'
+                }
+                alt={`${member.nickname} 프로필`}
+                className="rounded-full border-2 border-white object-cover"
+              />
+            </div>
           ))}
           {members.length > visibleMembers && (
             <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-D9D9D9 text-xs font-medium text-black-333236">
