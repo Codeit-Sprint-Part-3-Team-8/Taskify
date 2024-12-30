@@ -85,7 +85,7 @@ export default function ModalComment({
         </button>
       </form>
 
-      <div className="max-h-[80px] flex-1">
+      <div className="max-h-[120px] flex-1">
         <div className="space-y-4">
           {comments.map((comment: CommentType) => (
             <div key={'comment-' + comment.id} className="flex gap-4">

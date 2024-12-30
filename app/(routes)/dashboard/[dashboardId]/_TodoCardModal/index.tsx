@@ -92,9 +92,11 @@ export default function TodoCardModal({
     deleteCommentData,
   ]);
 
+  if (!card || !commentList) return null;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black-000000/30">
-      <div className="animate-fadeInUp h-[710px] w-[327px] rounded-lg bg-white p-4 shadow-lg transition-all tablet:h-[766px] tablet:w-[678px] tablet:pb-6 tablet:pl-8 tablet:pr-8 tablet:pt-6 pc:h-[763px] pc:w-[730px] pc:pl-[18px] pc:pt-[30px]">
+      <div className="animate-fadeInUp max-h-[710px] rounded-lg bg-white p-4 shadow-lg transition-all tablet:max-h-[766px] tablet:pb-6 tablet:pl-8 tablet:pr-8 tablet:pt-6 pc:max-h-[763px]">
         <ModalHeader
           title={card?.title || null}
           onClick={handleClickMenu}
