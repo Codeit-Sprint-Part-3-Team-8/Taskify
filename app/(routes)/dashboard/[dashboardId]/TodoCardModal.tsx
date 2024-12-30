@@ -17,6 +17,7 @@ interface TodoCardModalProps {
   columnTitle: string;
   dashboardId: number;
   onClose: () => void;
+  onEditClick: () => void;
 }
 
 export default function TodoCardModal({
@@ -25,6 +26,7 @@ export default function TodoCardModal({
   columnTitle,
   dashboardId,
   onClose,
+  onEditClick,
 }: TodoCardModalProps) {
   const [cardInfo, setCardInfo] = useState<CardType | null>(null);
   const {
@@ -49,7 +51,7 @@ export default function TodoCardModal({
   const handleClickMenu = async (value: string) => {
     onClose();
     if (value === 'edit') {
-      alert('수정하기 모달 오픈');
+      onEditClick();
     } else if (value === 'delete') {
       await handleDeleteCard();
     }

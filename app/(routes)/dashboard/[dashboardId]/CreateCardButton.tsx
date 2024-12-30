@@ -1,8 +1,24 @@
 import Image from 'next/image';
+import { columnData } from './Dashboard';
 
-export default function CreateCardButton() {
+export default function CreateCardButton({
+  onClick,
+  id,
+  title,
+}: {
+  onClick: ({ id, title }: columnData) => void;
+  id: number;
+  title: string;
+}) {
+  const handleClick = () => {
+    onClick({ id, title });
+  };
+
   return (
-    <div className="flex h-8 w-full items-center justify-center rounded-md border px-24 py-1.5 tablet:h-10 tablet:py-2">
+    <div
+      onClick={handleClick}
+      className="flex h-8 w-full cursor-pointer items-center justify-center rounded-md border px-24 py-1.5 tablet:h-10 tablet:py-2"
+    >
       <div className="relative h-5 w-5 tablet:h-[22px] tablet:w-[22px]">
         <Image
           src="/images/icon/ic-plusbtn-purple.svg"
