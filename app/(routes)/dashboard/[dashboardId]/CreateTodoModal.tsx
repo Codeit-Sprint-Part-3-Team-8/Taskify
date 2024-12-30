@@ -59,6 +59,7 @@ export default function CreateTodoModal({
         imageUrl: formData.imageUrl,
       });
       onAddCard(columnData.id, response);
+      onClose();
     } catch (error) {
       alert('할 일 생성에 실패했습니다.');
       console.error('할 일 생성 에러:', error);
