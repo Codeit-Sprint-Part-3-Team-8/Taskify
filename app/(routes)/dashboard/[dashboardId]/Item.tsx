@@ -37,9 +37,12 @@ export function Item({ item, dragOverlay }: ItemsProps) {
           <p className="text-nowrap text-md font-medium text-black-333236 tablet:text-lg">
             {item.title}
           </p>
-          <div className="flex space-x-1">
+          <div className="flex flex-wrap gap-1 space-x-1">
             {item.tags.map((tag) => (
-              <div className="rounded-xl bg-gray-200 px-1" key={tag}>
+              <div
+                className="h-6 w-fit truncate rounded-xl bg-gray-200 px-1"
+                key={tag}
+              >
                 #{tag}
               </div>
             ))}
@@ -61,8 +64,8 @@ export function Item({ item, dragOverlay }: ItemsProps) {
           </div>
           <div className="flex items-center justify-between tablet:items-end pc:items-center">
             <Profile
-              profileImageUrl={item.assignee.profileImageUrl || undefined}
-              nickname={item.assignee.nickname}
+              profileImageUrl={item.assignee?.profileImageUrl || undefined}
+              nickname={item.assignee?.nickname}
             />
           </div>
         </div>

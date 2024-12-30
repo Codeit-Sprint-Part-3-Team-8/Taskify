@@ -122,6 +122,7 @@ export function TodoFormContent({
             담당자
           </label>
           <DropdownMenu
+            outline={true}
             buttonClassName="flex h-12 w-full items-center justify-between rounded-xl border border-gray-D9D9D9 px-4 text-left hover:border-gray-400 transition-colors"
             menuClassName="w-full absolute left-0 z-10 mt-1 rounded-lg border border-gray-200 bg-white shadow-lg"
             trigger={
@@ -185,6 +186,7 @@ export function TodoFormContent({
         </label>
         <div className="flex h-12 gap-2">
           <DropdownMenu
+            outline={true}
             buttonClassName="flex h-12 w-48 items-center gap-3 rounded-[0.875rem] border border-gray-D9D9D9 px-4 text-left hover:border-gray-400 transition-colors"
             menuClassName="w-[18rem] absolute left-0 z-10 mt-1 rounded-lg border border-gray-200 bg-white shadow-lg"
             trigger={
