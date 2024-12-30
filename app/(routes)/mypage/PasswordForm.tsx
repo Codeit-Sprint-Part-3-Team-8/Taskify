@@ -7,6 +7,7 @@ import {
 } from './validate';
 import useAsync from '@/_hooks/useAsync';
 import { updatePassword } from '@/api/auth.api';
+import Modal from '@/_components/Auth/Modal';
 
 const DEFAUTL_VALUES = {
   current: '',
@@ -18,8 +19,20 @@ export default function PasswordForm({ update }: { update: () => void }) {
   const [values, setValues] = useState(DEFAUTL_VALUES);
   const [validations, setValidations] = useState(DEFAULT_PASSWORD_VALIDATIONS);
   const [isFormValid, setIsFormValid] = useState(false);
-  const { data: updateData, excute: _updatePassword } =
-    useAsync(updatePassword);
+  const {
+    data: updateData,
+    excute: _updatePassword,
+    errorMessage: updateErrorMessage,
+    clear,
+  } = useAsync(updatePassword);
+  const [showError, setShowError] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  const handleClickCloseError = () => setShowError(false);
+  const handleClickCloseSuccess = () => {
+    clear();
+    setShowSuccess(false);
+  };
 
   const handleChangeValue = (event: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = event.target;
@@ -69,53 +82,80 @@ export default function PasswordForm({ update }: { update: () => void }) {
   }, [validations]);
 
   useEffect(() => {
+    setValues(DEFAUTL_VALUES);
     update();
   }, [updateData, update]);
 
+  useEffect(() => {
+    if (updateErrorMessage) {
+      setShowError(true);
+    }
+  }, [updateErrorMessage]);
+
+  useEffect(() => {
+    if (updateData) {
+      setShowSuccess(true);
+    }
+  }, [updateData]);
+
   return (
-    <form
-      className="min-w-[18rem] rounded-lg bg-white p-4 tablet:w-[42rem] tablet:rounded-2xl tablet:p-6"
-      onSubmit={handleSubmit}
-    >
-      <h2 className="mb-10 text-2lg font-bold text-black-333236 tablet:mb-6 tablet:text-2xl">
-        비밀번호 변경
-      </h2>
-      <div className="flex flex-col gap-4">
-        <InputField
-          name="current"
-          value={values.current}
-          onChange={handleChangeValue}
-          validation={validations.current}
-          label="현재 비밀번호"
-          placeholder="비밀번호 입력"
-          onBlur={handleBlurInput}
+    <>
+      {showSuccess && (
+        <Modal
+          text="비밀번호 변경에 성공했습니다."
+          onClick={handleClickCloseSuccess}
         />
-        <InputField
-          name="changed"
-          value={values.changed}
-          onChange={handleChangeValue}
-          validation={validations.changed}
-          label="새 비밀번호"
-          placeholder="새 비밀번호 입력"
-          onBlur={handleBlurInput}
+      )}
+      {showError && (
+        <Modal
+          text={updateErrorMessage as string}
+          onClick={handleClickCloseError}
         />
-        <InputField
-          name="confirmed"
-          value={values.confirmed}
-          onChange={handleChangeValue}
-          validation={validations.confirmed}
-          label="새 비밀번호 확인"
-          placeholder="새 비밀번호 확인 입력"
-          onBlur={handleBlurInput}
-        />
-        <button
-          className="w-full select-none rounded-lg border bg-violet-5534DA py-3.5 text-lg font-medium text-white disabled:bg-gray-9FA6B2"
-          type="submit"
-          disabled={!isFormValid}
-        >
-          변경
-        </button>
-      </div>
-    </form>
+      )}
+      <form
+        className="min-w-[18rem] rounded-lg bg-white p-4 tablet:w-[42rem] tablet:rounded-2xl tablet:p-6"
+        onSubmit={handleSubmit}
+      >
+        <h2 className="mb-10 text-2lg font-bold text-black-333236 tablet:mb-6 tablet:text-2xl">
+          비밀번호 변경
+        </h2>
+        <div className="flex flex-col gap-4">
+          <InputField
+            name="current"
+            value={values.current}
+            onChange={handleChangeValue}
+            validation={validations.current}
+            label="현재 비밀번호"
+            placeholder="비밀번호 입력"
+            onBlur={handleBlurInput}
+          />
+          <InputField
+            name="changed"
+            value={values.changed}
+            onChange={handleChangeValue}
+            validation={validations.changed}
+            label="새 비밀번호"
+            placeholder="새 비밀번호 입력"
+            onBlur={handleBlurInput}
+          />
+          <InputField
+            name="confirmed"
+            value={values.confirmed}
+            onChange={handleChangeValue}
+            validation={validations.confirmed}
+            label="새 비밀번호 확인"
+            placeholder="새 비밀번호 확인 입력"
+            onBlur={handleBlurInput}
+          />
+          <button
+            className="w-full select-none rounded-lg border bg-violet-5534DA py-3.5 text-lg font-medium text-white disabled:bg-gray-9FA6B2"
+            type="submit"
+            disabled={!isFormValid}
+          >
+            변경
+          </button>
+        </div>
+      </form>
+    </>
   );
 }
