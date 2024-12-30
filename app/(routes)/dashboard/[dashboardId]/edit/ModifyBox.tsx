@@ -86,7 +86,7 @@ export default function ModifyBox({ dashboardId }: ModifyBoxProps) {
             <div className="text-lg font-medium">대시보드 이름</div>
             <input
               ref={inputRef}
-              className="border-D9D9D9 rounded-lg border border-solid border-gray-D9D9D9 p-4"
+              className="border-D9D9D9 rounded-lg border border-solid border-gray-D9D9D9 p-4 focus-visible:outline-violet-5534DA"
               defaultValue={dashboardData?.title}
               onChange={handleInputChange}
             />

@@ -98,7 +98,7 @@ export default function LandingPage() {
             onWheel={handleWheel}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
-            className="h-screen touch-none overflow-hidden"
+            className="h-screen touch-none select-none overflow-hidden"
           >
             <Section
               ref={sectionRefs[0]}

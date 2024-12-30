@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useMemo, useEffect } from 'react';
 import Image from 'next/image';
 import debounce from 'lodash/debounce';
 
@@ -13,10 +13,11 @@ const SearchBar: React.FC<SearchBarProps> = ({
 }) => {
   const [keyword, setKeyword] = useState('');
 
-  const debouncedSearch = useCallback(
-    debounce((value: string) => {
-      onSearch(value);
-    }, 300),
+  const debouncedSearch = useMemo(
+    () =>
+      debounce((value: string) => {
+        onSearch(value);
+      }, 300),
     [onSearch],
   );
 
@@ -25,6 +26,10 @@ const SearchBar: React.FC<SearchBarProps> = ({
     setKeyword(value);
     debouncedSearch(value);
   };
+
+  useEffect(() => {
+    return () => debouncedSearch.cancel();
+  }, [debouncedSearch]);
 
   return (
     <div className="relative">
