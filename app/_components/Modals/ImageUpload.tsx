@@ -21,7 +21,7 @@ export default function ImageUpload({
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    console.log(columnId);
+
     if (file && columnId) {
       if (imageUrl?.startsWith('blob:')) {
         URL.revokeObjectURL(imageUrl);
@@ -39,8 +39,7 @@ export default function ImageUpload({
         const response = await createColumnImage({ columnId, image: formData });
 
         onImageChange(response.imageUrl);
-      } catch (error) {
-        console.error('이미지 업로드 실패:', error);
+      } catch {
         alert('이미지 업로드 중 문제가 발생했습니다. 다시 시도해주세요.');
         onImageChange(undefined);
       } finally {
