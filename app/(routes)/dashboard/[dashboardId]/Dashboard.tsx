@@ -22,12 +22,12 @@ import { getColumnList } from '@/api/columns.api';
 import { getCardList, updateCard } from '@/api/cards.api';
 import CreateColumnButton from './CreateColumnButton';
 import KanbanLoading from './DashboardLoading';
-import TodoCardModal from './TodoCardModal';
 import EditTodoModal from './EditTodoModal';
 import useAsync from '@/_hooks/useAsync';
 import { getMemberList } from '@/api/member.api';
 import CreateTodoModal from './CreateTodoModal';
 import { useAuth } from '@/context/AuthContext';
+import TodoCardModal from './_TodoCardModal';
 
 export type ItemGroupsType = {
   [columnId: string]: { title: string; cardData: CardListType };
@@ -427,7 +427,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
       {isCardModalVisible && selectedCard && selectedColumn && (
         <>
           <TodoCardModal
-            userId={selectedCard.assignee.id}
+            // userId={selectedCard.assignee.id}
             cardId={selectedCard.id}
             column={selectedColumn}
             dashboardId={dashBoard.id}
