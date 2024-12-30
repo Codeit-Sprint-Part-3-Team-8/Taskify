@@ -53,7 +53,7 @@ export default function CreateTodoModal({
         assigneeUserId: formData.assigneeId,
         dueDate: formData.dueDate,
         tags: formData.tags,
-        imageUrl: formData.imageUrl,
+        imageUrl: formData.imageUrl || undefined,
       });
       onClose();
     } catch (error) {
