@@ -92,6 +92,8 @@ export default function TodoCardModal({
     deleteCommentData,
   ]);
 
+  if (!card || !commentList) return null;
+
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black-000000/30">
       <div className="max-h-[710px] rounded-lg bg-white p-4 shadow-lg transition-all tablet:max-h-[766px] tablet:pb-6 tablet:pl-8 tablet:pr-8 tablet:pt-6 pc:max-h-[763px]">
