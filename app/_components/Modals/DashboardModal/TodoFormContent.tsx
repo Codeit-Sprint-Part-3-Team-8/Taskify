@@ -172,7 +172,7 @@ export function TodoFormContent({
           value={formData.description}
           onChange={(e) => onChange('description', e.target.value)}
           disabled={isLoading}
-          className="h-32 resize-none rounded-xl border border-gray-D9D9D9 px-4 py-3 text-[0.9375rem] placeholder:text-gray-9FA6B2 focus:border-gray-400"
+          className="h-32 resize-none rounded-xl border border-gray-D9D9D9 px-4 py-3 text-[0.9375rem] placeholder:text-gray-9FA6B2 focus-visible:outline-violet-5534DA"
         />
       </div>
 
@@ -244,7 +244,7 @@ export function TodoFormContent({
           onChange={(e) => setTagInput(e.target.value)}
           onKeyDown={handleTagKeyDown}
           disabled={isLoading}
-          className="h-12 rounded-[0.875rem] border border-gray-D9D9D9 px-4 text-[0.9375rem] placeholder:text-gray-9FA6B2 focus:border-gray-400 focus:outline-none"
+          className="h-12 rounded-[0.875rem] border border-gray-D9D9D9 px-4 text-[0.9375rem] placeholder:text-gray-9FA6B2 focus-visible:outline-violet-5534DA"
         />
         <div className="flex flex-wrap gap-2">
           {formData.tags.map((tag) => (
