@@ -6,10 +6,10 @@ import Dropdown from '@/_components/Dropdown/Dropdown';
 import useCommentList from '@/_hooks/useCommentList';
 import CommentList from '@/_components/Modals/DashboardModal/CommentList';
 import useIntersectionObserver from '@/_hooks/useIntersectionObserver';
-import { CardType } from '@/_types/cards.type';
 import UserProfile from '@/_components/UserProfile/UserProfile';
 import useResize from '@/utils/useResize';
 import { ColumnData } from './Dashboard';
+import useAsync from '@/_hooks/useAsync';
 
 interface TodoCardModalProps {
   userId: number;
@@ -30,7 +30,6 @@ export default function TodoCardModal({
   onEditClick,
   onDeleteCard,
 }: TodoCardModalProps) {
-  const [cardInfo, setCardInfo] = useState<CardType | null>(null);
   const {
     commentsResponse,
     addComment,
@@ -41,6 +40,7 @@ export default function TodoCardModal({
   } = useCommentList(cardId, null);
   const [newComment, setNewComment] = useState('');
   const screenType = useResize();
+  const { excute: _getCard, data: cardData } = useAsync(getCard);
 
   const handleClose = (e: React.MouseEvent) => {
     if (e.target === e.currentTarget) {
@@ -69,21 +69,12 @@ export default function TodoCardModal({
   };
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const CARD_INFO = await getCard({ cardId });
-        setCardInfo(CARD_INFO);
-      } catch (error) {
-        console.error('데이터 요청 실패:', error);
-      }
-    };
-
-    fetchData();
-  }, [cardId]);
+    _getCard({ cardId });
+  }, [cardId, _getCard]);
 
   const hanndleClickSubmit = () => {
-    if (!cardInfo) return;
-    addComment(newComment, dashboardId, cardInfo.columnId);
+    if (!cardData) return;
+    addComment(newComment, dashboardId, cardData.columnId);
     setNewComment('');
   };
 
@@ -106,9 +97,7 @@ export default function TodoCardModal({
     >
       {screenType === 'mobile' ? (
         <div className="relative h-[710px] w-[327px] rounded-lg bg-white p-4 shadow-lg">
-          <h1 className="mb-2 mt-10 text-xl font-bold">
-            새로운 일정 관리 Taskify
-          </h1>
+          <h1 className="mb-2 mt-10 text-xl font-bold">{cardData?.title}</h1>
           <div className="absolute right-4 top-4 flex items-center gap-4">
             <Dropdown
               buttonClassName="rounded-full"
@@ -143,12 +132,12 @@ export default function TodoCardModal({
               </label>
               <div className="flex items-center gap-2">
                 <UserProfile
-                  profileImageUrl={cardInfo?.assignee?.profileImageUrl}
+                  profileImageUrl={cardData?.assignee?.profileImageUrl}
                   onlyImg
-                  nickname={cardInfo?.assignee?.nickname || ''}
+                  nickname={cardData?.assignee?.nickname || ''}
                 />
                 <span className="text-xs font-normal">
-                  {cardInfo?.assignee?.nickname || ''}
+                  {cardData?.assignee?.nickname || ''}
                 </span>
               </div>
             </div>
@@ -156,7 +145,7 @@ export default function TodoCardModal({
               <label className="text-black-323236 block text-xs font-semibold">
                 마감일
               </label>
-              <div className="text-xs font-normal">{cardInfo?.dueDate}</div>
+              <div className="text-xs font-normal">{cardData?.dueDate}</div>
             </div>
           </div>
 
@@ -168,7 +157,7 @@ export default function TodoCardModal({
               </span>
             </div>
             <div className="flex h-full gap-2">
-              {cardInfo?.tags.map((tag) => (
+              {cardData?.tags.map((tag) => (
                 <span
                   key={tag}
                   className="h-full rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-600"
@@ -181,11 +170,11 @@ export default function TodoCardModal({
 
           <div className="mb-6 h-[272px]">
             <p className="mb-8 text-xs font-normal text-black-000000">
-              {cardInfo?.description}
+              {cardData?.description}
             </p>
-            {cardInfo?.imageUrl && (
+            {cardData?.imageUrl && (
               <Image
-                src={cardInfo.imageUrl}
+                src={cardData.imageUrl}
                 alt="Task illustration"
                 className="mb-6 h-auto w-full rounded-lg object-contain"
                 width={290}
@@ -253,7 +242,7 @@ export default function TodoCardModal({
       ) : (
         <div className="relative h-[710px] w-[327px] rounded-lg bg-white p-4 shadow-lg tablet:h-[766px] tablet:w-[678px] tablet:pb-6 tablet:pl-8 tablet:pr-8 tablet:pt-6 pc:h-[763px] pc:w-[730px] pc:pl-[18px] pc:pt-[30px]">
           <h1 className="text-xl font-bold tablet:mb-6 tablet:text-2xl pc:mb-8">
-            새로운 일정 관리 Taskify
+            {cardData?.title}
           </h1>
           <div className="absolute right-4 top-4 flex items-center gap-4 tablet:right-8 tablet:top-6 tablet:gap-6 pc:right-[30px] pc:top-[30px]">
             <Dropdown
@@ -291,12 +280,12 @@ export default function TodoCardModal({
               </label>
               <div className="flex items-center gap-2">
                 <UserProfile
-                  profileImageUrl={cardInfo?.assignee?.profileImageUrl}
+                  profileImageUrl={cardData?.assignee?.profileImageUrl}
                   onlyImg
-                  nickname={cardInfo?.assignee?.nickname || ''}
+                  nickname={cardData?.assignee?.nickname || ''}
                 />
                 <span className="text-md font-normal">
-                  {cardInfo?.assignee?.nickname || ''}
+                  {cardData?.assignee?.nickname || ''}
                 </span>
               </div>
             </div>
@@ -304,7 +293,7 @@ export default function TodoCardModal({
               <label className="text-black-323236 block text-sm font-semibold">
                 마감일
               </label>
-              <div className="text-md font-normal">{cardInfo?.dueDate}</div>
+              <div className="text-md font-normal">{cardData?.dueDate}</div>
             </div>
           </div>
 
@@ -320,7 +309,7 @@ export default function TodoCardModal({
                   </span>
                 </div>
                 <div className="flex gap-2">
-                  {cardInfo?.tags.map((tag) => (
+                  {cardData?.tags.map((tag) => (
                     <span
                       key={tag}
                       className="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-600"
@@ -333,11 +322,11 @@ export default function TodoCardModal({
 
               <div className="mb-6">
                 <p className="mb-4 text-md font-normal text-black-000000">
-                  {cardInfo?.description}
+                  {cardData?.description}
                 </p>
-                {cardInfo?.imageUrl && (
+                {cardData?.imageUrl && (
                   <Image
-                    src={cardInfo.imageUrl}
+                    src={cardData.imageUrl}
                     alt="Task illustration"
                     className="mb-6 h-auto w-full rounded-lg object-contain"
                     width={445}
