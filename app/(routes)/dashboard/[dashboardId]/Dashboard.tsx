@@ -283,6 +283,25 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
     });
   };
 
+  const handleUpdateCard = (columnId: number, updatedCard: CardType) => {
+    setItemGroups((itemGroups) => {
+      const updatedItemGroups = {
+        ...itemGroups,
+        [columnId]: {
+          ...itemGroups[columnId],
+          cardData: {
+            ...itemGroups[columnId].cardData,
+            cards: itemGroups[columnId].cardData.cards.map((card) =>
+              card.id === updatedCard.id ? { ...card, ...updatedCard } : card,
+            ),
+          },
+        },
+      };
+
+      return updatedItemGroups;
+    });
+  };
+
   const handleColumnCreated = ({ id, title }: OnColumnHandlerParams) => {
     setItemGroups((prevItemGroups) => ({
       ...prevItemGroups,
@@ -402,6 +421,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
             columnTitle: title,
           }))}
           members={members?.members || []}
+          onEditCard={handleUpdateCard}
           onClose={handleCloseEditModal}
         />
       )}

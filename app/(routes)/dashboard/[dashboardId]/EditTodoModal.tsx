@@ -12,6 +12,7 @@ interface EditTodoModalProps {
   card: CardType;
   columns: Array<{ columnId: number; columnTitle: string }>;
   members: Member[] | [];
+  onEditCard: (columnId: number, updatedCard: CardType) => void;
   onClose: () => void;
 }
 
@@ -20,6 +21,7 @@ export default function EditTodoModal({
   card,
   columns,
   members,
+  onEditCard,
   onClose,
 }: EditTodoModalProps) {
   const [formData, setFormData] = useState({
@@ -47,10 +49,11 @@ export default function EditTodoModal({
   const handleEditTodo = async () => {
     setIsLoading(true);
     try {
-      await updateCard({
+      const response = await updateCard({
         cardId: card.id,
         ...formData,
       });
+      onEditCard(formData.columnId, response);
       onClose();
     } catch (error) {
       alert('할 일 수정에 실패했습니다.');
