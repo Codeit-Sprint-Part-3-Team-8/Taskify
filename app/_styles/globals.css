@@ -13,7 +13,9 @@
 @layer base {
   /* 기본 스타일 초기화 */
   * {
+
     @apply m-0 box-border p-0;
+
   }
   /* 부드러운 스크롤을 위한 속성 */
   html {
