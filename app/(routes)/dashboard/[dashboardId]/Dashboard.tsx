@@ -427,7 +427,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
       {isCardModalVisible && selectedCard && selectedColumn && (
         <>
           <TodoCardModal
-            // userId={selectedCard.assignee.id}
+            userId={selectedCard.assignee.id}
             cardId={selectedCard.id}
             column={selectedColumn}
             dashboardId={dashBoard.id}

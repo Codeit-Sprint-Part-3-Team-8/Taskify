@@ -5,11 +5,18 @@ import useAsync from '@/_hooks/useAsync';
 import ModalHeader from './ModalHeader';
 import ModalContent from './ModalContent';
 import ModalComment from './ModalComment';
-import { createComment, getCommentList } from '@/api/comments.api';
+import {
+  createComment,
+  deleteComment,
+  getCommentList,
+  updateComment,
+} from '@/api/comments.api';
 import ModalInfo from './ModalInfo';
 import ModalTags from './ModalTags';
+import { useAuth } from '@/context/AuthContext';
 
 interface TodoCardModalProps {
+  userId: number;
   cardId: number;
   column: ColumnData;
   dashboardId: number;
@@ -29,8 +36,16 @@ export default function TodoCardModal({
   const { excute: _getCard, data: card } = useAsync(getCard);
   const { excute: _getCommentList, data: commentList } =
     useAsync(getCommentList);
-  const { excute: _createComment, data: createCommentData } =
-    useAsync(createComment);
+  const {
+    excute: _createComment,
+    data: createCommentData,
+    loading: createLoading,
+  } = useAsync(createComment);
+  const { excute: _updateComment, data: updateCommentData } =
+    useAsync(updateComment);
+  const { excute: _deleteComment, data: deleteCommentData } =
+    useAsync(deleteComment);
+  const { user } = useAuth();
 
   // 카드 삭제 함수
   const handleDeleteCard = async () => {
@@ -56,13 +71,27 @@ export default function TodoCardModal({
     _createComment({ cardId, columnId: column.id, dashboardId, content });
   };
 
+  const handleUpdateComment = (commentId: number, content: string) => {
+    _updateComment({ commentId, content });
+  };
+
+  const handleDeleteComment = (commentId: number) => {
+    _deleteComment({ commentId });
+  };
+
   useEffect(() => {
     _getCard({ cardId });
   }, [cardId, _getCard]);
 
   useEffect(() => {
     _getCommentList({ cardId, size: 1000 });
-  }, [cardId, _getCommentList, createCommentData]);
+  }, [
+    cardId,
+    _getCommentList,
+    createCommentData,
+    updateCommentData,
+    deleteCommentData,
+  ]);
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black-000000/30">
@@ -78,10 +107,14 @@ export default function TodoCardModal({
             <ModalTags columnTitle={column.title} tags={card?.tags} />
             <div className="scrollbar-hidden relative overflow-y-scroll">
               <ModalContent card={card} />
-              {commentList && (
+              {commentList && user && (
                 <ModalComment
+                  user={user}
                   commentList={commentList}
                   onSubmit={handleSubmitComment}
+                  onUpdate={handleUpdateComment}
+                  onDelete={handleDeleteComment}
+                  disabled={createLoading}
                 />
               )}
             </div>

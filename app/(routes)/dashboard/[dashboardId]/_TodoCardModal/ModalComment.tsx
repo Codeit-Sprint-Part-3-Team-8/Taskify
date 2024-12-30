@@ -1,31 +1,71 @@
 import UserProfile from '@/_components/UserProfile/UserProfile';
 import { CommentListType, CommentType } from '@/_types/comments.type';
+import { UserType } from '@/_types/users.type';
 import { formatDate } from 'date-fns';
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, FormEvent, useEffect, useState } from 'react';
 
 interface ModalCommentProps {
+  user: UserType;
   commentList: CommentListType;
   onSubmit: (content: string) => void;
+  onUpdate: (commentId: number, content: string) => void;
+  onDelete: (commentId: number) => void;
+  disabled: boolean;
 }
 
 export default function ModalComment({
+  user,
   commentList,
   onSubmit,
+  onUpdate,
+  onDelete,
+  disabled,
 }: ModalCommentProps) {
   const [content, setContent] = useState('');
+  const [isEditing, setIsEditing] = useState<number | null>(null);
+  const [editedContent, setEditedContent] = useState('');
   const { comments } = commentList;
 
   const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
     setContent(event.target.value);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
     onSubmit(content);
   };
 
+  const handleEditChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setEditedContent(event.target.value);
+  };
+
+  const handleClickEdit = (commentId: number, initContent: string) => {
+    setIsEditing(commentId);
+    setEditedContent(initContent);
+  };
+
+  const handleUpdate = (commentId: number) => {
+    onUpdate(commentId, editedContent);
+    setIsEditing(null);
+    setEditedContent('');
+  };
+
+  const handleCancel = () => {
+    setEditedContent('');
+    setIsEditing(null);
+  };
+
+  const handleDelete = (commentId: number) => {
+    onDelete(commentId);
+  };
+
+  useEffect(() => {
+    setContent('');
+  }, [commentList]);
+
   return (
     <div className="flex flex-col">
-      <div className="relative mb-2 w-full">
+      <form className="relative mb-2 w-full" onSubmit={handleSubmit}>
         <label className="text-black-323236 mb-[6px] block text-md font-medium">
           댓글
         </label>
@@ -38,24 +78,22 @@ export default function ModalComment({
         />
         <button
           type="submit"
-          onClick={handleSubmit}
-          className="absolute bottom-[1.25rem] right-[1.3rem] h-[28px] w-[84px] rounded-lg border border-gray-D9D9D9 bg-white px-4 text-xs font-medium text-violet-5534DA"
+          className="absolute bottom-[1.25rem] right-[1.3rem] h-[28px] w-[84px] rounded-lg border border-gray-D9D9D9 bg-white px-4 text-xs font-medium text-violet-5534DA disabled:text-gray-787486"
+          disabled={disabled}
         >
           입력
         </button>
-      </div>
+      </form>
 
       <div className="max-h-[80px] flex-1">
         <div className="space-y-4">
           {comments.map((comment: CommentType) => (
             <div key={'comment-' + comment.id} className="flex gap-4">
-              <div>
-                <UserProfile
-                  profileImageUrl={comment.author.profileImageUrl}
-                  onlyImg
-                  nickname={comment.author.nickname}
-                />
-              </div>
+              <UserProfile
+                profileImageUrl={comment.author.profileImageUrl}
+                onlyImg
+                nickname={comment.author.nickname}
+              />
               <div className="flex flex-col">
                 <div className="mb-2 flex items-center gap-2">
                   <span className="text-black-323236 text-xs font-semibold">
@@ -65,12 +103,12 @@ export default function ModalComment({
                     {formatDate(comment.createdAt, 'yyyy.MM.dd HH:mm')}
                   </span>
                 </div>
-                {/* {isEditing ? (
+                {isEditing === comment.id ? (
                   <div className="flex flex-col">
                     <textarea
                       className="w-full rounded-md border border-gray-9FA6B2 p-2"
                       value={editedContent}
-                      onChange={(e) => setEditedContent(e.target.value)}
+                      onChange={handleEditChange}
                     />
                     <button
                       type="button"
@@ -82,36 +120,37 @@ export default function ModalComment({
                     <button
                       type="button"
                       className="text-sm text-gray-787486"
-                      onClick={handleSave}
+                      onClick={() => handleUpdate(comment.id)}
                     >
                       저장
                     </button>
                   </div>
                 ) : (
                   <div className="text-black-323236 mb-1 text-xs font-normal">
-                    {content}
+                    {comment.content}
                   </div>
                 )}
-                {!isEditing && userId === authorId && (
+                {isEditing !== comment.id && user.id === comment.author.id && (
                   <div className="flex gap-2">
                     <button
                       type="button"
                       className="text-[0.75rem] font-normal text-gray-787486"
-                      onClick={() => setIsEditing(true)}
+                      onClick={() =>
+                        handleClickEdit(comment.id, comment.content)
+                      }
                     >
                       수정
                     </button>
                     <button
                       type="button"
                       className="text-[0.75rem] font-normal text-gray-787486"
-                      onClick={handleDelete}
+                      onClick={() => handleDelete(comment.id)}
                     >
                       삭제
                     </button>
                   </div>
-                )} */}
+                )}
               </div>
-              <div>{comment.content}</div>
             </div>
           ))}
         </div>
