@@ -5,6 +5,7 @@ import useAsync from '@/_hooks/useAsync';
 import { createProfileImage, updateUser } from '@/api/users.api';
 import { ProfileFormProps, ProfileValuesType } from './types';
 import { DEFAULT_PROFILE_VALIDATIONS, validate } from './validate';
+import Modal from '@/_components/Auth/Modal';
 
 const DEFAULT_VALUES: ProfileValuesType = {
   email: '',
@@ -24,9 +25,21 @@ export default function ProfileForm({
   const {
     data: profileData,
     excute: _createProfileImage,
+    errorMessage: imageErrorMessage,
     clear: claerProfileImage,
   } = useAsync(createProfileImage);
-  const { data: updateData, excute: _updateUser } = useAsync(updateUser);
+  const {
+    data: updateData,
+    excute: _updateUser,
+    errorMessage: updateErrorMessage,
+  } = useAsync(updateUser);
+  const [showUpdateError, setShowUpdateError] = useState(false);
+  const [showImageError, setShowImageError] = useState(false);
+  const [showSuccess, setShowSuccess] = useState(false);
+
+  const handleClickCloseUpdateError = () => setShowUpdateError(false);
+  const handleClickCloseImageError = () => setShowImageError(false);
+  const handleClickCloseSuccess = () => setShowSuccess(false);
 
   /**
    * 프로필 폼 입력 필드 값 변경 핸들러
@@ -125,46 +138,84 @@ export default function ProfileForm({
     setValues({ email, nickname, profileImageUrl });
   }, [email, nickname, profileImageUrl]);
 
+  useEffect(() => {
+    if (updateErrorMessage) {
+      setShowUpdateError(true);
+    }
+  }, [updateErrorMessage]);
+
+  useEffect(() => {
+    if (imageErrorMessage) {
+      setShowUpdateError(true);
+    }
+  }, [imageErrorMessage]);
+
+  useEffect(() => {
+    if (updateData) {
+      setShowSuccess(true);
+    }
+  }, [updateData]);
+
   return (
-    <form
-      className="min-w-[18rem] rounded-lg bg-white p-4 tablet:w-[42rem] tablet:rounded-2xl tablet:p-6"
-      onSubmit={handleSubmit}
-    >
-      <h2 className="mb-10 text-2lg font-bold text-black-333236 tablet:mb-6 tablet:text-2xl">
-        프로필
-      </h2>
-      <div className="tablet:flex">
-        <ImageInputField
-          profileImageUrl={values.profileImageUrl}
-          onChange={handleChangeProfile}
+    <>
+      {showSuccess && (
+        <Modal
+          text="프로필 변경에 성공했습니다."
+          onClick={handleClickCloseSuccess}
         />
-        <div className="mt-10 flex flex-col gap-4 tablet:ml-10 tablet:mt-0 tablet:grow">
-          <InputField
-            name="email"
-            type="text"
-            placeholder={email}
-            value={''}
-            validation={{ isValid: false, message: '' }}
-            readonly={true}
-            onChange={handleChangeValue}
+      )}
+      {showUpdateError && (
+        <Modal
+          text={updateErrorMessage as string}
+          onClick={handleClickCloseUpdateError}
+        />
+      )}
+      {showImageError && (
+        <Modal
+          text={imageErrorMessage as string}
+          onClick={handleClickCloseImageError}
+        />
+      )}
+      <form
+        className="min-w-[18rem] rounded-lg bg-white p-4 tablet:w-[42rem] tablet:rounded-2xl tablet:p-6"
+        onSubmit={handleSubmit}
+      >
+        <h2 className="mb-10 text-2lg font-bold text-black-333236 tablet:mb-6 tablet:text-2xl">
+          프로필
+        </h2>
+        <div className="tablet:flex">
+          <ImageInputField
+            profileImageUrl={values.profileImageUrl}
+            onChange={handleChangeProfile}
           />
-          <InputField
-            name="nickname"
-            type="text"
-            placeholder={nickname}
-            value={values.nickname}
-            validation={validations.nickname}
-            onChange={handleChangeValue}
-          />
-          <button
-            className="w-full select-none rounded-lg border bg-violet-5534DA py-3.5 text-lg font-medium text-white disabled:bg-gray-9FA6B2"
-            type="submit"
-            disabled={!isFormValid}
-          >
-            저장
-          </button>
+          <div className="mt-10 flex flex-col gap-4 tablet:ml-10 tablet:mt-0 tablet:grow">
+            <InputField
+              name="email"
+              type="text"
+              placeholder={email}
+              value={''}
+              validation={{ isValid: false, message: '' }}
+              readonly={true}
+              onChange={handleChangeValue}
+            />
+            <InputField
+              name="nickname"
+              type="text"
+              placeholder={nickname}
+              value={values.nickname}
+              validation={validations.nickname}
+              onChange={handleChangeValue}
+            />
+            <button
+              className="w-full select-none rounded-lg border bg-violet-5534DA py-3.5 text-lg font-medium text-white disabled:bg-gray-9FA6B2"
+              type="submit"
+              disabled={!isFormValid}
+            >
+              저장
+            </button>
+          </div>
         </div>
-      </div>
-    </form>
+      </form>
+    </>
   );
 }
