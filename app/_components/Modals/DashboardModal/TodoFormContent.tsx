@@ -1,30 +1,32 @@
 import React, { useState } from 'react';
 import icDropdownArrow from '@images/icon/ic-dropdown-arrow.svg';
 import { Calendar } from '@/_components/Calendar/Calendar';
-import { Calendar as CalendarIcon, X } from 'lucide-react';
+import { Calendar as CalendarIcon, X, Clock } from 'lucide-react';
 import { format } from 'date-fns';
 import Image from 'next/image';
 import DropdownMenu from '@/_components/Dropdown/Dropdown';
 import ModalInput from '@/_components/Modals/ModalInput';
 import ImageUpload from '@/_components/Modals/ImageUpload';
-import { Member } from '@/api/types';
+import { MemberType } from '@/_types/members.type';
 import { KeyboardEvent } from 'react';
 import { FormDataValue } from '@/_types/todo-prop.type';
+import { ColumnData } from '@/(routes)/dashboard/[dashboardId]/Dashboard';
 
 interface TodoFormContentProps {
   formData: {
     columnId?: number;
     columnTitle?: string;
-    assigneeUserId?: number;
+    assigneeUserId?: number | null;
     title: string;
     description: string;
-    dueDate?: string;
+    dueDate?: string | null;
     tags: string[];
-    imageUrl?: string;
+    imageUrl?: string | null;
   };
   onChange: (field: string, value: FormDataValue) => void;
   columns?: Array<{ columnId: number; columnTitle: string }>;
-  members: Member[];
+  currentColumn: ColumnData;
+  members: MemberType[];
   isLoading: boolean;
 }
 
@@ -32,12 +34,28 @@ export function TodoFormContent({
   formData,
   onChange,
   columns,
+  currentColumn,
   members,
   isLoading,
 }: TodoFormContentProps) {
   const [tagInput, setTagInput] = useState('');
   const [assigneeNickname, setAssigneeNickname] = useState('');
 
+  const ClickDate = (e: React.MouseEvent<HTMLButtonElement>) => {
+    const timeInput =
+      e.currentTarget.parentElement?.querySelector('input[type="time"]');
+    if (timeInput) {
+      (timeInput as HTMLInputElement).showPicker();
+    }
+  };
+
+  const ClickTime = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const currentDate = formData.dueDate
+      ? format(new Date(formData.dueDate), 'yyyy-MM-dd')
+      : format(new Date(), 'yyyy-MM-dd');
+    const newDateTime = `${currentDate} ${e.target.value}`;
+    onChange('dueDate', newDateTime);
+  };
   const handleTagKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
     if (e.key === 'Enter' && tagInput.trim()) {
       e.preventDefault();
@@ -56,7 +74,7 @@ export function TodoFormContent({
   };
 
   return (
-    <div className="flex w-full flex-col gap-6">
+    <div className="flex w-full flex-col gap-5">
       <div className="flex gap-4">
         {columns && (
           <div className="flex w-full flex-col gap-2">
@@ -64,7 +82,7 @@ export function TodoFormContent({
               상태
             </label>
             <DropdownMenu
-              buttonClassName="flex h-12 w-full items-center justify-between rounded-[0.875rem] border border-gray-D9D9D9 px-4 text-left hover:border-gray-400 transition-colors"
+              buttonClassName="flex h-12 w-full items-center justify-between rounded-xl border border-gray-D9D9D9 px-4 text-left hover:border-gray-400 transition-colors"
               menuClassName="w-full absolute left-0 z-10 mt-1 rounded-lg border border-gray-200 bg-white shadow-lg"
               trigger={
                 <>
@@ -104,7 +122,7 @@ export function TodoFormContent({
             담당자
           </label>
           <DropdownMenu
-            buttonClassName="flex h-12 w-full items-center justify-between rounded-[0.875rem] border border-gray-D9D9D9 px-4 text-left hover:border-gray-400 transition-colors"
+            buttonClassName="flex h-12 w-full items-center justify-between rounded-xl border border-gray-D9D9D9 px-4 text-left hover:border-gray-400 transition-colors"
             menuClassName="w-full absolute left-0 z-10 mt-1 rounded-lg border border-gray-200 bg-white shadow-lg"
             trigger={
               <>
@@ -127,7 +145,7 @@ export function TodoFormContent({
                   key={member.id}
                   className="w-full px-4 py-2.5 text-left text-[0.9375rem] hover:bg-gray-50"
                   onClick={() => {
-                    onChange('assigneeId', member.id);
+                    onChange('assigneeUserId', member.userId);
                     setAssigneeNickname(member.nickname);
                   }}
                 >
@@ -146,45 +164,78 @@ export function TodoFormContent({
         value={formData.title}
         onChange={(e) => onChange('title', e.target.value)}
         disabled={isLoading}
-        className="h-12 rounded-[0.875rem] border-gray-D9D9D9 px-4 text-[0.9375rem] placeholder:text-gray-9FA6B2 focus:border-gray-400"
-      />
-
-      <ModalInput
-        name="설명"
-        label="설명 *"
-        placeholder="설명을 입력해 주세요"
-        value={formData.description}
-        onChange={(e) => onChange('description', e.target.value)}
-        disabled={isLoading}
-        className="min-h-[8rem] rounded-[0.875rem] border-gray-D9D9D9 px-4 py-3 text-[0.9375rem] placeholder:text-gray-9FA6B2 focus:border-gray-400"
+        className="h-12 rounded-xl border border-gray-D9D9D9 px-4 text-[0.9375rem] placeholder:text-gray-9FA6B2 focus:border-gray-400"
       />
 
       <div className="flex flex-col gap-2">
-        <label className="text-lg font-medium text-black-333236">마감일</label>
-        <DropdownMenu
-          buttonClassName="flex h-12 w-full items-center gap-3 rounded-[0.875rem] border border-gray-D9D9D9 px-4 text-left hover:border-gray-400 transition-colors"
-          menuClassName="w-[18rem] absolute left-0 z-10 mt-1 rounded-lg border border-gray-200 bg-whiteshadow-lg"
-          trigger={
-            <>
-              <CalendarIcon className="h-5 w-5 text-gray-9FA6B2" />
-              <span className="text-[0.9375rem] text-gray-9FA6B2">
-                {formData.dueDate ? formData.dueDate : '날짜를 선택해 주세요'}
-              </span>
-            </>
-          }
-        >
-          <Calendar
-            mode="single"
-            selected={formData.dueDate ? new Date(formData.dueDate) : undefined}
-            onSelect={(date) =>
-              onChange(
-                'dueDate',
-                date ? format(new Date(date), 'yyyy-MM-dd HH:mm') : undefined,
-              )
+        <label className="text-lg font-medium text-black-333236">설명 *</label>
+        <textarea
+          name="설명"
+          placeholder="설명을 입력해 주세요"
+          value={formData.description}
+          onChange={(e) => onChange('description', e.target.value)}
+          disabled={isLoading}
+          className="h-32 resize-none rounded-xl border border-gray-D9D9D9 px-4 py-3 text-[0.9375rem] placeholder:text-gray-9FA6B2 focus-visible:outline-violet-5534DA"
+        />
+      </div>
+
+      <div className="flex flex-col gap-2">
+        <label className="text-lg font-medium text-black-333236">
+          마감일 및 시간
+        </label>
+        <div className="flex h-12 gap-2">
+          <DropdownMenu
+            buttonClassName="flex h-12 w-48 items-center gap-3 rounded-[0.875rem] border border-gray-D9D9D9 px-4 text-left hover:border-gray-400 transition-colors"
+            menuClassName="w-[18rem] absolute left-0 z-10 mt-1 rounded-lg border border-gray-200 bg-white shadow-lg"
+            trigger={
+              <>
+                <CalendarIcon className="h-5 w-5 text-gray-9FA6B2" />
+                <span className="text-[0.9375rem] text-gray-9FA6B2">
+                  {formData.dueDate
+                    ? format(new Date(formData.dueDate), 'yyyy-MM-dd')
+                    : '날짜를 선택해 주세요'}
+                </span>
+              </>
             }
-            className="rounded-lg border"
-          />
-        </DropdownMenu>
+          >
+            <Calendar
+              mode="single"
+              selected={
+                formData.dueDate ? new Date(formData.dueDate) : undefined
+              }
+              onSelect={(date) => {
+                if (date) {
+                  const currentTime = formData.dueDate
+                    ? new Date(formData.dueDate).toTimeString().slice(0, 5)
+                    : '00:00';
+                  const newDateTime = `${format(date, 'yyyy-MM-dd')} ${currentTime}`;
+                  onChange('dueDate', newDateTime);
+                } else {
+                  onChange('dueDate', undefined);
+                }
+              }}
+              className="rounded-lg border"
+            />
+          </DropdownMenu>
+
+          <button
+            className="flex h-12 items-center gap-3 rounded-[0.875rem] border border-gray-D9D9D9 px-4"
+            onClick={ClickDate}
+          >
+            <Clock className="h-5 w-5 text-gray-9FA6B2" />
+            <input
+              type="time"
+              value={
+                formData.dueDate
+                  ? new Date(formData.dueDate).toTimeString().slice(0, 5)
+                  : ''
+              }
+              onChange={ClickTime}
+              className="border-none p-0 text-[0.9375rem] text-gray-9FA6B2 focus:ring-0 [&::-webkit-calendar-picker-indicator]:hidden"
+              placeholder="시간을 선택해 주세요"
+            />
+          </button>
+        </div>
       </div>
 
       <div className="flex flex-col gap-2">
@@ -196,7 +247,7 @@ export function TodoFormContent({
           onChange={(e) => setTagInput(e.target.value)}
           onKeyDown={handleTagKeyDown}
           disabled={isLoading}
-          className="h-12 rounded-[0.875rem] border border-gray-D9D9D9 px-4 text-[0.9375rem] placeholder:text-gray-9FA6B2 focus:border-gray-400 focus:outline-none"
+          className="h-12 rounded-[0.875rem] border border-gray-D9D9D9 px-4 text-[0.9375rem] placeholder:text-gray-9FA6B2 focus-visible:outline-violet-5534DA"
         />
         <div className="flex flex-wrap gap-2">
           {formData.tags.map((tag) => (
@@ -221,6 +272,7 @@ export function TodoFormContent({
       <div className="flex flex-col gap-2">
         <label className="text-lg font-medium text-black-333236">이미지</label>
         <ImageUpload
+          columnId={currentColumn.id}
           imageUrl={formData.imageUrl}
           onImageChange={(url) => onChange('imageUrl', url)}
           isLoading={isLoading}

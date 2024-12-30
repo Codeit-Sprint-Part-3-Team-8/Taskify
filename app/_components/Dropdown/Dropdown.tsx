@@ -43,17 +43,17 @@ const DropdownMenu = ({
 
   return (
     <div className="relative" ref={dropdownRef}>
-      <button
-        onClick={toggleDropdown}
-        className={`${buttonClassName} || 'flex items-center rounded-full p-1 tablet:gap-3 ${isDropdownVisible ? 'bg-gray-9FA6B2' : ''}'`}
-        type="button"
-      >
-        {trigger}
-      </button>
-      {isDropdownVisible && (
-        <div
-          className={`${menuClassName} || 'absolute shadow-lg' right-0 mt-2 w-36 rounded-md border border-gray-D9D9D9 bg-white`}
+      <div className="flex items-center">
+        <button
+          onClick={toggleDropdown}
+          className={`${buttonClassName} ${isDropdownVisible ? 'outline outline-2 outline-violet-5534DA' : ''}`}
+          type="button"
         >
+          {trigger}
+        </button>
+      </div>
+      {isDropdownVisible && (
+        <div className={`${menuClassName} right-0 top-full mt-1`}>
           {children}
         </div>
       )}

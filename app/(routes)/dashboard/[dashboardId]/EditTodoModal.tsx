@@ -4,34 +4,38 @@ import GenericModal from '@/_components/Modals/GenericModal';
 import { TodoFormContent } from '@/_components/Modals/DashboardModal/TodoFormContent';
 import { FormDataValue } from '@/_types/todo-prop.type';
 import { TodoFormFooter } from '@/_components/Modals/DashboardModal/TodoFormFooter';
-import { Member } from '@/api/types';
-import { UpdateCardParams } from '@/_types/cards.type';
+import { CardType } from '@/_types/cards.type';
+import { MemberType } from '@/_types/members.type';
+import { ColumnData } from './Dashboard';
 
 interface EditTodoModalProps {
-  cardId: number;
   columnTitle: string;
-  defaultValues: UpdateCardParams;
+  card: CardType;
   columns: Array<{ columnId: number; columnTitle: string }>;
-  members: Member[];
+  onEditCard: (columnId: number, updatedCard: CardType) => void;
+  currentColumn: ColumnData;
+  members: MemberType[];
   onClose: () => void;
 }
 
 export default function EditTodoModal({
   columnTitle,
-  defaultValues,
+  card,
   columns,
   members,
+  onEditCard,
+  currentColumn,
   onClose,
 }: EditTodoModalProps) {
   const [formData, setFormData] = useState({
-    columnId: defaultValues.columnId,
+    columnId: card.columnId,
     columnTitle: columnTitle,
-    title: defaultValues.title || '',
-    description: defaultValues.description || '',
-    assigneeUserId: defaultValues.assigneeUserId || 0,
-    dueDate: defaultValues.dueDate || '',
-    tags: defaultValues.tags || [],
-    imageUrl: defaultValues.imageUrl || '',
+    title: card.title || '',
+    description: card.description || '',
+    assigneeUserId: card.assignee.id || null,
+    dueDate: card.dueDate || null,
+    tags: card.tags || [],
+    imageUrl: card.imageUrl || null,
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -48,10 +52,11 @@ export default function EditTodoModal({
   const handleEditTodo = async () => {
     setIsLoading(true);
     try {
-      await updateCard({
-        cardId: defaultValues.cardId,
+      const response = await updateCard({
+        cardId: card.id,
         ...formData,
       });
+      onEditCard(formData.columnId, response);
       onClose();
     } catch (error) {
       alert('할 일 수정에 실패했습니다.');
@@ -69,6 +74,7 @@ export default function EditTodoModal({
           formData={formData}
           onChange={handleChange}
           columns={columns}
+          currentColumn={currentColumn}
           members={members}
           isLoading={isLoading}
         />

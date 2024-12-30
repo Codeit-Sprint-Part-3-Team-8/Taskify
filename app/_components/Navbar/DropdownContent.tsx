@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation';
 
 export default function DropdownContent() {
   const router = useRouter();
-  const { logout } = useAuth();
+  const { logout } = useAuth(true);
 
   const handleLogout = () => {
     logout();

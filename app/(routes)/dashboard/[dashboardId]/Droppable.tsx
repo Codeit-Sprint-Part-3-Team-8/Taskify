@@ -7,7 +7,7 @@ import CreateCardButton from './CreateCardButton';
 import Image from 'next/image';
 import { useState } from 'react';
 import EditColumnModal from '../EditColumnModal';
-import { OnColumnHandlerType } from './Dashboard';
+import { ColumnData, OnColumnHandlerType } from './Dashboard';
 
 interface DroppableProps {
   id: string;
@@ -16,6 +16,9 @@ interface DroppableProps {
   items: CardType[];
   onColumnUpdated: OnColumnHandlerType;
   onColumnDeleted: OnColumnHandlerType;
+  onClickCard: (card: CardType) => void;
+  onClickColumn: ({ id, title }: ColumnData) => void;
+  onClickCreateCard: ({ id, title }: ColumnData) => void;
 }
 
 export default function Droppable({
@@ -24,11 +27,14 @@ export default function Droppable({
   items,
   title,
   onColumnUpdated,
+  onClickCard,
+  onClickCreateCard,
+  onClickColumn,
   onColumnDeleted: onColumnDelete,
 }: DroppableProps) {
   const { setNodeRef } = useDroppable({ id });
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
+  const numericId = Number(id);
   const handleOpenEditModal = () => {
     setIsEditModalOpen(true);
   };
@@ -37,9 +43,16 @@ export default function Droppable({
     setIsEditModalOpen(false);
   };
 
+  const handleClickColumn = ({ id, title }: ColumnData) => {
+    onClickColumn({ id, title });
+  };
+
   return (
     <SortableContext id={id} items={items} strategy={rectSortingStrategy}>
-      <div className="px-3 py-4 mobile:w-full pc:max-w-[384px]">
+      <div
+        onClick={() => handleClickColumn({ id: numericId, title })}
+        className="px-3 py-4 mobile:w-full pc:max-w-[384px]"
+      >
         <div className="border-b-2 pb-2 tablet:pb-6 pc:border-none">
           <div className="flex justify-between pb-1">
             <div className="mb-4 flex items-center gap-2">
@@ -66,13 +79,21 @@ export default function Droppable({
               />
             </div>
           </div>
-          <CreateCardButton />
+          <CreateCardButton
+            onClick={onClickCreateCard}
+            id={Number(id)}
+            title={title}
+          />
           <ul
             ref={setNodeRef}
             className="tablet:scrollbar-hidden scrollbar-custom grid w-full grid-flow-col rounded-lg px-3 py-4 pb-8 mobile:gap-8 mobile:overflow-x-auto tablet:max-h-[220px] tablet:grid-flow-row tablet:gap-4 tablet:overflow-y-auto pc:h-full pc:max-h-full pc:gap-4"
           >
             {items.map((item) => (
-              <SortableItem key={item.id} item={item} />
+              <SortableItem
+                key={item.id}
+                item={item}
+                onClickCard={onClickCard}
+              />
             ))}
           </ul>
         </div>

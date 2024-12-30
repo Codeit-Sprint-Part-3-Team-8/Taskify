@@ -20,7 +20,7 @@ export default function UserProfile({
           alt={nickname}
         />
         <Avatar.Fallback className="flex h-[1.625rem] w-[1.625rem] items-center justify-center bg-gray-200 font-semibold text-gray-600 tablet:h-[2.375rem] tablet:w-[2.375rem]">
-          {nickname[0].toUpperCase()}
+          {nickname[0]}
         </Avatar.Fallback>
       </Avatar.Root>
       {!onlyImg && <span className="ml-2 text-sm font-medium">{nickname}</span>}

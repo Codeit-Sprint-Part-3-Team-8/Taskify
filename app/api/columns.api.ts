@@ -2,7 +2,7 @@ import {
   ColumnImageType,
   ColumnListType,
   ColumnType,
-  CreateColumnImage,
+  CreateColumnImageParams,
   CreateColumnParams,
   DeleteColumn,
   GetColumnListParams,
@@ -44,15 +44,17 @@ async function updateColumn({
 
 async function deleteColumn({ columnId }: DeleteColumn) {
   const response = await axios.delete(`/columns/${columnId}`);
-  return response.data;
+  return !!response;
 }
 
 async function createColumnImage({
   columnId,
   image,
-}: CreateColumnImage): Promise<ColumnImageType> {
-  const response = await axios.post(`/columns/${columnId}/card-image`, {
-    image,
+}: CreateColumnImageParams): Promise<ColumnImageType> {
+  const response = await axios.post(`/columns/${columnId}/card-image`, image, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+    },
   });
   return response.data;
 }

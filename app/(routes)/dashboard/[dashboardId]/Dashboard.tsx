@@ -11,7 +11,7 @@ import {
   useSensors,
 } from '@dnd-kit/core';
 import { arrayMove, sortableKeyboardCoordinates } from '@dnd-kit/sortable';
-import { useState, useCallback, useMemo, useEffect } from 'react';
+import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import { throttle } from 'lodash';
 import Droppable from './Droppable';
 import { Item } from './Item';
@@ -22,6 +22,12 @@ import { getColumnList } from '@/api/columns.api';
 import { getCardList, updateCard } from '@/api/cards.api';
 import CreateColumnButton from './CreateColumnButton';
 import KanbanLoading from './DashboardLoading';
+import TodoCardModal from './TodoCardModal';
+import EditTodoModal from './EditTodoModal';
+import useAsync from '@/_hooks/useAsync';
+import { getMemberList } from '@/api/member.api';
+import CreateTodoModal from './CreateTodoModal';
+import { useAuth } from '@/context/AuthContext';
 
 export type ItemGroupsType = {
   [columnId: string]: { title: string; cardData: CardListType };
@@ -37,20 +43,51 @@ export type OnColumnHandlerType = ({
   title,
 }: OnColumnHandlerParams) => void;
 
+export type ColumnData = {
+  id: number;
+  title: string;
+};
+
 export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
+  const {} = useAuth(true);
   const [itemGroups, setItemGroups] = useState<ItemGroupsType>({});
   const [isLoading, setIsLoading] = useState(true);
-  const [activeCard, setActiveCard] = useState<CardType | null | undefined>(
-    null,
-  );
-
+  const [dragActiveCard, setDragActiveCard] = useState<
+    CardType | null | undefined
+  >(null);
+  const [selectedCard, setSelecedCard] = useState<CardType | null>(null);
+  const [isCardModalVisible, setIsCardModalVisible] = useState(false);
+  const [isEditModalVisible, setIsEditModalVisible] = useState(false);
+  const [selectedColumn, setSelecedColumn] = useState<ColumnData | null>(null);
+  const [isCreateCardModalVisible, setIsCreateCardModalVisible] =
+    useState(false);
   const sensors = useSensors(
-    useSensor(MouseSensor),
-    useSensor(TouchSensor),
+    useSensor(MouseSensor, {
+      activationConstraint: {
+        distance: 10,
+      },
+    }),
+    useSensor(TouchSensor, {
+      activationConstraint: {
+        distance: 10,
+      },
+    }),
     useSensor(KeyboardSensor, {
       coordinateGetter: sortableKeyboardCoordinates,
     }),
   );
+
+  const { data: members, excute: fetchMembers } = useAsync(
+    async ({ dashboardId }: { dashboardId: number }) =>
+      getMemberList({ dashboardId, page: 1, size: 20 }),
+  );
+
+  const fetchMembersRef = useRef(fetchMembers);
+
+  useEffect(() => {
+    if (!dashBoard.id) return;
+    fetchMembersRef.current({ dashboardId: dashBoard.id });
+  }, [dashBoard.id]);
 
   useEffect(() => {
     if (!dashBoard.id) return;
@@ -95,11 +132,11 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
       (card) => card.id === active.id,
     );
 
-    setActiveCard(currentCard);
+    setDragActiveCard(currentCard);
   };
 
   const handleDragCancel = () => {
-    setActiveCard(null);
+    setDragActiveCard(null);
   };
 
   const throttledHandleDragOver = useMemo(
@@ -155,7 +192,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
 
   const handleDragEnd = async ({ active, over }: DragEndEvent) => {
     if (!over) {
-      setActiveCard(null);
+      setDragActiveCard(null);
       return;
     }
 
@@ -216,16 +253,53 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
       await updateCard({
         cardId: id,
         columnId: Number(activeContainer),
-        assigneeUserId: assignee.id,
+        assigneeUserId: assignee.id || null,
         title: title,
         description: description,
-        dueDate: dueDate,
+        dueDate: dueDate || null,
         tags: tags,
-        imageUrl: imageUrl,
+        imageUrl: imageUrl || null,
       });
     } catch {
       setItemGroups(prevItemGroups);
     }
+  };
+
+  const handleAddNewCard = (columnId: number, newCard: CardType) => {
+    setItemGroups((itemGroups) => {
+      const newItemGroups = {
+        ...itemGroups,
+        [columnId]: {
+          ...itemGroups[columnId],
+          cardData: {
+            cursorId: itemGroups[columnId].cardData.cursorId,
+            totalCount: itemGroups[columnId].cardData.totalCount + 1,
+            cards: [...itemGroups[columnId].cardData.cards, newCard],
+          },
+        },
+      };
+
+      return newItemGroups;
+    });
+  };
+
+  const handleUpdateCard = (columnId: number, updatedCard: CardType) => {
+    setItemGroups((itemGroups) => {
+      const updatedItemGroups = {
+        ...itemGroups,
+        [columnId]: {
+          ...itemGroups[columnId],
+          cardData: {
+            ...itemGroups[columnId].cardData,
+            cards: itemGroups[columnId].cardData.cards.map((card) =>
+              card.id === updatedCard.id ? { ...card, ...updatedCard } : card,
+            ),
+          },
+        },
+      };
+
+      return updatedItemGroups;
+    });
   };
 
   const handleColumnCreated = ({ id, title }: OnColumnHandlerParams) => {
@@ -257,6 +331,48 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
     });
   };
 
+  const handleClickColumn = ({ id, title }: ColumnData) => {
+    setSelecedColumn({ id, title });
+  };
+
+  const handleClickCreateCard = ({ id, title }: ColumnData) => {
+    setSelecedColumn({ id, title });
+    setIsCreateCardModalVisible(true);
+  };
+
+  const handleClickCard = (card: CardType) => {
+    setSelecedCard(card);
+    setIsCardModalVisible(true);
+  };
+
+  const handleDeleteCard = (columnId: number, cardId: number) => {
+    setItemGroups((itemGroups) => {
+      const updatedItemGroups = {
+        ...itemGroups,
+        [columnId]: {
+          ...itemGroups[columnId],
+          cardData: {
+            ...itemGroups[columnId].cardData,
+            totalCount: itemGroups[columnId].cardData.totalCount - 1,
+            cards: itemGroups[columnId].cardData.cards.filter(
+              (card) => card.id !== cardId,
+            ),
+          },
+        },
+      };
+
+      return updatedItemGroups;
+    });
+  };
+
+  const handleCloseCardModal = () => {
+    setIsCardModalVisible(false);
+  };
+
+  const handleCloseEditModal = () => {
+    setIsEditModalVisible(false);
+  };
+
   return (
     <div className="sidebar-right-content">
       <DndContext
@@ -281,6 +397,9 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
                 items={itemGroups[itemGroup].cardData.cards || []}
                 onColumnUpdated={handleColumnUpdated}
                 onColumnDeleted={handleColumnDeleted}
+                onClickCard={handleClickCard}
+                onClickCreateCard={handleClickCreateCard}
+                onClickColumn={handleClickColumn}
               />
             ))}
 
@@ -291,9 +410,48 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
           </div>
         )}
         <DragOverlay>
-          {activeCard ? <Item item={activeCard} dragOverlay /> : null}
+          {dragActiveCard ? <Item item={dragActiveCard} dragOverlay /> : null}
         </DragOverlay>
       </DndContext>
+
+      {isCreateCardModalVisible && selectedColumn && (
+        <CreateTodoModal
+          dashboardId={dashBoard.id}
+          columnData={selectedColumn}
+          members={members?.members || []}
+          onClose={() => setIsCreateCardModalVisible(false)}
+          onAddCard={handleAddNewCard}
+        />
+      )}
+
+      {isCardModalVisible && selectedCard && selectedColumn && (
+        <>
+          <TodoCardModal
+            userId={selectedCard.assignee.id}
+            cardId={selectedCard.id}
+            column={selectedColumn}
+            dashboardId={dashBoard.id}
+            onClose={handleCloseCardModal}
+            onEditClick={() => setIsEditModalVisible(true)}
+            onDeleteCard={handleDeleteCard}
+          />
+        </>
+      )}
+
+      {isEditModalVisible && selectedCard && selectedColumn && (
+        <EditTodoModal
+          columnTitle={itemGroups[selectedCard.columnId].title}
+          card={selectedCard}
+          columns={Object.entries(itemGroups).map(([columnId, { title }]) => ({
+            columnId: Number(columnId),
+            columnTitle: title,
+          }))}
+          currentColumn={selectedColumn}
+          members={members?.members || []}
+          onEditCard={handleUpdateCard}
+          onClose={handleCloseEditModal}
+        />
+      )}
     </div>
   );
 }

@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import { createCard } from '@/api/cards.api';
-import { Member } from '@/api/types';
+import { MemberType } from '@/_types/members.type';
 import { TodoFormContent } from '@/_components/Modals/DashboardModal/TodoFormContent';
 import GenericModal from '@/_components/Modals/GenericModal';
 import { TodoFormFooter } from '@/_components/Modals/DashboardModal/TodoFormFooter';
 import { FormDataValue } from '@/_types/todo-prop.type';
+import { CardType } from '@/_types/cards.type';
 
 interface CreateTodoModalProps {
   dashboardId: number;
@@ -12,8 +13,9 @@ interface CreateTodoModalProps {
     id: number;
     title: string;
   };
-  members: Member[];
+  members: MemberType[];
   onClose: () => void;
+  onAddCard: (columnId: number, newCard: CardType) => void;
 }
 
 export default function CreateTodoModal({
@@ -21,15 +23,16 @@ export default function CreateTodoModal({
   columnData,
   members,
   onClose,
+  onAddCard,
 }: CreateTodoModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
-    assigneeId: 0,
+    assigneeUserId: undefined,
     title: '',
     description: '',
-    dueDate: '',
+    dueDate: undefined,
     tags: [],
-    imageUrl: '',
+    imageUrl: undefined,
   });
 
   const IS_INPUT_VALID =
@@ -45,16 +48,17 @@ export default function CreateTodoModal({
   const handleCreateTodo = async () => {
     setIsLoading(true);
     try {
-      await createCard({
+      const response = await createCard({
         dashboardId,
         columnId: columnData.id,
         title: formData.title,
         description: formData.description,
-        assigneeUserId: formData.assigneeId,
+        assigneeUserId: formData.assigneeUserId,
         dueDate: formData.dueDate,
         tags: formData.tags,
         imageUrl: formData.imageUrl,
       });
+      onAddCard(columnData.id, response);
       onClose();
     } catch (error) {
       alert('할 일 생성에 실패했습니다.');
@@ -70,6 +74,7 @@ export default function CreateTodoModal({
       mainContent={
         <TodoFormContent
           formData={formData}
+          currentColumn={columnData}
           onChange={handleChange}
           members={members}
           isLoading={isLoading}
