@@ -43,7 +43,7 @@ export type OnColumnHandlerType = ({
   title,
 }: OnColumnHandlerParams) => void;
 
-export type columnData = {
+export type ColumnData = {
   id: number;
   title: string;
 };
@@ -58,7 +58,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
   const [selectedCard, setSelecedCard] = useState<CardType | null>(null);
   const [isCardModalVisible, setIsCardModalVisible] = useState(false);
   const [isEditModalVisible, setIsEditModalVisible] = useState(false);
-  const [selectedColumn, setSelecedColumn] = useState<columnData | null>(null);
+  const [selectedColumn, setSelecedColumn] = useState<ColumnData | null>(null);
   const [isCreateCardModalVisible, setIsCreateCardModalVisible] =
     useState(false);
   const sensors = useSensors(
@@ -331,7 +331,11 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
     });
   };
 
-  const handleClickCreateCard = ({ id, title }: columnData) => {
+  const handleClickColumn = ({ id, title }: ColumnData) => {
+    setSelecedColumn({ id, title });
+  };
+
+  const handleClickCreateCard = ({ id, title }: ColumnData) => {
     setSelecedColumn({ id, title });
     setIsCreateCardModalVisible(true);
   };
@@ -375,6 +379,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
                 onColumnDeleted={handleColumnDeleted}
                 onClickCard={handleClickCard}
                 onClickCreateCard={handleClickCreateCard}
+                onClickColumn={handleClickColumn}
               />
             ))}
 
@@ -399,12 +404,12 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
         />
       )}
 
-      {isCardModalVisible && selectedCard && (
+      {isCardModalVisible && selectedCard && selectedColumn && (
         <>
           <TodoCardModal
             userId={selectedCard.assignee.id}
             cardId={selectedCard.id}
-            columnTitle={selectedCard.title}
+            columnTitle={selectedColumn.title}
             dashboardId={dashBoard.id}
             onClose={handleCloseCardModal}
             onEditClick={() => setIsEditModalVisible(true)}
