@@ -69,88 +69,90 @@ export default function DashboardNavBar() {
   const members = membersData?.members || []; //옵셔널 체이닝과 기본값(|| [])을 활용해 에러 방지
 
   return (
-    <div className="fixed top-0 z-10 flex h-[3.75rem] w-full items-center justify-end border-b border-gray-D9D9D9 bg-white pl-[5.25rem] pr-2 tablet:h-[4.375rem] tablet:pl-[12.5rem] tablet:pr-8 pc:justify-between pc:pl-80 pc:pr-20">
-      <div className="hidden w-1/3 gap-2 font-pretendard text-lg font-bold text-black-333236 pc:flex pc:text-xl">
-        <div className="truncate">{dashboardsData?.title}</div>
-        {dashboardsData?.createdByMe && (
-          <Image
-            width={20}
-            height={20}
-            src="/images/icon/ic-crown.svg"
-            alt="CrownIcon"
-          />
-        )}
-      </div>
-
-      <div className="flex items-center gap-2 tablet:gap-6 pc:gap-10">
-        <div className="flex items-center gap-1.5 tablet:gap-3 pc:gap-4">
-          <Link
-            href={`/dashboard/${id}/edit`}
-            className="flex items-center justify-center rounded-md border border-gray-D9D9D9 px-3 py-1.5 font-pretendard text-md font-medium tablet:gap-2 tablet:rounded-lg tablet:py-2 pc:px-4 pc:py-2.5 pc:text-lg"
-          >
+    <>
+      <div className="fixed top-0 z-30 flex h-[3.75rem] w-full items-center justify-end border-b border-gray-D9D9D9 bg-white pl-[5.25rem] pr-2 tablet:h-[4.375rem] tablet:pl-[12.5rem] tablet:pr-8 pc:justify-between pc:pl-80 pc:pr-20">
+        <div className="hidden w-1/3 gap-2 font-pretendard text-lg font-bold text-black-333236 pc:flex pc:text-xl">
+          <div className="truncate">{dashboardsData?.title}</div>
+          {dashboardsData?.createdByMe && (
             <Image
               width={20}
               height={20}
-              src={'/images/icon/ic-setting.svg'}
-              alt="setting"
-              className="hidden tablet:block"
+              src="/images/icon/ic-crown.svg"
+              alt="CrownIcon"
             />
-            관리
-          </Link>
-          <button
-            onClick={handleOpenInviteModal}
-            className="flex items-center justify-center rounded-md border border-gray-D9D9D9 px-3 py-1.5 font-pretendard text-md font-medium tablet:gap-2 tablet:rounded-lg tablet:py-2 pc:px-4 pc:py-2.5 pc:text-lg"
-          >
-            <Image
-              width={20}
-              height={20}
-              src={'/images/icon/ic-plusbtn.svg'}
-              alt="plus"
-              className="hidden tablet:block"
-            />
-            초대하기
-          </button>
-        </div>
-
-        <div className="flex items-center -space-x-3">
-          {members.slice(0, visibleMembers).map((member) => (
-            <div
-              key={member.id}
-              className="relative h-8 w-8 overflow-hidden rounded-full"
-            >
-              <Image
-                fill
-                src={
-                  member.profileImageUrl ||
-                  '/images/contents/default-profile.svg'
-                }
-                alt={`${member.nickname} 프로필`}
-                className="rounded-full border-2 border-white object-cover"
-              />
-            </div>
-          ))}
-          {members.length > visibleMembers && (
-            <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-D9D9D9 text-xs font-medium text-black-333236">
-              +{members.length - visibleMembers}
-            </span>
           )}
         </div>
-        <div className="relative flex items-center border-l border-gray-D9D9D9 pl-4 pc:pl-9">
-          <DropdownMenu
-            trigger={
-              <Profile
-                profileImageUrl={user?.profileImageUrl}
-                nickname={user?.nickname}
+
+        <div className="flex items-center gap-2 tablet:gap-6 pc:gap-10">
+          <div className="flex items-center gap-1.5 tablet:gap-3 pc:gap-4">
+            <Link
+              href={`/dashboard/${id}/edit`}
+              className="flex transform items-center justify-center rounded-md border border-gray-D9D9D9 px-3 py-1.5 font-pretendard text-md font-medium transition-transform hover:scale-105 hover:bg-blue-100 tablet:gap-2 tablet:rounded-lg tablet:py-2 pc:px-4 pc:py-2.5 pc:text-lg"
+            >
+              <Image
+                width={20}
+                height={20}
+                src={'/images/icon/ic-setting.svg'}
+                alt="setting"
+                className="hidden tablet:block"
               />
-            }
-          >
-            <DropdownContent />
-          </DropdownMenu>
+              관리
+            </Link>
+            <button
+              onClick={handleOpenInviteModal}
+              className="flex transform items-center justify-center rounded-md border border-gray-D9D9D9 px-3 py-1.5 font-pretendard text-md font-medium transition-transform hover:scale-105 hover:bg-blue-100 tablet:gap-2 tablet:rounded-lg tablet:py-2 pc:px-4 pc:py-2.5 pc:text-lg"
+            >
+              <Image
+                width={20}
+                height={20}
+                src={'/images/icon/ic-plusbtn.svg'}
+                alt="plus"
+                className="hidden tablet:block"
+              />
+              초대하기
+            </button>
+          </div>
+
+          <div className="flex items-center -space-x-3">
+            {members.slice(0, visibleMembers).map((member) => (
+              <div
+                key={member.id}
+                className="relative h-8 w-8 overflow-hidden rounded-full"
+              >
+                <Image
+                  fill
+                  src={
+                    member.profileImageUrl ||
+                    '/images/contents/default-profile.svg'
+                  }
+                  alt={`${member.nickname} 프로필`}
+                  className="rounded-full border-2 border-white object-cover"
+                />
+              </div>
+            ))}
+            {members.length > visibleMembers && (
+              <span className="flex h-8 w-8 items-center justify-center rounded-full bg-gray-D9D9D9 text-xs font-medium text-black-333236">
+                +{members.length - visibleMembers}
+              </span>
+            )}
+          </div>
+          <div className="relative flex items-center border-l border-gray-D9D9D9 pl-4 pc:pl-9">
+            <DropdownMenu
+              trigger={
+                <Profile
+                  profileImageUrl={user?.profileImageUrl}
+                  nickname={user?.nickname}
+                />
+              }
+            >
+              <DropdownContent />
+            </DropdownMenu>
+          </div>
         </div>
       </div>
       {isModalOpen && (
         <InviteModal dashboardId={id} onClose={handleCloseInviteModal} />
       )}
-    </div>
+    </>
   );
 }

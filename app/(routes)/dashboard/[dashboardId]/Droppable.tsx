@@ -51,7 +51,7 @@ export default function Droppable({
     <SortableContext id={id} items={items} strategy={rectSortingStrategy}>
       <div
         onClick={() => handleClickColumn({ id: numericId, title })}
-        className="px-3 py-4 mobile:w-full pc:max-w-[384px]"
+        className="flex-shrink-0 py-4 mobile:w-full mobile:px-6 tablet:px-10 pc:w-[364px] pc:px-4"
       >
         <div className="border-b-2 pb-2 tablet:pb-6 pc:border-none">
           <div className="flex justify-between pb-1">
@@ -60,8 +60,8 @@ export default function Droppable({
                 className="sh h-2 w-2 shrink-0 rounded-full"
                 style={{ backgroundColor: dashBoardColor }}
               />
-              <div className="flex items-center gap-4">
-                <p className="text-nowrap text-lg font-bold tablet:text-2lg">
+              <div className="flex w-full max-w-[520px] items-center gap-4 px-1 tablet:max-w-[480px] pc:max-w-[300px]">
+                <p className="truncate text-nowrap text-lg font-bold tablet:text-2lg">
                   {title}
                 </p>
                 <p className="flex h-5 w-5 items-center justify-center rounded-md bg-gray-EEEEEE px-1.5 py-1 text-xs text-gray-787486">
@@ -69,7 +69,7 @@ export default function Droppable({
                 </p>
               </div>
             </div>
-            <div className="relative h-5 w-5 tablet:h-[24px] tablet:w-[24px]">
+            <div className="relative h-5 w-5 transform transition-transform hover:rotate-45 hover:scale-125 tablet:h-[24px] tablet:w-[24px]">
               <Image
                 src="/images/icon/ic-setting.svg"
                 alt="컬럼 수정 버튼"
