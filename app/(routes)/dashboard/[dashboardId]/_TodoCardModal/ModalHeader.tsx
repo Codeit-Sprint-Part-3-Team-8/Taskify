@@ -18,10 +18,10 @@ export default function ModalHeader({
 
   return (
     <div className="mb-6 flex flex-col-reverse items-center justify-between gap-4 tablet:flex-row">
-      <h1 className="w-full text-start text-xl font-bold tablet:w-auto">
+      <h1 className="w-full truncate whitespace-nowrap text-start text-xl font-bold tablet:w-fit">
         {title}
       </h1>
-      <div className="flex w-full items-center justify-end gap-4">
+      <div className="flex items-center justify-end gap-4">
         <Dropdown
           buttonClassName="rounded-full"
           menuClassName="absolute right-2 flex z-50 flex-col items-center p-2 w-[93px] rounded-[6px] border border-gray-D9D9D9 bg-white"
