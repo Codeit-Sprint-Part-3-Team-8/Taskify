@@ -10,6 +10,7 @@ import ImageUpload from '@/_components/Modals/ImageUpload';
 import { MemberType } from '@/_types/members.type';
 import { KeyboardEvent } from 'react';
 import { FormDataValue } from '@/_types/todo-prop.type';
+import { ColumnData } from '@/(routes)/dashboard/[dashboardId]/Dashboard';
 
 interface TodoFormContentProps {
   formData: {
@@ -24,6 +25,7 @@ interface TodoFormContentProps {
   };
   onChange: (field: string, value: FormDataValue) => void;
   columns?: Array<{ columnId: number; columnTitle: string }>;
+  currentColumn: ColumnData;
   members: MemberType[];
   isLoading: boolean;
 }
@@ -32,6 +34,7 @@ export function TodoFormContent({
   formData,
   onChange,
   columns,
+  currentColumn,
   members,
   isLoading,
 }: TodoFormContentProps) {
@@ -269,6 +272,7 @@ export function TodoFormContent({
       <div className="flex flex-col gap-2">
         <label className="text-lg font-medium text-black-333236">이미지</label>
         <ImageUpload
+          columnId={currentColumn.id}
           imageUrl={formData.imageUrl}
           onImageChange={(url) => onChange('imageUrl', url)}
           isLoading={isLoading}

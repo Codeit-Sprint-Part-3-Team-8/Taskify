@@ -1,26 +1,51 @@
-import { X } from 'lucide-react';
+import { useState } from 'react';
 import Image from 'next/image';
+import { X } from 'lucide-react';
 import { useEffect } from 'react';
+import { createColumnImage } from '@/api/columns.api';
 
 interface ImageUploadProps {
   imageUrl?: string | null;
+  columnId: number | undefined;
   onImageChange: (url: string | undefined) => void;
   isLoading?: boolean;
 }
 
 export default function ImageUpload({
   imageUrl,
+  columnId,
   onImageChange,
   isLoading,
 }: ImageUploadProps) {
-  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const [uploading, setUploading] = useState(false);
+
+  const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
-    if (file) {
+
+    if (file && columnId) {
       if (imageUrl?.startsWith('blob:')) {
         URL.revokeObjectURL(imageUrl);
       }
-      const newImageUrl = URL.createObjectURL(file);
-      onImageChange(newImageUrl);
+
+      const previewUrl = URL.createObjectURL(file);
+      onImageChange(previewUrl);
+
+      try {
+        setUploading(true);
+
+        const formData = new FormData();
+        formData.append('image', file, file.name);
+
+        const response = await createColumnImage({ columnId, image: formData });
+
+        onImageChange(response.imageUrl);
+      } catch {
+        alert('이미지 업로드 중 문제가 발생했습니다. 다시 시도해주세요.');
+        onImageChange(undefined);
+      } finally {
+        setUploading(false);
+        URL.revokeObjectURL(previewUrl);
+      }
     }
   };
 
@@ -50,7 +75,7 @@ export default function ImageUpload({
             <button
               onClick={handleRemoveImage}
               className="absolute -right-2 -top-2 rounded-full bg-white p-1 shadow-md"
-              disabled={isLoading}
+              disabled={isLoading || uploading}
             >
               <X size={16} />
             </button>
@@ -62,7 +87,7 @@ export default function ImageUpload({
               className="hidden"
               accept="image/*"
               onChange={handleFileChange}
-              disabled={isLoading}
+              disabled={isLoading || uploading}
             />
             <span className="text-4xl text-violet-5534DA">+</span>
           </label>
