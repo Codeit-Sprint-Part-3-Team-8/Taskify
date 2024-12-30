@@ -13,7 +13,7 @@ import LandingSection3 from '@images/contents/landing-section3.png';
 import { montserrat } from '@/_styles/fonts';
 import Link from 'next/link';
 import ContentBox from './ContentBox';
-import useResize from '@/utils/useResize';
+import useResize from '@/_hooks/useResize';
 import Footer from './Footer';
 import { useAuth } from '@/context/AuthContext';
 import Navigate from '@/_components/Auth/Navigate';
