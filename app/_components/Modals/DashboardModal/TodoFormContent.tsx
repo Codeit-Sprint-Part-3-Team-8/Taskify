@@ -56,7 +56,7 @@ export function TodoFormContent({
   };
 
   return (
-    <div className="flex w-full flex-col gap-6">
+    <div className="flex w-full flex-col gap-5">
       <div className="flex gap-4">
         {columns && (
           <div className="flex w-full flex-col gap-2">
@@ -64,7 +64,7 @@ export function TodoFormContent({
               상태
             </label>
             <DropdownMenu
-              buttonClassName="flex h-12 w-full items-center justify-between rounded-[0.875rem] border border-gray-D9D9D9 px-4 text-left hover:border-gray-400 transition-colors"
+              buttonClassName="flex h-12 w-full items-center justify-between rounded-xl border border-gray-D9D9D9 px-4 text-left hover:border-gray-400 transition-colors"
               menuClassName="w-full absolute left-0 z-10 mt-1 rounded-lg border border-gray-200 bg-white shadow-lg"
               trigger={
                 <>
@@ -104,7 +104,7 @@ export function TodoFormContent({
             담당자
           </label>
           <DropdownMenu
-            buttonClassName="flex h-12 w-full items-center justify-between rounded-[0.875rem] border border-gray-D9D9D9 px-4 text-left hover:border-gray-400 transition-colors"
+            buttonClassName="flex h-12 w-full items-center justify-between rounded-xl border border-gray-D9D9D9 px-4 text-left hover:border-gray-400 transition-colors"
             menuClassName="w-full absolute left-0 z-10 mt-1 rounded-lg border border-gray-200 bg-white shadow-lg"
             trigger={
               <>
@@ -146,23 +146,25 @@ export function TodoFormContent({
         value={formData.title}
         onChange={(e) => onChange('title', e.target.value)}
         disabled={isLoading}
-        className="h-12 rounded-[0.875rem] border-gray-D9D9D9 px-4 text-[0.9375rem] placeholder:text-gray-9FA6B2 focus:border-gray-400"
+        className="h-12 rounded-xl border border-gray-D9D9D9 px-4 text-[0.9375rem] placeholder:text-gray-9FA6B2 focus:border-gray-400"
       />
 
-      <ModalInput
-        name="설명"
-        label="설명 *"
-        placeholder="설명을 입력해 주세요"
-        value={formData.description}
-        onChange={(e) => onChange('description', e.target.value)}
-        disabled={isLoading}
-        className="min-h-[8rem] rounded-[0.875rem] border-gray-D9D9D9 px-4 py-3 text-[0.9375rem] placeholder:text-gray-9FA6B2 focus:border-gray-400"
-      />
+      <div className="flex flex-col gap-2">
+        <label className="text-lg font-medium text-black-333236">설명 *</label>
+        <textarea
+          name="설명"
+          placeholder="설명을 입력해 주세요"
+          value={formData.description}
+          onChange={(e) => onChange('description', e.target.value)}
+          disabled={isLoading}
+          className="h-32 resize-none rounded-xl border border-gray-D9D9D9 px-4 py-3 text-[0.9375rem] placeholder:text-gray-9FA6B2 focus:border-gray-400"
+        />
+      </div>
 
       <div className="flex flex-col gap-2">
         <label className="text-lg font-medium text-black-333236">마감일</label>
         <DropdownMenu
-          buttonClassName="flex h-12 w-full items-center gap-3 rounded-[0.875rem] border border-gray-D9D9D9 px-4 text-left hover:border-gray-400 transition-colors"
+          buttonClassName="flex h-12 w-full items-center gap-3 rounded-xl border border-gray-D9D9D9 px-4 text-left hover:border-gray-400 transition-colors"
           menuClassName="w-[18rem] absolute left-0 z-10 mt-1 rounded-lg border border-gray-200 bg-whiteshadow-lg"
           trigger={
             <>
