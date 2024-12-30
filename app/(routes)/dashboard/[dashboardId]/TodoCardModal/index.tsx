@@ -1,13 +1,12 @@
 import { useCallback, useEffect, useState } from 'react';
-import Image from 'next/image';
 import { deleteCard, getCard } from '@/api/cards.api';
 import useCommentList from '@/_hooks/useCommentList';
 import CommentList from '@/_components/Modals/DashboardModal/CommentList';
 import useIntersectionObserver from '@/_hooks/useIntersectionObserver';
-import UserProfile from '@/_components/UserProfile/UserProfile';
 import { ColumnData } from '../Dashboard';
 import useAsync from '@/_hooks/useAsync';
 import ModalHeader from './ModalHeader';
+import ModalContent from './ModalContent';
 
 interface TodoCardModalProps {
   userId: number;
@@ -83,74 +82,13 @@ export default function TodoCardModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black-000000/30">
-      <div className="h-[710px] w-[327px] rounded-lg bg-white p-4 shadow-lg">
+      <div className="h-[710px] w-[327px] rounded-lg bg-white p-4 shadow-lg transition-all tablet:h-[766px] tablet:w-[678px] tablet:pb-6 tablet:pl-8 tablet:pr-8 tablet:pt-6 pc:h-[763px] pc:w-[730px] pc:pl-[18px] pc:pt-[30px]">
         <ModalHeader
           title={cardData?.title || null}
           onClick={handleClickMenu}
           onClose={onClose}
         />
-
-        <div className="flex flex-col gap-4 tablet:flex-row-reverse">
-          <div className="flex h-fit items-center justify-between gap-4 rounded-xl border border-gray-D9D9D9 px-4 py-[0.375rem] tablet:w-40 tablet:flex-col tablet:items-start tablet:px-4 tablet:py-3">
-            <div className="flex h-[2.875rem] grow flex-col justify-between">
-              <label className="text-black-323236 text-xs font-semibold">
-                담당자
-              </label>
-              <div className="flex items-center gap-2">
-                <UserProfile
-                  profileImageUrl={cardData?.assignee?.profileImageUrl}
-                  onlyImg
-                  nickname={cardData?.assignee?.nickname || ''}
-                />
-                <span className="text-xs font-normal">
-                  {cardData?.assignee?.nickname || ''}
-                </span>
-              </div>
-            </div>
-            <div className="flex h-[2.875rem] grow flex-col justify-between">
-              <label className="text-black-323236 text-xs font-semibold">
-                마감일
-              </label>
-              <div className="text-xs font-normal">{cardData?.dueDate}</div>
-            </div>
-          </div>
-
-          <div className="grow">
-            <div className="mb-4 flex h-[26px] w-full items-center gap-2">
-              <div className="flex h-full w-16 items-center gap-1 rounded-full bg-violet-8">
-                <span className="ml-[6px] text-3xl text-violet-5534DA">•</span>
-                <span className="mt-1 text-xs text-violet-5534DA">
-                  {column.title}
-                </span>
-              </div>
-              <div className="flex h-full gap-2">
-                {cardData?.tags.map((tag) => (
-                  <span
-                    key={tag}
-                    className="h-full rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-600"
-                  >
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
-
-            <div className="mb-6 h-[272px]">
-              <p className="mb-8 text-xs font-normal text-black-000000">
-                {cardData?.description}
-              </p>
-              {cardData?.imageUrl && (
-                <Image
-                  src={cardData.imageUrl}
-                  alt="Task illustration"
-                  className="mb-6 h-auto w-full rounded-lg object-contain"
-                  width={290}
-                  height={168}
-                />
-              )}
-            </div>
-          </div>
-        </div>
+        <ModalContent columnTitle={column.title} card={cardData} />
 
         <div className="flex h-[180px] flex-col">
           <div className="relative mb-2 w-full">
