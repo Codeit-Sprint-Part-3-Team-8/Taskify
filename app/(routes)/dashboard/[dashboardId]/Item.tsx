@@ -20,7 +20,7 @@ export function Item({ item, dragOverlay }: ItemsProps) {
 
   return (
     <div
-      className={`item h-full max-h-full w-full ${dragOverlay ? 'cursor-grabbing' : 'cursor-grab'} gap-5 rounded-md border-2 border-gray-200 bg-gray-50 px-3 pt-3 tablet:flex tablet:items-center tablet:pt-0 ${item.imageUrl ? 'pc:h-[304px] pc:w-[314px]' : 'pc:fit pc:w-[314px]'} transform transition-transform hover:scale-105 hover:bg-gray-200 pc:flex-col pc:gap-4 pc:py-3`}
+      className={`item h-full max-h-full w-full ${dragOverlay ? 'cursor-grabbing' : 'cursor-grab'} gap-5 rounded-md border-2 border-gray-200 bg-gray-50 px-3 pt-3 tablet:flex tablet:items-center tablet:pt-0 ${item.imageUrl ? 'pc:h-[304px] pc:w-[314px]' : 'pc:fit pc:w-[314px]'} transform transition-transform hover:scale-105 hover:bg-blue-50 pc:flex-col pc:gap-4 pc:py-3`}
     >
       <div
         className={`relative w-full overflow-hidden rounded-md mobile:h-[152px] tablet:h-[54px] tablet:w-[90px] ${item.imageUrl ? 'pc:h-full pc:w-full' : 'tablet:hidden pc:hidden'}`}
