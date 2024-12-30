@@ -8,8 +8,10 @@ import {
   InvitationType,
 } from '@/_types/dashboards.type';
 import useAsync from '@/_hooks/useAsync';
-import { deleteMember } from '@/api/member.api';
-import { getInvitationListByDashboardId } from '@/api/dashboards.api';
+import {
+  deleteInvitation,
+  getInvitationListByDashboardId,
+} from '@/api/dashboards.api';
 
 const INVITATION_PAGE_SIZE = 4;
 
@@ -33,7 +35,7 @@ export default function InviteList({
     excute: deleteMemberData,
     // loading: memberLoading,
     // error: memberError,
-  } = useAsync(deleteMember);
+  } = useAsync(deleteInvitation);
 
   const [inviteDataState, setInviteDataState] =
     useState<DashboardInvitationListType | null>(invitationData);
@@ -47,7 +49,8 @@ export default function InviteList({
   };
 
   const handleRemoveMember = async (id: number) => {
-    await deleteMemberData({ memberId: id });
+    await deleteMemberData({ invitationId: id, dashboardId: dashboardId });
+    fetchInviteData();
   };
 
   useEffect(() => {
@@ -60,6 +63,16 @@ export default function InviteList({
     fetchInviteData();
   }, [fetchInviteData]);
 
+  if (!inviteDataState?.invitations) {
+    return (
+      <div className="mx-3 h-80 bg-white px-4 py-5 tablet:h-96 tablet:w-[34rem] tablet:py-8 pc:w-[38rem]">
+        <div className="text-center text-lg text-gray-600">
+          초대 데이터가 없습니다.
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="mx-3 h-[27rem] rounded-2xl bg-white px-5 py-5 tablet:w-[34rem] tablet:py-8 pc:w-[38rem]">
       <div className="flex items-center justify-between">
@@ -67,7 +80,7 @@ export default function InviteList({
         <div className="relative flex gap-4">
           <Pagenation
             onClickPage={handleClickInvitePage}
-            totalCount={inviteDataState?.totalCount || 0}
+            totalCount={inviteDataState?.totalCount || 1}
             pageSize={4}
           />
           <Button
@@ -85,26 +98,36 @@ export default function InviteList({
           이메일
         </div>
       </div>
-      {inviteDataState?.invitations.map((invitation: InvitationType, index) => (
-        <div key={invitation.id}>
-          <div className="pb-4">
-            <div className="flex items-center justify-between pb-4">
-              <div>{invitation.invitee.email}</div>
-              <Button
-                backgroundColor="white"
-                className="px-4 py-2 text-violet-5534DA"
-                type="submit"
-                onClick={() => handleRemoveMember(invitation.id)}
-              >
-                취소
-              </Button>
-            </div>
-            {index !== inviteDataState.invitations.length - 1 && (
-              <hr className="bg-gray-EEEEEE" />
-            )}
-          </div>
+      {inviteDataState.invitations.length === 0 ? (
+        <div className="text-center text-lg text-gray-600">
+          초대된 멤버가 없습니다.
         </div>
-      ))}
+      ) : (
+        <>
+          {inviteDataState?.invitations.map(
+            (invitation: InvitationType, index) => (
+              <div key={invitation.id}>
+                <div className="pb-4">
+                  <div className="flex items-center justify-between pb-4">
+                    <div>{invitation.invitee.email}</div>
+                    <Button
+                      backgroundColor="white"
+                      className="px-4 py-2 text-violet-5534DA"
+                      type="submit"
+                      onClick={() => handleRemoveMember(invitation.id)}
+                    >
+                      취소
+                    </Button>
+                  </div>
+                  {index !== inviteDataState.invitations.length - 1 && (
+                    <hr className="bg-gray-EEEEEE" />
+                  )}
+                </div>
+              </div>
+            ),
+          )}
+        </>
+      )}
     </div>
   );
 }

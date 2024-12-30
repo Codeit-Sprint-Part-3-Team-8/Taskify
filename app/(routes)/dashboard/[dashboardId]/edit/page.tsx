@@ -14,10 +14,12 @@ import InviteList from './InviteList';
 import Button from '@/_components/Button/Button';
 import InviteModal from './InviteModal';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 
 export default function Dashboard() {
   const pathname = usePathname();
   const router = useRouter();
+  const {} = useAuth(true);
   const dashboardId = Number(pathname.split('/')[2]);
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
