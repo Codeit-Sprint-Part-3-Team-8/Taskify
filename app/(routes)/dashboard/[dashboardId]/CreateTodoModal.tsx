@@ -89,7 +89,6 @@ export default function CreateTodoModal({
           onClose={onClose}
         />
       }
-      onClose={onClose}
     />
   );
 }
