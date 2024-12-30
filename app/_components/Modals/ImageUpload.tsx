@@ -3,7 +3,7 @@ import Image from 'next/image';
 import { useEffect } from 'react';
 
 interface ImageUploadProps {
-  imageUrl?: string;
+  imageUrl?: string | null;
   onImageChange: (url: string | undefined) => void;
   isLoading?: boolean;
 }
