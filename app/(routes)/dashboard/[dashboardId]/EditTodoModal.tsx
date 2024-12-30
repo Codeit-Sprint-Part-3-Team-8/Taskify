@@ -4,34 +4,33 @@ import GenericModal from '@/_components/Modals/GenericModal';
 import { TodoFormContent } from '@/_components/Modals/DashboardModal/TodoFormContent';
 import { FormDataValue } from '@/_types/todo-prop.type';
 import { TodoFormFooter } from '@/_components/Modals/DashboardModal/TodoFormFooter';
+import { CardType } from '@/_types/cards.type';
 import { Member } from '@/api/types';
-import { UpdateCardParams } from '@/_types/cards.type';
 
 interface EditTodoModalProps {
-  cardId: number;
   columnTitle: string;
-  defaultValues: UpdateCardParams;
+  card: CardType;
   columns: Array<{ columnId: number; columnTitle: string }>;
-  members: Member[];
+  members: Member[] | [];
   onClose: () => void;
 }
 
 export default function EditTodoModal({
   columnTitle,
-  defaultValues,
+  card,
   columns,
   members,
   onClose,
 }: EditTodoModalProps) {
   const [formData, setFormData] = useState({
-    columnId: defaultValues.columnId,
+    columnId: card.columnId,
     columnTitle: columnTitle,
-    title: defaultValues.title || '',
-    description: defaultValues.description || '',
-    assigneeUserId: defaultValues.assigneeUserId || 0,
-    dueDate: defaultValues.dueDate || '',
-    tags: defaultValues.tags || [],
-    imageUrl: defaultValues.imageUrl || '',
+    title: card.title || '',
+    description: card.description || '',
+    assigneeUserId: card.assignee.id || 0,
+    dueDate: card.dueDate || '',
+    tags: card.tags || [],
+    imageUrl: card.imageUrl || '',
   });
   const [isLoading, setIsLoading] = useState(false);
 
@@ -49,7 +48,7 @@ export default function EditTodoModal({
     setIsLoading(true);
     try {
       await updateCard({
-        cardId: defaultValues.cardId,
+        cardId: card.id,
         ...formData,
       });
       onClose();
