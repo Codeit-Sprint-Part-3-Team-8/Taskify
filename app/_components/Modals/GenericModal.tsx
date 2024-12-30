@@ -1,7 +1,7 @@
 interface GenericModalProps {
   modalSize?: string;
   title?: string | React.ReactNode;
-  onClose: () => Promise<void> | void;
+  onClose?: () => Promise<void> | void;
   mainContent: React.ReactNode;
   footerContent?: React.ReactNode;
   className?: string;
@@ -15,6 +15,8 @@ const GenericModal = ({
   className = '',
 }: GenericModalProps) => {
   const handleClose = (e: React.MouseEvent) => {
+    if (!onClose) return;
+
     if (e.target === e.currentTarget) {
       onClose();
     }
