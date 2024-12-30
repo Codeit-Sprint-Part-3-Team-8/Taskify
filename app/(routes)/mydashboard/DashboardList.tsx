@@ -102,7 +102,7 @@ export default function DashboardList({
             <button
               onClick={handlePreviousPage}
               disabled={currentPage === 1}
-              className="rounded-md border border-gray-D9D9D9 px-2.5 py-2.5 tablet:px-3 tablet:py-3"
+              className="rounded-md border border-gray-D9D9D9 px-2.5 py-2.5 transition-all duration-150 hover:bg-[#B599FF] active:scale-90 active:bg-violet-5534DA tablet:px-3 tablet:py-3"
             >
               <Image
                 width={16}
@@ -114,7 +114,7 @@ export default function DashboardList({
             <button
               onClick={handleNextPage}
               disabled={currentPage === totalPages}
-              className="rounded-md border border-gray-D9D9D9 px-2.5 py-2.5 tablet:px-3 tablet:py-3"
+              className="rounded-md border border-gray-D9D9D9 px-2.5 py-2.5 transition-all duration-150 hover:bg-[#B599FF] active:scale-90 active:bg-violet-5534DA tablet:px-3 tablet:py-3"
             >
               <Image
                 width={16}

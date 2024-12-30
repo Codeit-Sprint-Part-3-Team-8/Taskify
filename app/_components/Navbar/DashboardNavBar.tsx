@@ -22,7 +22,7 @@ enum ScreenSize {
 export default function DashboardNavBar() {
   const [visibleMembers, setVisibleMembers] = useState(2);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const { user } = useAuth();
+  const { user } = useAuth(true);
   const params = useParams();
   const id = Number(params.dashboardId);
 
