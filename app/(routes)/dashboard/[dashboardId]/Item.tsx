@@ -61,8 +61,8 @@ export function Item({ item, dragOverlay }: ItemsProps) {
           </div>
           <div className="flex items-center justify-between tablet:items-end pc:items-center">
             <Profile
-              profileImageUrl={item.assignee.profileImageUrl || undefined}
-              nickname={item.assignee.nickname}
+              profileImageUrl={item.assignee?.profileImageUrl || undefined}
+              nickname={item.assignee?.nickname}
             />
           </div>
         </div>
