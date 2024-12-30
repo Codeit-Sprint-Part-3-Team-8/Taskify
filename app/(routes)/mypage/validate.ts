@@ -49,7 +49,7 @@ const validate: {
     if (typeof value === 'string') {
       const schema = new Validator(value)
         .required('비밀번호를 입력해주세요.')
-        .minLength(8);
+        .minLength(8, '비밀번호를 8자 이상 입력해주세요');
       return {
         isValid: schema.validate(),
         message: schema.validate() ? '' : schema.getErrors()[0],

@@ -15,7 +15,7 @@ export default function MyPage() {
   return (
     <>
       <SideBar />
-      <MyDashboardNavBar />
+      <MyDashboardNavBar title="계정관리" />
       <Container className="flex flex-col gap-6 p-6">
         <Link
           href="/mydashboard"
