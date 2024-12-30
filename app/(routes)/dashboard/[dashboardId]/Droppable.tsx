@@ -60,8 +60,8 @@ export default function Droppable({
                 className="sh h-2 w-2 shrink-0 rounded-full"
                 style={{ backgroundColor: dashBoardColor }}
               />
-              <div className="flex items-center gap-4">
-                <p className="text-nowrap text-lg font-bold tablet:text-2lg">
+              <div className="flex w-full max-w-[520px] items-center gap-4 px-1 tablet:max-w-[480px] pc:max-w-[300px]">
+                <p className="truncate text-nowrap text-lg font-bold tablet:text-2lg">
                   {title}
                 </p>
                 <p className="flex h-5 w-5 items-center justify-center rounded-md bg-gray-EEEEEE px-1.5 py-1 text-xs text-gray-787486">
