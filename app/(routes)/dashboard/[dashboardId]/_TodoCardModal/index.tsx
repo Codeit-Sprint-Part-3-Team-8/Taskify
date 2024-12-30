@@ -66,7 +66,7 @@ export default function TodoCardModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black-000000/30">
-      <div className="h-[710px] rounded-lg bg-white p-4 shadow-lg transition-all tablet:h-[766px] tablet:pb-6 tablet:pl-8 tablet:pr-8 tablet:pt-6 pc:h-[763px] pc:pl-[18px] pc:pt-[30px]">
+      <div className="h-[710px] rounded-lg bg-white p-4 shadow-lg transition-all tablet:h-[766px] tablet:pb-6 tablet:pl-8 tablet:pr-8 tablet:pt-6 pc:h-[763px]">
         <ModalHeader
           title={card?.title || null}
           onClick={handleClickMenu}

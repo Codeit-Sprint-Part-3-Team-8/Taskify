@@ -17,11 +17,11 @@ export default function ModalHeader({
   const handleClickDelete = useCallback(() => onClick('delete'), [onClick]);
 
   return (
-    <div className="mb-6 flex flex-col-reverse items-center justify-between gap-4 tablet:flex-row">
-      <h1 className="w-full truncate whitespace-nowrap text-start text-xl font-bold tablet:w-fit">
+    <div className="mb-6 flex flex-col-reverse items-start justify-between gap-4 tablet:flex-row tablet:items-center">
+      <h1 className="w-full max-w-64 truncate whitespace-nowrap text-start text-xl font-bold">
         {title}
       </h1>
-      <div className="flex items-center justify-end gap-4">
+      <div className="flex w-full items-center justify-end gap-4 tablet:w-fit">
         <Dropdown
           buttonClassName="rounded-full"
           menuClassName="absolute right-2 flex z-50 flex-col items-center p-2 w-[93px] rounded-[6px] border border-gray-D9D9D9 bg-white"
