@@ -61,7 +61,12 @@ export default function CreateTodoModal({
       onAddCard(columnData.id, response);
       onClose();
     } catch (error) {
-      alert('할 일 생성에 실패했습니다.');
+      if (formData.tags.some((tag: string) => tag.length > 250)) {
+        alert('태그는 250자를 넘길 수 없습니다.');
+      } else {
+        alert('할 일 생성에 실패했습니다.');
+      }
+
       console.error('할 일 생성 에러:', error);
     } finally {
       setIsLoading(false);
