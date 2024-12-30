@@ -61,11 +61,9 @@ async function updateDashboard({
   return response.data;
 }
 
-async function deleteDashboard({
-  dashboardId,
-}: DeleteDashboardParams): Promise<DashboardType> {
+async function deleteDashboard({ dashboardId }: DeleteDashboardParams) {
   const response = await axios.delete(`/dashboards/${dashboardId}`);
-  return response.data;
+  return !!response;
 }
 
 async function createInvitation({
@@ -99,7 +97,7 @@ async function deleteInvitation({
   const response = await axios.delete(
     `/dashboards/${dashboardId}/invitations/${invitationId}`,
   );
-  return response.data;
+  return !!response;
 }
 
 export {

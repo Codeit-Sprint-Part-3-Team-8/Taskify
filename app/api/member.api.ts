@@ -22,7 +22,7 @@ async function getMemberList({
 
 async function deleteMember({ memberId }: DeleteMemberParams) {
   const response = await axios.delete(`/members/${memberId}`);
-  return response.data;
+  return !!response;
 }
 
 export { getMemberList, deleteMember };
