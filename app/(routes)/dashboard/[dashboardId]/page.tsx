@@ -1,5 +1,7 @@
 'use client';
 
+import NavBar from '@/_components/Navbar/NavBar';
+import SideBar from '@/_components/Sidebar/SideBar';
 import { DashboardType } from '@/_types/dashboards.type';
 import { getDashboard } from '@/api/dashboards.api';
 import dynamic from 'next/dynamic';
@@ -24,12 +26,11 @@ export default function DashBoardPage() {
     const fetchDashBoard = async () => {
       const numericDashboardId = Number(dashboardId);
       try {
-        console.log(dashboardId);
         const data = await getDashboard({ dashboardId: numericDashboardId });
 
         setDashBoard(data);
-      } catch (error) {
-        console.log('ERROR fetching DashBoard', error);
+      } catch {
+        alert('대쉬보드를 불러오는 데 실패했습니다. 다시 시도해주세요.');
       }
     };
 
@@ -38,6 +39,8 @@ export default function DashBoardPage() {
 
   return (
     <main>
+      <NavBar type="dashboard" />
+      <SideBar />
       <DashBoard dashBoard={dashBoard} />
     </main>
   );
