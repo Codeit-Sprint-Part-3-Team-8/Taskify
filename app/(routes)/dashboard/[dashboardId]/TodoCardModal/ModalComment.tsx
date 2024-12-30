@@ -1,49 +1,25 @@
-import CommentList from '@/_components/Modals/DashboardModal/CommentList';
-import useCommentList from '@/_hooks/useCommentList';
-import useIntersectionObserver from '@/_hooks/useIntersectionObserver';
-import { CardType } from '@/_types/cards.type';
-import { useCallback, useState } from 'react';
+import { CommentListType, CommentType } from '@/_types/comments.type';
+import { ChangeEvent, useState } from 'react';
 
 interface ModalCommentProps {
-  card: CardType | null;
-  userId: number;
-  cardId: number;
-  dashboardId: number;
+  commentList: CommentListType;
+  onSubmit: (content: string) => void;
 }
 
 export default function ModalComment({
-  userId,
-  cardId,
-  dashboardId,
-  card,
+  commentList,
+  onSubmit,
 }: ModalCommentProps) {
-  const {
-    commentsResponse,
-    addComment,
-    loadMoreComments,
-    removeComment,
-    editComment,
-    isSubmitting,
-  } = useCommentList(cardId, null);
-  const [newComment, setNewComment] = useState('');
+  const [content, setContent] = useState('');
+  const { comments } = commentList;
 
-  const hanndleClickSubmit = () => {
-    if (!card) return;
-    addComment(newComment, dashboardId, card.columnId);
-    setNewComment('');
+  const handleChange = (event: ChangeEvent<HTMLTextAreaElement>) => {
+    setContent(event.target.value);
   };
 
-  const handleObserver: IntersectionObserverCallback = useCallback(
-    (entries) => {
-      const [entry] = entries;
-      if (entry?.isIntersecting && commentsResponse?.cursorId) {
-        loadMoreComments(commentsResponse.cursorId);
-      }
-    },
-    [commentsResponse?.cursorId, loadMoreComments],
-  );
-
-  const endPoint = useIntersectionObserver(handleObserver);
+  const handleSubmit = () => {
+    onSubmit(content);
+  };
 
   return (
     <div className="flex h-[180px] flex-col">
@@ -54,19 +30,13 @@ export default function ModalComment({
         <textarea
           name="comment"
           placeholder="댓글 작성하기"
-          className="h-[70px] w-full resize-none rounded-xl border border-gray-D9D9D9 p-4 placeholder:text-xs placeholder:text-gray-9FA6B2 focus:border-gray-D9D9D9 focus:outline-none"
-          onChange={(e) => setNewComment(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === 'Enter') {
-              hanndleClickSubmit();
-            }
-          }}
-          value={newComment}
-          disabled={isSubmitting}
+          className="h-[70px] w-full resize-none rounded-xl border border-gray-D9D9D9 p-4 text-xs placeholder:text-xs placeholder:text-gray-9FA6B2 focus-visible:outline-violet-5534DA"
+          onChange={handleChange}
+          value={content}
         />
         <button
-          onClick={hanndleClickSubmit}
-          disabled={isSubmitting || !newComment.trim()}
+          type="submit"
+          onClick={handleSubmit}
           className="absolute bottom-[1.25rem] right-[1.3rem] h-[28px] w-[84px] rounded-lg border border-gray-D9D9D9 bg-white px-4 text-xs font-medium text-violet-5534DA"
         >
           입력
@@ -75,30 +45,24 @@ export default function ModalComment({
 
       <div className="max-h-[80px] flex-1 overflow-y-auto">
         <div className="space-y-4">
-          {commentsResponse?.comments.map(
-            ({
-              id: commentId,
-              author: { id: authorId, nickname, profileImageUrl },
-              createdAt,
-              content,
-            }) => (
-              <CommentList
-                key={`comment_${commentId}`}
-                userId={userId}
-                commentId={commentId}
-                authorId={authorId}
-                nickname={nickname}
-                profileImageUrl={profileImageUrl}
-                createdAt={createdAt}
-                content={content}
-                removeComment={removeComment}
-                updateComment={editComment}
-              />
-            ),
-          )}
-          {commentsResponse?.cursorId && <div ref={endPoint} />}
+          {comments.map((comment: CommentType) => (
+            <div key={'comment-' + comment.id}>{comment.content}</div>
+          ))}
         </div>
       </div>
     </div>
   );
 }
+
+// <CommentList
+//   key={`comment_${comment.id}`}
+//   userId={comment}
+//   commentId={comment.id}
+//   authorId={comment.authorId}
+//   nickname={comment.nickname}
+//   profileImageUrl={comment.profileImageUrl}
+//   createdAt={comment.createdAt}
+//   content={content}
+//   removeComment={removeComment}
+//   updateComment={editComment}
+// />
