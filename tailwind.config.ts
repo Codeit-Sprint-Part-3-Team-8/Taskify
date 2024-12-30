@@ -1,6 +1,8 @@
-import type { Config } from 'tailwindcss'
+/** @type {import('tailwindcss').Config} */
+import tailsindcssAnimate from 'tailwindcss-animate';
 
-export default {
+module.exports = {
+  darkMode: ['class'],
   content: ['./app/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     /* 디바이스 분기점 정의 */
@@ -29,10 +31,9 @@ export default {
           D9D9D9: '#D9D9D9',
           EEEEEE: '#EEEEEE',
           FAFAFA: '#FAFAFA',
+          F5F5F5: '#F5F5F5',
         },
-        white: {
-          FFFFFF: '#FFFFFF',
-        },
+        white: '#FFFFFF',
         violet: {
           '5534DA': '#5534DA',
           '8': '#F1EFFD',
@@ -56,7 +57,42 @@ export default {
           E876EA: '#E876EA',
         },
       },
+      keyframes: {
+        fadeInUp: {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+      },
+      animation: {
+        fadeInUp: 'fadeInUp 0.2s ease-out',
+      },
+      fontFamily: {
+        pretendard: ['var(--font-pretendard)'],
+        montserrat: ['var(--font-montserrat)'],
+      },
+      fontSize: {
+        xs: ['0.75rem', { lineHeight: '1.12rem' }], // 12px
+        sm: ['0.815rem', { lineHeight: '1.37rem' }], // 13px
+        md: ['0.875rem', { lineHeight: '1.5rem' }], // 14px
+        lg: ['1rem', { lineHeight: '1.62rem' }], // 16px
+        '2lg': ['1.125rem', { lineHeight: '1.62rem' }], // 18px
+        xl: ['1.25rem', { lineHeight: '2rem' }], // 20px
+        '2xl': ['1.5rem', { lineHeight: '2rem' }], // 24px
+        '3xl': ['2rem', { lineHeight: '2.62rem' }], // 32px
+        '4xl': ['2.5rem', { lineHeight: '2.62rem' }], // 40px
+        '5xl': ['3rem', { lineHeight: '4rem' }], // 48px
+        '6xl': ['4.75rem', { lineHeight: '6.25rem' }], // 76px
+      },
+    },
+    animation: {
+      'dot-bounce': 'dot-bounce 1.5s infinite',
+    },
+    keyframes: {
+      'dot-bounce': {
+        '0%, 80%, 100%': { transform: 'scale(0)' },
+        '40%': { transform: 'scale(1)' },
+      },
     },
   },
-  plugins: [],
-} satisfies Config
+  plugins: [tailsindcssAnimate],
+};
