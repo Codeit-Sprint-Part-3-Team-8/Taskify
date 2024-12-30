@@ -15,7 +15,7 @@ export default function UserProfile({
     <div className="flex items-center">
       <Avatar.Root className="inline-flex select-none items-center justify-center overflow-hidden rounded-full bg-gray-200 align-middle">
         <Avatar.Image
-          className="h-[1.625rem] w-[1.625rem] object-cover tablet:h-[2.375rem] tablet:w-[2.375rem]"
+          className="h-[1.625rem] w-[1.625rem] object-cover tablet:h-[2.125rem] tablet:w-[2.125rem]"
           src={profileImageUrl || ''}
           alt={nickname}
         />
