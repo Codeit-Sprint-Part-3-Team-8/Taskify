@@ -69,7 +69,7 @@ export default function Droppable({
                 </p>
               </div>
             </div>
-            <div className="relative h-5 w-5 tablet:h-[24px] tablet:w-[24px]">
+            <div className="relative h-5 w-5 transform transition-transform hover:rotate-45 hover:scale-125 tablet:h-[24px] tablet:w-[24px]">
               <Image
                 src="/images/icon/ic-setting.svg"
                 alt="컬럼 수정 버튼"
