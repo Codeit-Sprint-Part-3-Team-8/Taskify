@@ -1,4 +1,5 @@
 /** @type {import('tailwindcss').Config} */
+import tailsindcssAnimate from 'tailwindcss-animate';
 
 module.exports = {
   darkMode: ['class'],
@@ -56,6 +57,15 @@ module.exports = {
           E876EA: '#E876EA',
         },
       },
+      keyframes: {
+        fadeInUp: {
+          '0%': { opacity: '0', transform: 'translateY(20px)' },
+          '100%': { opacity: '1', transform: 'translateY(0)' },
+        },
+      },
+      animation: {
+        fadeInUp: 'fadeInUp 0.2s ease-out',
+      },
       fontFamily: {
         pretendard: ['var(--font-pretendard)'],
         montserrat: ['var(--font-montserrat)'],
@@ -84,5 +94,5 @@ module.exports = {
       },
     },
   },
-  plugins: [require('tailwindcss-animate')],
+  plugins: [tailsindcssAnimate],
 };

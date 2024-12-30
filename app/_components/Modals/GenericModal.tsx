@@ -24,11 +24,11 @@ const GenericModal = ({
 
   return (
     <div
-      className="fixed inset-0 z-40 flex items-center justify-center bg-black-000000/30 text-black-333236"
+      className="fixed inset-0 z-50 flex items-center justify-center bg-black-000000/30 text-black-333236"
       onClick={handleClose}
     >
       <div
-        className={`rounded-xl bg-white p-8 shadow-xl mobile:w-[20rem] tablet:w-[32rem] ${className}`}
+        className={`animate-fadeInUp rounded-xl bg-white p-8 shadow-xl mobile:w-[20rem] tablet:w-[32rem] ${className}`}
       >
         {title && (
           <header className="mb-6 w-full">
