@@ -10,7 +10,7 @@ const BUTTON_SIZE =
 interface InviteModalProps {
   onClose: () => Promise<void> | void;
   dashboardId: number;
-  onSubmitSuccess: () => void;
+  onSubmitSuccess?: () => void;
 }
 
 const InviteModal = ({
@@ -41,7 +41,9 @@ const InviteModal = ({
       setIsLoading(false);
     }
 
-    onSubmitSuccess();
+    if (onSubmitSuccess) {
+      onSubmitSuccess();
+    }
   };
 
   const mainContent = (
