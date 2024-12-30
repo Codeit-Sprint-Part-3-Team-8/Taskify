@@ -66,7 +66,7 @@ export default function TodoCardModal({
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black-000000/30">
-      <div className="h-[710px] w-[327px] rounded-lg bg-white p-4 shadow-lg transition-all tablet:h-[766px] tablet:w-[678px] tablet:pb-6 tablet:pl-8 tablet:pr-8 tablet:pt-6 pc:h-[763px] pc:w-[730px] pc:pl-[18px] pc:pt-[30px]">
+      <div className="h-[710px] rounded-lg bg-white p-4 shadow-lg transition-all tablet:h-[766px] tablet:pb-6 tablet:pl-8 tablet:pr-8 tablet:pt-6 pc:h-[763px] pc:pl-[18px] pc:pt-[30px]">
         <ModalHeader
           title={card?.title || null}
           onClick={handleClickMenu}
@@ -74,7 +74,7 @@ export default function TodoCardModal({
         />
         <div className="flex flex-col gap-4 tablet:flex-row-reverse">
           {card && <ModalInfo card={card} />}
-          <div>
+          <div className="flex w-[18.125rem] flex-col gap-4 rounded-lg tablet:w-[26.25rem] pc:w-[27.81375rem]">
             <ModalTags columnTitle={column.title} tags={card?.tags} />
             <ModalContent card={card} />
             {commentList && (
