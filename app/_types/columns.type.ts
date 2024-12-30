@@ -33,9 +33,9 @@ interface DeleteColumn {
   columnId: number;
 }
 
-interface CreateColumnImage {
+interface CreateColumnImageParams {
   columnId: number;
-  image: File;
+  image: FormData;
 }
 
 export type {
@@ -45,6 +45,6 @@ export type {
   ColumnListType,
   UpdateColumnParams,
   DeleteColumn,
-  CreateColumnImage,
+  CreateColumnImageParams,
   ColumnImageType,
 };
