@@ -253,12 +253,12 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
       await updateCard({
         cardId: id,
         columnId: Number(activeContainer),
-        assigneeUserId: assignee.id,
+        assigneeUserId: assignee.id || null,
         title: title,
         description: description,
-        dueDate: dueDate,
+        dueDate: dueDate || null,
         tags: tags,
-        imageUrl: imageUrl,
+        imageUrl: imageUrl || null,
       });
     } catch {
       setItemGroups(prevItemGroups);
