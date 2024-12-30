@@ -46,7 +46,7 @@ const DropdownMenu = ({
       <div className="flex items-center">
         <button
           onClick={toggleDropdown}
-          className={buttonClassName}
+          className={`${buttonClassName} ${isDropdownVisible ? 'outline outline-2 outline-violet-5534DA' : ''}`}
           type="button"
         >
           {trigger}
