@@ -1,12 +1,10 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { deleteCard, getCard } from '@/api/cards.api';
-import useCommentList from '@/_hooks/useCommentList';
-import CommentList from '@/_components/Modals/DashboardModal/CommentList';
-import useIntersectionObserver from '@/_hooks/useIntersectionObserver';
 import { ColumnData } from '../Dashboard';
 import useAsync from '@/_hooks/useAsync';
 import ModalHeader from './ModalHeader';
 import ModalContent from './ModalContent';
+import ModalComment from './ModalComment';
 
 interface TodoCardModalProps {
   userId: number;
@@ -27,15 +25,6 @@ export default function TodoCardModal({
   onEditClick,
   onDeleteCard,
 }: TodoCardModalProps) {
-  const {
-    commentsResponse,
-    addComment,
-    loadMoreComments,
-    removeComment,
-    editComment,
-    isSubmitting,
-  } = useCommentList(cardId, null);
-  const [newComment, setNewComment] = useState('');
   const { excute: _getCard, data: cardData } = useAsync(getCard);
 
   // 카드 삭제 함수
@@ -62,24 +51,6 @@ export default function TodoCardModal({
     _getCard({ cardId });
   }, [cardId, _getCard]);
 
-  const hanndleClickSubmit = () => {
-    if (!cardData) return;
-    addComment(newComment, dashboardId, cardData.columnId);
-    setNewComment('');
-  };
-
-  const handleObserver: IntersectionObserverCallback = useCallback(
-    (entries) => {
-      const [entry] = entries;
-      if (entry?.isIntersecting && commentsResponse?.cursorId) {
-        loadMoreComments(commentsResponse.cursorId);
-      }
-    },
-    [commentsResponse?.cursorId, loadMoreComments],
-  );
-
-  const endPoint = useIntersectionObserver(handleObserver);
-
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black-000000/30">
       <div className="h-[710px] w-[327px] rounded-lg bg-white p-4 shadow-lg transition-all tablet:h-[766px] tablet:w-[678px] tablet:pb-6 tablet:pl-8 tablet:pr-8 tablet:pt-6 pc:h-[763px] pc:w-[730px] pc:pl-[18px] pc:pt-[30px]">
@@ -90,60 +61,12 @@ export default function TodoCardModal({
         />
         <ModalContent columnTitle={column.title} card={cardData} />
 
-        <div className="flex h-[180px] flex-col">
-          <div className="relative mb-2 w-full">
-            <label className="text-black-323236 mb-[6px] block text-md font-medium">
-              댓글
-            </label>
-            <textarea
-              name="comment"
-              placeholder="댓글 작성하기"
-              className="h-[70px] w-full resize-none rounded-xl border border-gray-D9D9D9 p-4 placeholder:text-xs placeholder:text-gray-9FA6B2 focus:border-gray-D9D9D9 focus:outline-none"
-              onChange={(e) => setNewComment(e.target.value)}
-              onKeyDown={(e) => {
-                if (e.key === 'Enter') {
-                  hanndleClickSubmit();
-                }
-              }}
-              value={newComment}
-              disabled={isSubmitting}
-            />
-            <button
-              onClick={hanndleClickSubmit}
-              disabled={isSubmitting || !newComment.trim()}
-              className="absolute bottom-[1.25rem] right-[1.3rem] h-[28px] w-[84px] rounded-lg border border-gray-D9D9D9 bg-white px-4 text-xs font-medium text-violet-5534DA"
-            >
-              입력
-            </button>
-          </div>
-
-          <div className="max-h-[80px] flex-1 overflow-y-auto">
-            <div className="space-y-4">
-              {commentsResponse?.comments.map(
-                ({
-                  id: commentId,
-                  author: { id: authorId, nickname, profileImageUrl },
-                  createdAt,
-                  content,
-                }) => (
-                  <CommentList
-                    key={`comment_${commentId}`}
-                    userId={userId}
-                    commentId={commentId}
-                    authorId={authorId}
-                    nickname={nickname}
-                    profileImageUrl={profileImageUrl}
-                    createdAt={createdAt}
-                    content={content}
-                    removeComment={removeComment}
-                    updateComment={editComment}
-                  />
-                ),
-              )}
-              {commentsResponse?.cursorId && <div ref={endPoint} />}
-            </div>
-          </div>
-        </div>
+        <ModalComment
+          userId={userId}
+          cardId={cardId}
+          dashboardId={dashboardId}
+          card={cardData}
+        />
         {/* Add your mobile view content here */}
       </div>
     </div>
