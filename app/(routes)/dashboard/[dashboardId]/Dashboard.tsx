@@ -265,6 +265,24 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
     }
   };
 
+  const handleAddNewCard = (columnId: number, newCard: CardType) => {
+    setItemGroups((itemGroups) => {
+      const newItemGroups = {
+        ...itemGroups,
+        [columnId]: {
+          ...itemGroups[columnId],
+          cardData: {
+            cursorId: itemGroups[columnId].cardData.cursorId,
+            totalCount: itemGroups[columnId].cardData.totalCount + 1,
+            cards: [...itemGroups[columnId].cardData.cards, newCard],
+          },
+        },
+      };
+
+      return newItemGroups;
+    });
+  };
+
   const handleColumnCreated = ({ id, title }: OnColumnHandlerParams) => {
     setItemGroups((prevItemGroups) => ({
       ...prevItemGroups,
@@ -358,6 +376,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
           columnData={selectedColumn}
           members={members?.members || []}
           onClose={() => setIsCreateCardModalVisible(false)}
+          onAddCard={handleAddNewCard}
         />
       )}
 

@@ -5,6 +5,7 @@ import { TodoFormContent } from '@/_components/Modals/DashboardModal/TodoFormCon
 import GenericModal from '@/_components/Modals/GenericModal';
 import { TodoFormFooter } from '@/_components/Modals/DashboardModal/TodoFormFooter';
 import { FormDataValue } from '@/_types/todo-prop.type';
+import { CardType } from '@/_types/cards.type';
 
 interface CreateTodoModalProps {
   dashboardId: number;
@@ -14,6 +15,7 @@ interface CreateTodoModalProps {
   };
   members: Member[];
   onClose: () => void;
+  onAddCard: (columnId: number, newCard: CardType) => void;
 }
 
 export default function CreateTodoModal({
@@ -21,6 +23,7 @@ export default function CreateTodoModal({
   columnData,
   members,
   onClose,
+  onAddCard,
 }: CreateTodoModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -45,7 +48,7 @@ export default function CreateTodoModal({
   const handleCreateTodo = async () => {
     setIsLoading(true);
     try {
-      await createCard({
+      const response = await createCard({
         dashboardId,
         columnId: columnData.id,
         title: formData.title,
@@ -55,7 +58,7 @@ export default function CreateTodoModal({
         tags: formData.tags,
         imageUrl: formData.imageUrl,
       });
-      onClose();
+      onAddCard(columnData.id, response);
     } catch (error) {
       alert('할 일 생성에 실패했습니다.');
       console.error('할 일 생성 에러:', error);
