@@ -28,6 +28,7 @@ export default function DashboardList({
   const handlePreviousPage = () => {
     if (currentPage > 1) onPageChange(currentPage - 1);
   };
+  const adjustedTotalPages = totalPages === 0 ? 1 : totalPages;
 
   return (
     <div className="p-4 pl-[5.5rem] pt-[5.25rem] tablet:pl-[12.5rem] tablet:pt-[6.875rem] pc:pl-[21.25rem] pc:pt-28">
@@ -96,7 +97,7 @@ export default function DashboardList({
         </div>
         <div className="mt-4 flex items-center justify-end gap-4 pc:mt-3">
           <div className="font-pretendard text-xs font-normal text-black-333236 tablet:text-md">
-            {`${totalPages} 페이지 중 ${currentPage}`}
+            {`${adjustedTotalPages} 페이지 중 ${currentPage}`}
           </div>
           <div>
             <button
