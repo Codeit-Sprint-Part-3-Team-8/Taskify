@@ -2,9 +2,10 @@ import Button from '@/_components/Button/Button';
 import Pagenation from './Pagenation';
 import { MemberListType, MemberType } from '@/_types/members.type';
 import useAsync from '@/_hooks/useAsync';
-import { deleteMember, getMemberList } from '@/api/member.api';
+import { getMemberList } from '@/api/member.api';
 import { useCallback, useEffect, useState } from 'react';
 import Image from 'next/image';
+import ModifyModal from './ModifyModal';
 
 const MEMBER_PAGE_SIZE = 4;
 
@@ -16,11 +17,11 @@ export default function ModifyList({ dashboardId }: { dashboardId: number }) {
     // error: memberError,
   } = useAsync(getMemberList);
 
-  const { excute: deleteMemberAsync } = useAsync(deleteMember);
   const [memberDataState, setMemberDataState] = useState<MemberListType | null>(
     memberData,
   );
-
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [deleteId, setDeleteId] = useState<number | null>(null);
   const fetchMemberData = useCallback(async () => {
     await getMemberData({ dashboardId, size: MEMBER_PAGE_SIZE });
   }, [dashboardId, getMemberData]);
@@ -29,8 +30,13 @@ export default function ModifyList({ dashboardId }: { dashboardId: number }) {
     await getMemberData({ dashboardId, page, size: MEMBER_PAGE_SIZE });
   };
 
-  const handleRemoveMember = async (memberId: number) => {
-    await deleteMemberAsync({ memberId });
+  const handleDeleteMember = async (memberId: number) => {
+    setIsModalOpen(true);
+    setDeleteId(memberId);
+  };
+
+  const handleConfirm = () => {
+    setIsModalOpen(false);
     fetchMemberData();
   };
 
@@ -68,7 +74,7 @@ export default function ModifyList({ dashboardId }: { dashboardId: number }) {
         <div className="text-xl font-bold">구성원</div>
         <Pagenation
           onClickPage={handleClickPage}
-          totalCount={memberData?.totalCount}
+          totalCount={memberData?.totalCount || 1}
           pageSize={4}
         />
       </div>
@@ -94,10 +100,11 @@ export default function ModifyList({ dashboardId }: { dashboardId: number }) {
               </div>
             </div>
             <Button
+              disabled={member.isOwner === true}
               backgroundColor="white"
               className="px-4 py-2 text-purple-760DDE"
               type="submit"
-              onClick={() => handleRemoveMember(member.id)}
+              onClick={() => handleDeleteMember(member.id)}
             >
               삭제
             </Button>
@@ -107,6 +114,14 @@ export default function ModifyList({ dashboardId }: { dashboardId: number }) {
           )}
         </div>
       ))}
+      {isModalOpen && (
+        <ModifyModal
+          columnId={deleteId!}
+          initialTitle="dd"
+          onClose={() => setIsModalOpen(false)}
+          onConfirm={handleConfirm}
+        />
+      )}
     </div>
   );
 }

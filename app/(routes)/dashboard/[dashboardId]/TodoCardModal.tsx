@@ -9,23 +9,26 @@ import useIntersectionObserver from '@/_hooks/useIntersectionObserver';
 import { CardType } from '@/_types/cards.type';
 import UserProfile from '@/_components/UserProfile/UserProfile';
 import useResize from '@/utils/useResize';
+import { ColumnData } from './Dashboard';
 
 interface TodoCardModalProps {
   userId: number;
   cardId: number;
-  columnTitle: string;
+  column: ColumnData;
   dashboardId: number;
   onClose: () => void;
   onEditClick: () => void;
+  onDeleteCard: (columnId: number, cardId: number) => void;
 }
 
 export default function TodoCardModal({
   userId,
   cardId,
-  columnTitle,
+  column,
   dashboardId,
   onClose,
   onEditClick,
+  onDeleteCard,
 }: TodoCardModalProps) {
   const [cardInfo, setCardInfo] = useState<CardType | null>(null);
   const {
@@ -49,6 +52,7 @@ export default function TodoCardModal({
   const handleDeleteCard = async () => {
     try {
       await deleteCard({ cardId });
+      onDeleteCard(column.id, cardId);
       alert('카드가 삭제되었습니다.');
     } catch (error) {
       console.error('카드 삭제 오류:', error);
@@ -160,7 +164,7 @@ export default function TodoCardModal({
             <div className="flex h-full w-16 items-center gap-1 rounded-full bg-violet-8">
               <span className="ml-[6px] text-3xl text-violet-5534DA">•</span>
               <span className="mt-1 text-xs text-violet-5534DA">
-                {columnTitle}
+                {column.title}
               </span>
             </div>
             <div className="flex h-full gap-2">
@@ -312,7 +316,7 @@ export default function TodoCardModal({
                     •
                   </span>
                   <span className="mt-1 text-xs text-violet-5534DA">
-                    {columnTitle}
+                    {column.title}
                   </span>
                 </div>
                 <div className="flex gap-2">

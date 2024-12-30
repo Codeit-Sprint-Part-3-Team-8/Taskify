@@ -7,7 +7,7 @@ import CreateCardButton from './CreateCardButton';
 import Image from 'next/image';
 import { useState } from 'react';
 import EditColumnModal from '../EditColumnModal';
-import { columnData, OnColumnHandlerType } from './Dashboard';
+import { ColumnData, OnColumnHandlerType } from './Dashboard';
 
 interface DroppableProps {
   id: string;
@@ -17,7 +17,8 @@ interface DroppableProps {
   onColumnUpdated: OnColumnHandlerType;
   onColumnDeleted: OnColumnHandlerType;
   onClickCard: (card: CardType) => void;
-  onClickCreateCard: ({ id, title }: columnData) => void;
+  onClickColumn: ({ id, title }: ColumnData) => void;
+  onClickCreateCard: ({ id, title }: ColumnData) => void;
 }
 
 export default function Droppable({
@@ -28,11 +29,12 @@ export default function Droppable({
   onColumnUpdated,
   onClickCard,
   onClickCreateCard,
+  onClickColumn,
   onColumnDeleted: onColumnDelete,
 }: DroppableProps) {
   const { setNodeRef } = useDroppable({ id });
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-
+  const numericId = Number(id);
   const handleOpenEditModal = () => {
     setIsEditModalOpen(true);
   };
@@ -41,9 +43,16 @@ export default function Droppable({
     setIsEditModalOpen(false);
   };
 
+  const handleClickColumn = ({ id, title }: ColumnData) => {
+    onClickColumn({ id, title });
+  };
+
   return (
     <SortableContext id={id} items={items} strategy={rectSortingStrategy}>
-      <div className="px-3 py-4 mobile:w-full pc:max-w-[384px]">
+      <div
+        onClick={() => handleClickColumn({ id: numericId, title })}
+        className="px-3 py-4 mobile:w-full pc:max-w-[384px]"
+      >
         <div className="border-b-2 pb-2 tablet:pb-6 pc:border-none">
           <div className="flex justify-between pb-1">
             <div className="mb-4 flex items-center gap-2">
