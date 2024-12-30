@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 
 interface DropdownMenuProps {
+  outline?: boolean;
   trigger: React.ReactNode;
   children: React.ReactNode;
   buttonClassName?: string;
@@ -8,6 +9,7 @@ interface DropdownMenuProps {
 }
 
 const DropdownMenu = ({
+  outline = false,
   trigger,
   children,
   buttonClassName,
@@ -46,7 +48,7 @@ const DropdownMenu = ({
       <div className="flex items-center">
         <button
           onClick={toggleDropdown}
-          className={`${buttonClassName} ${isDropdownVisible ? 'outline outline-2 outline-violet-5534DA' : ''}`}
+          className={`${buttonClassName} ${outline && isDropdownVisible ? 'outline outline-2 outline-violet-5534DA' : ''}`}
           type="button"
         >
           {trigger}
