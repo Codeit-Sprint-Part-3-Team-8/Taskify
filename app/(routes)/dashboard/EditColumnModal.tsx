@@ -32,14 +32,6 @@ const EditColumnModal = ({
 
   // 컬럼 삭제
   const handleDeleteColumn = async () => {
-    const isConfirmed = window.confirm(
-      '칼럼의 모든 카드가 삭제됩니다. 계속하시겠습니까?',
-    );
-
-    if (!isConfirmed) {
-      onClose();
-      return;
-    }
     setIsLoading(true);
 
     try {
