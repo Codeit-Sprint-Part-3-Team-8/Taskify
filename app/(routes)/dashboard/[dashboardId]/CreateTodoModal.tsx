@@ -24,12 +24,12 @@ export default function CreateTodoModal({
 }: CreateTodoModalProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [formData, setFormData] = useState({
-    assigneeId: 0,
+    assigneeId: undefined,
     title: '',
     description: '',
-    dueDate: '',
+    dueDate: undefined,
     tags: [],
-    imageUrl: '',
+    imageUrl: undefined,
   });
 
   const IS_INPUT_VALID =

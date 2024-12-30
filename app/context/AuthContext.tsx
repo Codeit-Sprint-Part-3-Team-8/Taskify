@@ -52,7 +52,7 @@ function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const login = useCallback(
     async ({ email, password }: LoginUserParams) => {
-      await _loginUser({ email, password });
+      await _loginUser({ email: email.trim(), password: password.trim() });
     },
     [_loginUser],
   );

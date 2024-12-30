@@ -3,13 +3,13 @@ interface CardType {
   title: string;
   description: string;
   tags: string[];
-  dueDate: string | null;
+  dueDate: string | undefined;
   assignee: {
     profileImageUrl: string | null;
     nickname: string;
     id: number;
   };
-  imageUrl: string | null;
+  imageUrl: string | undefined;
   teamId: string;
   columnId: number;
   createdAt: string;

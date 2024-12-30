@@ -32,7 +32,7 @@ export default function Dashboard() {
 
   return (
     <>
-      <NavBar type="mydashboard" />
+      <NavBar type="dashboard" />
       <SideBar />
       <div className="sidebar-right-content">
         <div className="pb-32 pl-3 pt-4 tablet:pb-16 pc:pb-14">
