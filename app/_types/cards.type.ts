@@ -3,13 +3,13 @@ interface CardType {
   title: string;
   description: string;
   tags: string[];
-  dueDate: string | null;
+  dueDate: string | undefined;
   assignee: {
     profileImageUrl: string | null;
     nickname: string;
     id: number;
-  } | null;
-  imageUrl: string | null;
+  };
+  imageUrl: string | undefined;
   teamId: string;
   columnId: number;
   createdAt: string;
@@ -42,12 +42,12 @@ interface GetCardListParams {
 interface UpdateCardParams {
   cardId: number;
   columnId: number;
-  assigneeUserId: number | null;
+  assigneeUserId?: number;
   title: string;
   description: string;
-  dueDate: string | null;
-  tags: string[];
-  imageUrl: string | null;
+  dueDate?: string;
+  tags?: string[];
+  imageUrl?: string;
 }
 
 interface GetCardParams {

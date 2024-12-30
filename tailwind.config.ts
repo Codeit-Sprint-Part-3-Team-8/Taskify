@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 
 module.exports = {
+  darkMode: ['class'],
   content: ['./app/**/*.{js,ts,jsx,tsx,mdx}'],
   theme: {
     /* 디바이스 분기점 정의 */
@@ -29,6 +30,7 @@ module.exports = {
           D9D9D9: '#D9D9D9',
           EEEEEE: '#EEEEEE',
           FAFAFA: '#FAFAFA',
+          F5F5F5: '#F5F5F5',
         },
         white: '#FFFFFF',
         violet: {
@@ -72,6 +74,15 @@ module.exports = {
         '6xl': ['4.75rem', { lineHeight: '6.25rem' }], // 76px
       },
     },
+    animation: {
+      'dot-bounce': 'dot-bounce 1.5s infinite',
+    },
+    keyframes: {
+      'dot-bounce': {
+        '0%, 80%, 100%': { transform: 'scale(0)' },
+        '40%': { transform: 'scale(1)' },
+      },
+    },
   },
-  plugins: [],
+  plugins: [require('tailwindcss-animate')],
 };
