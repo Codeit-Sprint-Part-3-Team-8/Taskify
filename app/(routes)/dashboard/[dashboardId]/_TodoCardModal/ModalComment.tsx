@@ -24,7 +24,7 @@ export default function ModalComment({
   };
 
   return (
-    <div className="flex h-[180px] flex-col">
+    <div className="flex flex-col">
       <div className="relative mb-2 w-full">
         <label className="text-black-323236 mb-[6px] block text-md font-medium">
           댓글
@@ -45,7 +45,7 @@ export default function ModalComment({
         </button>
       </div>
 
-      <div className="max-h-[80px] flex-1 overflow-y-auto">
+      <div className="max-h-[80px] flex-1">
         <div className="space-y-4">
           {comments.map((comment: CommentType) => (
             <div key={'comment-' + comment.id} className="flex gap-4">

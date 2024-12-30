@@ -61,7 +61,7 @@ export default function TodoCardModal({
   }, [cardId, _getCard]);
 
   useEffect(() => {
-    _getCommentList({ cardId });
+    _getCommentList({ cardId, size: 1000 });
   }, [cardId, _getCommentList, createCommentData]);
 
   return (
@@ -76,13 +76,15 @@ export default function TodoCardModal({
           {card && <ModalInfo card={card} />}
           <div className="flex w-[18.125rem] flex-col gap-4 rounded-lg tablet:w-[26.25rem] pc:w-[27.81375rem]">
             <ModalTags columnTitle={column.title} tags={card?.tags} />
-            <ModalContent card={card} />
-            {commentList && (
-              <ModalComment
-                commentList={commentList}
-                onSubmit={handleSubmitComment}
-              />
-            )}
+            <div className="scrollbar-hidden relative overflow-y-scroll">
+              <ModalContent card={card} />
+              {commentList && (
+                <ModalComment
+                  commentList={commentList}
+                  onSubmit={handleSubmitComment}
+                />
+              )}
+            </div>
           </div>
         </div>
       </div>
