@@ -112,7 +112,7 @@ export default function TodoCardModal({
           <div className="absolute right-4 top-4 flex items-center gap-4">
             <Dropdown
               buttonClassName="rounded-full"
-              menuClassName="absolute flex flex-col items-center p-2 w-[93px] rounded-[6px] border border-gray-D9D9D9 bg-white"
+              menuClassName="absolute right-2 flex z-50 flex-col items-center p-2 w-[93px] rounded-[6px] border border-gray-D9D9D9 bg-white"
               trigger={<MoreVertical className="h-4 w-4" />}
             >
               <button
@@ -258,7 +258,7 @@ export default function TodoCardModal({
           <div className="absolute right-4 top-4 flex items-center gap-4 tablet:right-8 tablet:top-6 tablet:gap-6 pc:right-[30px] pc:top-[30px]">
             <Dropdown
               buttonClassName="rounded-full"
-              menuClassName="absolute flex flex-col items-center p-2 w-[93px] rounded-[6px] border border-gray-D9D9D9 bg-white"
+              menuClassName="absolute z-50 flex flex-col items-center p-2 w-[93px] rounded-[6px] border border-gray-D9D9D9 bg-white"
               trigger={
                 <MoreVertical className="h-4 w-4 tablet:h-6 tablet:w-6" />
               }
