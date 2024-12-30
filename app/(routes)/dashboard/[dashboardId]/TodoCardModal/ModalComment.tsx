@@ -118,16 +118,3 @@ export default function ModalComment({
     </div>
   );
 }
-
-// <CommentList
-//   key={`comment_${comment.id}`}
-//   userId={comment}
-//   commentId={comment.id}
-//   authorId={comment.authorId}
-//   nickname={comment.nickname}
-//   profileImageUrl={comment.profileImageUrl}
-//   createdAt={comment.createdAt}
-//   content={content}
-//   removeComment={removeComment}
-//   updateComment={editComment}
-// />
