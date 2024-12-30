@@ -114,9 +114,11 @@ export default function DashboardNavBar() {
 
         <div className="flex items-center -space-x-3">
           {members.slice(0, visibleMembers).map((member) => (
-            <div className="relative h-8 w-8 overflow-hidden rounded-full">
+            <div
+              key={member.id}
+              className="relative h-8 w-8 overflow-hidden rounded-full"
+            >
               <Image
-                key={member.id}
                 fill
                 src={
                   member.profileImageUrl ||
