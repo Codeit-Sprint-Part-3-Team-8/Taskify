@@ -73,7 +73,7 @@ async function getCard({ cardId }: GetCardParams): Promise<CardType> {
 
 async function deleteCard({ cardId }: DeleteCardParams) {
   const response = await axios.delete(`/cards/${cardId}`);
-  return response.data;
+  return !!response;
 }
 
 export { createCard, getCardList, updateCard, getCard, deleteCard };

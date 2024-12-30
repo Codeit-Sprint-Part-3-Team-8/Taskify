@@ -7,16 +7,7 @@ import CreateDashboardModal from '@/(routes)/mydashboard/CreateDashboardModal';
 import useAsync from '@/_hooks/useAsync';
 import { getDashboardList } from '@/api/dashboards.api';
 import { useParams } from 'next/navigation';
-
-interface DashBoard {
-  id: number;
-  title: string;
-  color: string;
-  userId: number;
-  createdAt: string;
-  updatedAt: string;
-  createdByMe: boolean;
-}
+import SidebarSkeleton from './SideBarSkeleton';
 
 const SIZE = 10;
 
@@ -26,22 +17,15 @@ export default function SideBar() {
   const params = useParams();
   const selectedDashboardId = Number(params.dashboardId);
 
-  const {
-    data,
-    excute: fetchDashboards,
-    loading,
-  } = useAsync(
-    async ({ page }: { page: number }) =>
-      await getDashboardList({
-        navigationMethod: 'pagination',
-        page,
-        size: SIZE,
-      }),
-  );
+  const { data, excute: fetchDashboards, loading } = useAsync(getDashboardList);
 
   useEffect(() => {
-    fetchDashboards({ page });
-  }, [page]);
+    fetchDashboards({
+      navigationMethod: 'pagination',
+      page,
+      size: SIZE,
+    });
+  }, [page, fetchDashboards]);
 
   const handleOpenCreateModal = () => {
     setIsModalOpen(true);
@@ -66,8 +50,11 @@ export default function SideBar() {
   };
 
   return (
-    <div className="fixed left-0 top-0 z-20 flex h-full w-16 flex-col gap-10 border border-r-gray-D9D9D9 bg-white px-3 py-5 tablet:w-40 tablet:gap-14 pc:w-72 pc:px-2">
-      <Link className="flex justify-center tablet:justify-start" href={'/'}>
+    <div className="fixed left-0 top-0 z-20 flex h-dvh w-16 flex-col gap-10 border border-r-gray-D9D9D9 bg-white px-3 py-5 tablet:w-40 tablet:gap-14 pc:w-72 pc:px-2">
+      <Link
+        className="flex justify-center tablet:justify-start"
+        href={'/mydashboard'}
+      >
         <Image
           width={28.82}
           height={33.07}
@@ -86,7 +73,7 @@ export default function SideBar() {
         <div className='gap-4" flex w-full flex-col gap-4'>
           <button
             onClick={handleOpenCreateModal}
-            className="flex w-full items-center justify-center tablet:justify-between"
+            className="flex w-full cursor-pointer items-center justify-center tablet:justify-between"
           >
             <div className="hidden text-xs text-gray-787486 tablet:block">
               Dash Boards
@@ -98,9 +85,9 @@ export default function SideBar() {
               alt="Plusbtn"
             />
           </button>
-          <div className="flex h-[30rem] w-full flex-col gap-3.5 tablet:gap-0.5 pc:gap-2">
+          <div className="flex w-full flex-col gap-3.5 tablet:gap-0.5 pc:gap-2">
             {!loading && data?.dashboards?.length ? (
-              data.dashboards.map((dashboard: DashBoard) => (
+              data.dashboards.map((dashboard) => (
                 <Link
                   href={`/dashboard/${dashboard.id}`}
                   key={dashboard.id}
@@ -113,7 +100,7 @@ export default function SideBar() {
                   }}
                 >
                   <span
-                    className="sh h-2 w-2 shrink-0 rounded-full"
+                    className="h-2 w-2 shrink-0 rounded-full"
                     style={{ backgroundColor: dashboard.color }}
                   />
                   <div className="hidden w-full text-gray-787486 tablet:flex tablet:gap-1 tablet:text-base pc:gap-1.5">
@@ -132,14 +119,14 @@ export default function SideBar() {
             ) : (
               <div></div>
             )}
-            {loading && <div></div>}
+            {loading && <SidebarSkeleton />}
           </div>
         </div>
         <div className="hidden tablet:block">
           <button
             onClick={handlePreviousPage}
             disabled={page === 1}
-            className="rounded-md border border-gray-D9D9D9 px-2.5 py-2.5 tablet:px-3 tablet:py-3"
+            className="cursor-pointer rounded-md border border-gray-D9D9D9 px-2.5 py-2.5 transition-all duration-150 hover:bg-[#B599FF] active:scale-90 active:bg-violet-5534DA tablet:px-3 tablet:py-3"
           >
             <Image
               width={16}
@@ -151,7 +138,7 @@ export default function SideBar() {
           <button
             onClick={handleNextPage}
             disabled={data?.dashboards.length !== SIZE}
-            className="rounded-md border border-gray-D9D9D9 px-2.5 py-2.5 tablet:px-3 tablet:py-3"
+            className="cursor-pointer rounded-md border border-gray-D9D9D9 px-2.5 py-2.5 transition-all duration-150 hover:bg-[#B599FF] active:scale-90 active:bg-violet-5534DA tablet:px-3 tablet:py-3"
           >
             <Image
               width={16}

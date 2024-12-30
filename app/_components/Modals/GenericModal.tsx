@@ -1,8 +1,9 @@
 interface GenericModalProps {
-  title?: string;
+  modalSize?: string;
+  title?: string | React.ReactNode;
   onClose: () => Promise<void> | void;
   mainContent: React.ReactNode;
-  footerContent: React.ReactNode;
+  footerContent?: React.ReactNode;
   className?: string;
 }
 
@@ -21,17 +22,21 @@ const GenericModal = ({
 
   return (
     <div
-      className="z-1 fixed inset-0 flex items-center justify-center bg-black-000000/30"
+      className="fixed inset-0 z-40 flex items-center justify-center bg-black-000000/30 text-black-333236"
       onClick={handleClose}
     >
-      <div className={`rounded-lg bg-white p-6 shadow-lg ${className}`}>
+      <div
+        className={`rounded-xl bg-white p-8 shadow-xl mobile:w-[20rem] tablet:w-[32rem] ${className}`}
+      >
         {title && (
-          <header className="mb-4">
-            <h1 className="text-xl font-semibold">{title}</h1>
+          <header className="mb-6 w-full">
+            <h1 className="text-[1.375rem] font-semibold leading-tight">
+              {title}
+            </h1>
           </header>
         )}
-        <main className="mb-4">{mainContent}</main>
-        <footer>{footerContent}</footer>
+        <main className="mb-6 w-full">{mainContent}</main>
+        {footerContent && <footer className="w-full">{footerContent}</footer>}
       </div>
     </div>
   );

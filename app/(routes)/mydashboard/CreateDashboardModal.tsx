@@ -64,7 +64,7 @@ const CreateDashboardModal = ({ onClose }: { onClose: () => void }) => {
   };
 
   const mainContent = (
-    <div className="flex flex-col gap-3">
+    <div className="flex w-full flex-col gap-3">
       <ModalInput
         name="dashboard"
         value={newDashboardName}
@@ -77,7 +77,7 @@ const CreateDashboardModal = ({ onClose }: { onClose: () => void }) => {
           <button
             key={color.label}
             type="button"
-            className="focus:ring-primary flex h-10 w-10 items-center justify-center rounded-full transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2"
+            className="focus:ring-primary flex items-center justify-center rounded-full transition-transform hover:scale-110 focus:outline-none focus:ring-2 focus:ring-offset-2 mobile:h-8 mobile:w-8 tablet:h-10 tablet:w-10"
             onClick={() => setSelectedColor(color.value)}
             style={{ backgroundColor: color.value }}
             aria-label={`${color.label} 색상 선택`}
@@ -93,7 +93,7 @@ const CreateDashboardModal = ({ onClose }: { onClose: () => void }) => {
   );
 
   const footerContent = (
-    <div className="mt-6 flex gap-4">
+    <div className="mt-6 flex w-full items-center justify-center gap-4">
       <Button
         backgroundColor="white"
         className={BUTTON_SIZE}

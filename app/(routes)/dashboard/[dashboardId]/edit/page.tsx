@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import Image from 'next/image';
 import iconArrow from '@images/icon/icon_arrow.svg';
 import ModifyBox from './ModifyBox';
@@ -12,27 +12,23 @@ import { usePathname } from 'next/navigation';
 import { deleteDashboard } from '@/api/dashboards.api';
 import InviteList from './InviteList';
 import Button from '@/_components/Button/Button';
-import InviteModal from './InviteModal';
 import { useRouter } from 'next/navigation';
+import { useAuth } from '@/context/AuthContext';
 
 export default function Dashboard() {
   const pathname = usePathname();
   const router = useRouter();
+  const {} = useAuth(true);
   const dashboardId = Number(pathname.split('/')[2]);
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const handleDeleteDashboard = async () => {
     await deleteDashboard({ dashboardId });
     router.push(`/mydashboard`);
   };
 
-  const handleCloseModal = () => {
-    setIsModalOpen(false);
-  };
-
   return (
     <>
-      <NavBar type="mydashboard" />
+      <NavBar type="dashboard" />
       <SideBar />
       <div className="sidebar-right-content">
         <div className="pb-32 pl-3 pt-4 tablet:pb-16 pc:pb-14">
@@ -47,10 +43,7 @@ export default function Dashboard() {
           <div className="flex flex-col gap-4">
             <ModifyBox dashboardId={dashboardId} />
             <ModifyList dashboardId={dashboardId} />
-            <InviteList
-              onClickModal={() => setIsModalOpen(true)}
-              dashboardId={dashboardId}
-            />
+            <InviteList dashboardId={dashboardId} />
           </div>
           <div className="mx-3 pt-6">
             <Button
@@ -65,9 +58,6 @@ export default function Dashboard() {
           </div>
         </div>
       </div>
-      {isModalOpen && (
-        <InviteModal dashboardId={dashboardId} onClose={handleCloseModal} />
-      )}
     </>
   );
 }

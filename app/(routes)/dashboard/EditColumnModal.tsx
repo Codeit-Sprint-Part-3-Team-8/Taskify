@@ -4,18 +4,23 @@ import ModalInput from '@/_components/Modals/ModalInput';
 import { useState } from 'react';
 import { updateColumn } from '@/api/columns.api';
 import { deleteColumn } from '@/api/columns.api';
+import { OnColumnHandlerType } from './[dashboardId]/Dashboard';
 
 const BUTTON_SIZE =
   'tablet:w-[16rem] tablet:h-[3.375rem] mobile:w-[9rem] mobile:h-[3.375rem]';
 
 interface EditColumnModalProps {
   onClose: () => Promise<void> | void;
+  onColumnUpdated: OnColumnHandlerType;
+  onColumnDeleted: OnColumnHandlerType;
   columnId: number;
   initialTitle?: string;
 }
 
 const EditColumnModal = ({
   onClose,
+  onColumnUpdated,
+  onColumnDeleted: onColumnDeleted,
   initialTitle = '',
   columnId,
 }: EditColumnModalProps) => {
@@ -27,21 +32,13 @@ const EditColumnModal = ({
 
   // 컬럼 삭제
   const handleDeleteColumn = async () => {
-    const isConfirmed = window.confirm(
-      '칼럼의 모든 카드가 삭제됩니다. 계속하시겠습니까?',
-    );
-
-    if (!isConfirmed) {
-      onClose();
-      return;
-    }
     setIsLoading(true);
 
     try {
       await deleteColumn({ columnId });
-    } catch (error) {
+      onColumnDeleted({ id: columnId });
+    } catch {
       alert('컬럼 삭제에 실패했습니다.');
-      console.error(error);
     } finally {
       onClose();
       setIsLoading(false);
@@ -61,10 +58,11 @@ const EditColumnModal = ({
         columnId: columnId,
         title: editedColumnName,
       });
+
+      onColumnUpdated({ id: columnId, title: editedColumnName });
       onClose();
-    } catch (error) {
+    } catch {
       alert('컬럼 수정에 실패했습니다.');
-      console.error(error);
     } finally {
       setIsLoading(false);
     }
