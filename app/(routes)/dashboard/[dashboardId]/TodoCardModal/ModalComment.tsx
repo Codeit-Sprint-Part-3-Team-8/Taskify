@@ -1,4 +1,6 @@
+import UserProfile from '@/_components/UserProfile/UserProfile';
 import { CommentListType, CommentType } from '@/_types/comments.type';
+import { formatDate } from 'date-fns';
 import { ChangeEvent, useState } from 'react';
 
 interface ModalCommentProps {
@@ -46,7 +48,70 @@ export default function ModalComment({
       <div className="max-h-[80px] flex-1 overflow-y-auto">
         <div className="space-y-4">
           {comments.map((comment: CommentType) => (
-            <div key={'comment-' + comment.id}>{comment.content}</div>
+            <div key={'comment-' + comment.id} className="flex gap-4">
+              <div>
+                <UserProfile
+                  profileImageUrl={comment.author.profileImageUrl}
+                  onlyImg
+                  nickname={comment.author.nickname}
+                />
+              </div>
+              <div className="flex flex-col">
+                <div className="mb-2 flex items-center gap-2">
+                  <span className="text-black-323236 text-xs font-semibold">
+                    {comment.author.nickname}
+                  </span>
+                  <span className="text-[0.625rem] font-normal text-gray-9FA6B2">
+                    {formatDate(comment.createdAt, 'yyyy.MM.dd HH:mm')}
+                  </span>
+                </div>
+                {/* {isEditing ? (
+                  <div className="flex flex-col">
+                    <textarea
+                      className="w-full rounded-md border border-gray-9FA6B2 p-2"
+                      value={editedContent}
+                      onChange={(e) => setEditedContent(e.target.value)}
+                    />
+                    <button
+                      type="button"
+                      className="text-sm text-gray-787486"
+                      onClick={handleCancel}
+                    >
+                      취소
+                    </button>
+                    <button
+                      type="button"
+                      className="text-sm text-gray-787486"
+                      onClick={handleSave}
+                    >
+                      저장
+                    </button>
+                  </div>
+                ) : (
+                  <div className="text-black-323236 mb-1 text-xs font-normal">
+                    {content}
+                  </div>
+                )}
+                {!isEditing && userId === authorId && (
+                  <div className="flex gap-2">
+                    <button
+                      type="button"
+                      className="text-[0.75rem] font-normal text-gray-787486"
+                      onClick={() => setIsEditing(true)}
+                    >
+                      수정
+                    </button>
+                    <button
+                      type="button"
+                      className="text-[0.75rem] font-normal text-gray-787486"
+                      onClick={handleDelete}
+                    >
+                      삭제
+                    </button>
+                  </div>
+                )} */}
+              </div>
+            </div>
           ))}
         </div>
       </div>

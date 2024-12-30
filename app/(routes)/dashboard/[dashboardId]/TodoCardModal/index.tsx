@@ -8,7 +8,6 @@ import ModalComment from './ModalComment';
 import { createComment, getCommentList } from '@/api/comments.api';
 
 interface TodoCardModalProps {
-  userId: number;
   cardId: number;
   column: ColumnData;
   dashboardId: number;
@@ -18,7 +17,6 @@ interface TodoCardModalProps {
 }
 
 export default function TodoCardModal({
-  userId,
   cardId,
   column,
   dashboardId,
