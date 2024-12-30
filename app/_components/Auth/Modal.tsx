@@ -6,7 +6,7 @@ export default function Modal({
   onClick: () => void;
 }) {
   return (
-    <div className="fixed z-20 flex h-full w-full items-center justify-center bg-black-171717/80">
+    <div className="fixed left-0 top-0 z-20 flex h-dvh w-dvw items-center justify-center bg-black-171717/80">
       <div className="flex h-48 min-w-80 flex-col items-center justify-center gap-8 rounded-2xl bg-white px-16 py-10">
         <div className="text-xl font-medium text-black-333236">{text}</div>
         <button
