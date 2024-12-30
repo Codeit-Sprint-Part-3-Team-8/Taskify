@@ -37,7 +37,7 @@ export default function DashboardList({
           <button
             type="button"
             onClick={onOpenCreateModal}
-            className="flex items-center justify-center gap-3 rounded-lg border border-gray-D9D9D9 px-14 py-5 hover:cursor-pointer"
+            className="flex transform items-center justify-center gap-3 rounded-lg border border-gray-D9D9D9 px-14 py-5 transition-transform hover:scale-105 hover:cursor-pointer hover:bg-blue-200"
           >
             <p className="font-pretendard text-md font-semibold text-black-333236 tablet:text-lg">
               새로운 대시보드
@@ -53,7 +53,7 @@ export default function DashboardList({
             Array.from({ length: 5 }).map((_, index) => (
               <div
                 key={index}
-                className="flex w-full animate-pulse items-center gap-3 rounded-lg border border-gray-D9D9D9 px-5 py-5"
+                className="animate-pulse flex w-full items-center gap-3 rounded-lg border border-gray-D9D9D9 px-5 py-5"
               >
                 <div className="h-2 w-2 rounded-full bg-gray-300"></div>
                 <div className="flex w-full flex-col gap-3 pc:gap-4">
@@ -67,7 +67,7 @@ export default function DashboardList({
               <Link
                 href={`/dashboard/${dashboard.id}`}
                 key={dashboard.id}
-                className="flex w-full items-center justify-between gap-3 rounded-lg border border-gray-D9D9D9 px-5 py-5"
+                className="flex w-full transform items-center justify-between gap-3 rounded-lg border border-gray-D9D9D9 px-5 py-5 transition-transform hover:scale-105 hover:bg-purple-100"
               >
                 <div className="flex w-11/12 items-center gap-3 pc:gap-4">
                   <div
