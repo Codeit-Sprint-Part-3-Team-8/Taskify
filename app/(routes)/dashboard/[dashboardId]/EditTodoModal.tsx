@@ -88,7 +88,6 @@ export default function EditTodoModal({
           onClose={onClose}
         />
       }
-      onClose={onClose}
     />
   );
 }

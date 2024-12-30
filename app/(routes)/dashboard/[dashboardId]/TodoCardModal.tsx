@@ -161,17 +161,17 @@ export default function TodoCardModal({
           </div>
 
           <div className="mb-4 flex h-[26px] w-full items-center gap-2">
-            <div className="flex h-full w-16 items-center gap-1 rounded-full bg-violet-8">
+            <div className="flex h-full max-w-40 items-center gap-1 rounded-full bg-violet-8 pr-2">
               <span className="ml-[6px] text-3xl text-violet-5534DA">•</span>
-              <span className="mt-1 text-xs text-violet-5534DA">
+              <span className="mt-1 truncate whitespace-nowrap text-xs text-violet-5534DA">
                 {column.title}
               </span>
             </div>
-            <div className="flex h-full gap-2">
+            <div className="flex h-full gap-2 truncate">
               {cardInfo?.tags.map((tag) => (
                 <span
                   key={tag}
-                  className="h-full rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-600"
+                  className="h-full whitespace-nowrap rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-600"
                 >
                   {tag}
                 </span>
@@ -311,11 +311,11 @@ export default function TodoCardModal({
           <div className="flex h-full gap-10">
             <div className="relative flex h-[43.25rem] w-[420px] flex-col">
               <div className="mb-4 flex w-full items-center gap-2">
-                <div className="flex items-center gap-1 rounded-full bg-violet-8 tablet:h-7 tablet:w-16">
-                  <span className="ml-[6px] text-3xl text-violet-5534DA">
+                <div className="flex max-w-40 items-center gap-1 rounded-full bg-violet-8 pl-2 pr-2 tablet:h-7">
+                  <span className="mb-1 ml-[6px] text-3xl text-violet-5534DA">
                     •
                   </span>
-                  <span className="mt-1 text-xs text-violet-5534DA">
+                  <span className="truncate whitespace-nowrap text-xs text-violet-5534DA">
                     {column.title}
                   </span>
                 </div>
@@ -323,7 +323,7 @@ export default function TodoCardModal({
                   {cardInfo?.tags.map((tag) => (
                     <span
                       key={tag}
-                      className="rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-600"
+                      className="whitespace-nowrap rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-600"
                     >
                       {tag}
                     </span>
