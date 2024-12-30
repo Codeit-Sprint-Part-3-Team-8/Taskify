@@ -18,7 +18,7 @@ export default function SortableItem({
   return (
     <li
       onClick={() => onClickCard(item)}
-      className={`h-full max-h-[260px] w-[280px] transform transition-all tablet:h-[94px] tablet:w-full pc:h-full ${
+      className={`h-full w-[280px] transform transition-all tablet:h-[94px] tablet:w-full pc:h-full ${
         isDragging ? 'opacity-50' : 'opacity-100'
       }`}
       style={{

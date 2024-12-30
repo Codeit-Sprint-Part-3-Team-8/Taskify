@@ -1,3 +1,4 @@
+import Profile from '@/_components/Navbar/Profile';
 import { CardType } from '@/_types/cards.type';
 import Image from 'next/image';
 
@@ -19,7 +20,7 @@ export function Item({ item, dragOverlay }: ItemsProps) {
 
   return (
     <div
-      className={`item h-full max-h-full w-full ${dragOverlay ? 'cursor-grabbing' : 'cursor-grab'} gap-5 rounded-md border-2 border-gray-200 bg-gray-100 px-3 pt-3 tablet:flex tablet:items-center tablet:pt-0 ${item.imageUrl ? 'pc:h-[304px] pc:w-[314]' : 'pc:fit pc:w-[314px]'} pc:flex-col pc:gap-4 pc:py-3`}
+      className={`item h-full max-h-full w-full ${dragOverlay ? 'cursor-grabbing' : 'cursor-grab'} gap-5 rounded-md border-2 border-gray-200 bg-gray-50 px-3 pt-3 tablet:flex tablet:items-center tablet:pt-0 ${item.imageUrl ? 'pc:h-[304px] pc:w-[314px]' : 'pc:fit pc:w-[314px]'} pc:flex-col pc:gap-4 pc:py-3`}
     >
       <div
         className={`relative w-full overflow-hidden rounded-md mobile:h-[152px] tablet:h-[54px] tablet:w-[90px] ${item.imageUrl ? 'pc:h-full pc:w-full' : 'tablet:hidden pc:hidden'}`}
@@ -36,9 +37,11 @@ export function Item({ item, dragOverlay }: ItemsProps) {
           <p className="text-nowrap text-md font-medium text-black-333236 tablet:text-lg">
             {item.title}
           </p>
-          <div>
+          <div className="flex space-x-1">
             {item.tags.map((tag) => (
-              <div key={tag}>{tag}</div>
+              <div className="rounded-xl bg-gray-200 px-1" key={tag}>
+                #{tag}
+              </div>
             ))}
           </div>
         </div>
@@ -57,7 +60,10 @@ export function Item({ item, dragOverlay }: ItemsProps) {
             </p>
           </div>
           <div className="flex items-center justify-between tablet:items-end pc:items-center">
-            프로필이미지
+            <Profile
+              profileImageUrl={item.assignee.profileImageUrl || undefined}
+              nickname={item.assignee.nickname}
+            />
           </div>
         </div>
       </div>
