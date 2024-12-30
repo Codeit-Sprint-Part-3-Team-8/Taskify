@@ -27,7 +27,7 @@ import useAsync from '@/_hooks/useAsync';
 import { getMemberList } from '@/api/member.api';
 import CreateTodoModal from './CreateTodoModal';
 import { useAuth } from '@/context/AuthContext';
-import TodoCardModal from './TodoCardModal';
+import TodoCardModal from './_TodoCardModal';
 
 export type ItemGroupsType = {
   [columnId: string]: { title: string; cardData: CardListType };
@@ -438,7 +438,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
         </>
       )}
 
-      {isEditModalVisible && selectedCard && (
+      {isEditModalVisible && selectedCard && selectedColumn && (
         <EditTodoModal
           columnTitle={itemGroups[selectedCard.columnId].title}
           card={selectedCard}
@@ -446,6 +446,7 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
             columnId: Number(columnId),
             columnTitle: title,
           }))}
+          currentColumn={selectedColumn}
           members={members?.members || []}
           onEditCard={handleUpdateCard}
           onClose={handleCloseEditModal}

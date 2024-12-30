@@ -6,12 +6,14 @@ import { FormDataValue } from '@/_types/todo-prop.type';
 import { TodoFormFooter } from '@/_components/Modals/DashboardModal/TodoFormFooter';
 import { CardType } from '@/_types/cards.type';
 import { MemberType } from '@/_types/members.type';
+import { ColumnData } from './Dashboard';
 
 interface EditTodoModalProps {
   columnTitle: string;
   card: CardType;
   columns: Array<{ columnId: number; columnTitle: string }>;
   onEditCard: (columnId: number, updatedCard: CardType) => void;
+  currentColumn: ColumnData;
   members: MemberType[];
   onClose: () => void;
 }
@@ -22,6 +24,7 @@ export default function EditTodoModal({
   columns,
   members,
   onEditCard,
+  currentColumn,
   onClose,
 }: EditTodoModalProps) {
   const [formData, setFormData] = useState({
@@ -71,6 +74,7 @@ export default function EditTodoModal({
           formData={formData}
           onChange={handleChange}
           columns={columns}
+          currentColumn={currentColumn}
           members={members}
           isLoading={isLoading}
         />
@@ -84,7 +88,6 @@ export default function EditTodoModal({
           onClose={onClose}
         />
       }
-      onClose={onClose}
     />
   );
 }

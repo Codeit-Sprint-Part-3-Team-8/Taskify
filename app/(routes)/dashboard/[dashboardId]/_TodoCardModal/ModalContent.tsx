@@ -36,17 +36,17 @@ export default function ModalContent({ card, columnTitle }: ModalContentProps) {
 
       <div className="grow">
         <div className="mb-4 flex h-[26px] w-full items-center gap-2">
-          <div className="flex h-full w-16 items-center gap-1 rounded-full bg-violet-8">
+          <div className="flex h-full max-w-40 items-center gap-1 rounded-full bg-violet-8 pr-2">
             <span className="ml-[6px] text-3xl text-violet-5534DA">•</span>
-            <span className="mt-1 text-xs text-violet-5534DA">
+            <span className="mt-1 truncate whitespace-nowrap text-xs text-violet-5534DA">
               {columnTitle}
             </span>
           </div>
-          <div className="flex h-full gap-2">
+          <div className="flex h-full gap-2 truncate">
             {card?.tags.map((tag) => (
               <span
                 key={tag}
-                className="h-full rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-600"
+                className="h-full whitespace-nowrap rounded-full bg-gray-100 px-3 py-1 text-sm text-gray-600"
               >
                 {tag}
               </span>
