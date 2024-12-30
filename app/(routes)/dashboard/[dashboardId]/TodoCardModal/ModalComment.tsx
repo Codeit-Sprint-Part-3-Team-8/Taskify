@@ -111,6 +111,7 @@ export default function ModalComment({
                   </div>
                 )} */}
               </div>
+              <div>{comment.content}</div>
             </div>
           ))}
         </div>
