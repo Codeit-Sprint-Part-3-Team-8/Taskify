@@ -345,6 +345,26 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
     setIsCardModalVisible(true);
   };
 
+  const handleDeleteCard = (columnId: number, cardId: number) => {
+    setItemGroups((itemGroups) => {
+      const updatedItemGroups = {
+        ...itemGroups,
+        [columnId]: {
+          ...itemGroups[columnId],
+          cardData: {
+            ...itemGroups[columnId].cardData,
+            totalCount: itemGroups[columnId].cardData.totalCount - 1,
+            cards: itemGroups[columnId].cardData.cards.filter(
+              (card) => card.id !== cardId,
+            ),
+          },
+        },
+      };
+
+      return updatedItemGroups;
+    });
+  };
+
   const handleCloseCardModal = () => {
     setIsCardModalVisible(false);
   };
@@ -409,10 +429,11 @@ export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
           <TodoCardModal
             userId={selectedCard.assignee.id}
             cardId={selectedCard.id}
-            columnTitle={selectedColumn.title}
+            column={selectedColumn}
             dashboardId={dashBoard.id}
             onClose={handleCloseCardModal}
             onEditClick={() => setIsEditModalVisible(true)}
+            onDeleteCard={handleDeleteCard}
           />
         </>
       )}
