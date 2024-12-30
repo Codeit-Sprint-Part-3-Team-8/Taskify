@@ -27,6 +27,7 @@ import EditTodoModal from './EditTodoModal';
 import useAsync from '@/_hooks/useAsync';
 import { getMemberList } from '@/api/member.api';
 import CreateTodoModal from './CreateTodoModal';
+import { useAuth } from '@/context/AuthContext';
 
 export type ItemGroupsType = {
   [columnId: string]: { title: string; cardData: CardListType };
@@ -48,6 +49,7 @@ export type columnData = {
 };
 
 export default function DashBoard({ dashBoard }: { dashBoard: DashboardType }) {
+  const {} = useAuth(true);
   const [itemGroups, setItemGroups] = useState<ItemGroupsType>({});
   const [isLoading, setIsLoading] = useState(true);
   const [dragActiveCard, setDragActiveCard] = useState<
