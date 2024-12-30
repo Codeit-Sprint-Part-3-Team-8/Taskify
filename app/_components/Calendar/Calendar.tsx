@@ -7,7 +7,9 @@ import { DayPicker } from 'react-day-picker';
 import { cn } from '@/_lib/utils';
 import { buttonVariants } from '@/_components/Calendar/CalendarButton';
 
-export type CalendarProps = React.ComponentProps<typeof DayPicker>;
+export type CalendarProps = React.ComponentProps<typeof DayPicker> & {
+  onTimeChange?: (time: string) => void;
+};
 
 function Calendar({
   className,
