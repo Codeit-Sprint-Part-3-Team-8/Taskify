@@ -7,7 +7,7 @@ import Profile from './Profile';
 import DropdownContent from './DropdownContent';
 
 export default function MyDashboardNavBar() {
-  const { user } = useAuth();
+  const { user } = useAuth(true);
 
   return (
     <div className="fixed top-0 z-10 flex h-[3.75rem] w-full items-center justify-between border-b border-gray-D9D9D9 bg-white pl-[5.25rem] pr-2 tablet:h-[4.375rem] tablet:pl-[12.5rem] tablet:pr-8 pc:pl-80 pc:pr-20">
