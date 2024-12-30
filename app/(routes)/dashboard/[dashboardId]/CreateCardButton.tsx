@@ -1,12 +1,12 @@
 import Image from 'next/image';
-import { columnData } from './Dashboard';
+import { ColumnData } from './Dashboard';
 
 export default function CreateCardButton({
   onClick,
   id,
   title,
 }: {
-  onClick: ({ id, title }: columnData) => void;
+  onClick: ({ id, title }: ColumnData) => void;
   id: number;
   title: string;
 }) {
