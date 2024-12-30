@@ -50,7 +50,7 @@ async function updateComment({
 
 async function deleteComment({ commentId }: DeleteCommentParams) {
   const response = await axios.delete(`/comments/${commentId}`);
-  return response.data;
+  return !!response;
 }
 
 export { createComment, getCommentList, updateComment, deleteComment };
