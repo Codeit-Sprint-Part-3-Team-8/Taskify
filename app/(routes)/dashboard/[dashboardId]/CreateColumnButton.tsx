@@ -22,9 +22,9 @@ export default function CreateColumnButton({
 
   return (
     <>
-      <div className="pc:pt-15 w-full cursor-pointer px-3 tablet:py-8 pc:pt-[60px]">
+      <div className="pc:pt-15 w-full px-8 tablet:py-8 pc:pt-[60px]">
         <div
-          className="flex h-[70px] w-full items-center justify-center gap-3 rounded-md border pc:px-24"
+          className="flex h-[70px] w-full transform cursor-pointer items-center justify-center gap-3 rounded-md border border-gray-300 transition-transform hover:scale-105 hover:bg-purple-100 pc:px-24"
           onClick={openModal}
         >
           <p className="text-nowrap text-lg font-bold tablet:text-2lg">
