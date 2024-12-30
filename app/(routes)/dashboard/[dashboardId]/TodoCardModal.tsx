@@ -93,7 +93,7 @@ export default function TodoCardModal({
         <div className="relative">
           <Dropdown
             buttonClassName="rounded-full"
-            menuClassName="absolute flex flex-col items-center right-[-10px] pt-2 w-[93px] rounded-[6px] border border-gray-D9D9D9 bg-white"
+            menuClassName="absolute flex flex-col items-center right-[-10px] pt-2 w-[93px] rounded-[6px] border border-gray-D9D9D9 bg-white z-50"
             trigger={<MoreVertical className="h-6 w-6" />}
           >
             <button
