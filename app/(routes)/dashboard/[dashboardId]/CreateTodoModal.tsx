@@ -73,6 +73,7 @@ export default function CreateTodoModal({
       mainContent={
         <TodoFormContent
           formData={formData}
+          currentColumn={columnData}
           onChange={handleChange}
           members={members}
           isLoading={isLoading}
