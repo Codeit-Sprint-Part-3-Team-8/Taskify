@@ -7,6 +7,7 @@ import ModalContent from './ModalContent';
 import ModalComment from './ModalComment';
 import { createComment, getCommentList } from '@/api/comments.api';
 import ModalInfo from './ModalInfo';
+import ModalTags from './ModalTags';
 
 interface TodoCardModalProps {
   cardId: number;
@@ -74,7 +75,8 @@ export default function TodoCardModal({
         <div className="flex flex-col gap-4 tablet:flex-row-reverse">
           {card && <ModalInfo card={card} />}
           <div>
-            <ModalContent columnTitle={column.title} card={card} />
+            <ModalTags columnTitle={column.title} tags={card?.tags} />
+            <ModalContent card={card} />
             {commentList && (
               <ModalComment
                 commentList={commentList}
